@@ -23,13 +23,13 @@ import customClasses.Fuentes;
 import customClasses.RoundedPanel;
 import customClasses.SideBar;
 
-public class MoviesView {
+public class ClientsView {
 
-Color blue = new Color(24, 130, 234);
-	
+	Color blue = new Color(24, 130, 234);
+
 	Fuentes tipoFuentes = new Fuentes();
 	Font titles = tipoFuentes.fuente("/fonts/GolosText-Regular.ttf", Font.BOLD, 16f);
-	
+
 	ImageIcon homeIcon = new ImageIcon(HomeView.class.getResource("/images/home.png"));
 	ImageIcon usersIcon = new ImageIcon(HomeView.class.getResource("/images/users.png"));
 	ImageIcon gamesIcon = new ImageIcon(HomeView.class.getResource("/images/games.png"));
@@ -39,20 +39,18 @@ Color blue = new Color(24, 130, 234);
 	ImageIcon logOut = new ImageIcon(HomeView.class.getResource("/images/logOut.png"));
 	ImageIcon adminIcon = new ImageIcon(HomeView.class.getResource("/images/admin.png"));
 
-
-	public MoviesView() {
+	public ClientsView() {
 
 	}
 
-	public void movies() {
-		// VENTANA
+	public void clients() {
+		//VENTANA
 		JFrame frame = new JFrame();
 		frame.setBounds(100, 20, 823, 643);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 
-
-		// PANEL LATERAL
+		//PANEL LATERAL
 		RoundedPanel sidepanel = new RoundedPanel(10, blue);
 		sidepanel.setLocation(0, 0);
 		sidepanel.setSize(128, 606);
@@ -140,11 +138,11 @@ Color blue = new Color(24, 130, 234);
 		centro.setLayout(null);
 
 		RoundedPanel titlePanel = new RoundedPanel(30, new Color(255, 255, 255));
-		titlePanel.setBounds(151, 11, 100, 43);
+		titlePanel.setBounds(151, 11, 200, 43);
 		centro.add(titlePanel);
 		titlePanel.setLayout(new BorderLayout(0, 0));
 
-		JLabel titleLabel = new JLabel("Películas");
+		JLabel titleLabel = new JLabel("Clientes registrados");
 		titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		titleLabel.setFont(titles);
 		titlePanel.add(titleLabel);

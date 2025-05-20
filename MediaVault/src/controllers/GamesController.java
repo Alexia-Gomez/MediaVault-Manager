@@ -1,5 +1,15 @@
 package controllers;
 
-public class GamesController {
+import views.GamesView;
 
+public class GamesController {
+	private GamesView view;
+
+	public GamesController() {
+		view = new GamesView();
+	}
+
+	public void games() {
+		view.games();
+	}
 }
