@@ -51,7 +51,8 @@ public class GamesView {
 		frame.setBounds(100, 20, 823, 643);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
-
+		frame.setLocationRelativeTo(null);
+		frame.setResizable(false);
 
 		// PANEL LATERAL
 		RoundedPanel sidepanel = new RoundedPanel(10, blue);

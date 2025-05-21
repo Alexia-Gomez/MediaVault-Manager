@@ -50,6 +50,8 @@ Color blue = new Color(24, 130, 234);
 		frame.setBounds(100, 20, 823, 643);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
+		frame.setLocationRelativeTo(null);
+		frame.setResizable(false);
 		
 		
 		// PANEL LATERAL
