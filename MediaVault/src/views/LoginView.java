@@ -6,6 +6,8 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import controllers.AdminController;
+
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -126,18 +128,16 @@ public class LoginView {
 				String password = new String(passField.getPassword());
 				String username = userField.getText();
 				
-				if(username.equals("admin")&&password.equals("123")) {
- 					
- 					frame.dispose();
+		        AdminController controller = new AdminController();
+
+		        boolean acceso = controller.autenticar(username, password);
+		        
+		        if(acceso) {
+		        	
  					HomeController hc = new HomeController();
  					hc.home();
- 					
- 					userField.setBorderColor(new Color(186, 186, 186));
- 		            passField.setBorderColor(new Color(186, 186, 186));
- 		            errorLabel.setVisible(false);
- 				}
- 				else {
- 					
+	                  
+		        }else {
  					passField.setBorderColor(Color.red);
  					userField.setBorderColor(Color.red);
  					errorLabel.setVisible(true);
@@ -145,7 +145,7 @@ public class LoginView {
  					passField.setText("");
  					userField.setText("");
  					userField.requestFocus();
- 				}
+		        }
 
 			}
 
