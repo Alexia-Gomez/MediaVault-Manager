@@ -30,14 +30,6 @@ public class ClientsView {
 	Fuentes tipoFuentes = new Fuentes();
 	Font titles = tipoFuentes.fuente("/fonts/GolosText-Regular.ttf", Font.BOLD, 16f);
 
-	ImageIcon homeIcon = new ImageIcon(HomeView.class.getResource("/images/home.png"));
-	ImageIcon usersIcon = new ImageIcon(HomeView.class.getResource("/images/users.png"));
-	ImageIcon gamesIcon = new ImageIcon(HomeView.class.getResource("/images/games.png"));
-	ImageIcon moviesIcon = new ImageIcon(HomeView.class.getResource("/images/movies.png"));
-	ImageIcon opIcon = new ImageIcon(HomeView.class.getResource("/images/op.png"));
-	ImageIcon rentIcon = new ImageIcon(HomeView.class.getResource("/images/rent.png"));
-	ImageIcon logOut = new ImageIcon(HomeView.class.getResource("/images/logOut.png"));
-	ImageIcon adminIcon = new ImageIcon(HomeView.class.getResource("/images/admin.png"));
 
 	public ClientsView() {
 
@@ -59,78 +51,12 @@ public class ClientsView {
 		sidepanel.setLayout(new GridLayout(0, 1, 0, 0));
 		frame.getContentPane().add(sidepanel);
 
-
-		SideBar inicio = new SideBar("Inicio", homeIcon);
-		sidepanel.add(inicio);
-		inicio.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				frame.dispose();
-				HomeController hc = new HomeController();
-				hc.home();
-			}
-
-		});
-
-		SideBar clientes = new SideBar("Clientes", usersIcon);
-		sidepanel.add(clientes);
-		clientes.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				frame.dispose();
-				ClientsController cc = new ClientsController();
-				cc.clients();
-			}
-
-		});
-
-		SideBar nuevaOp = new SideBar("Nueva operación", opIcon );
-		sidepanel.add(nuevaOp);
-		nuevaOp.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				frame.dispose();
-				OperationsController oc = new OperationsController();
-				oc.operations();
-			}
-
-		});
-
-		SideBar rentaCompra = new SideBar("Rentas\ny compras", rentIcon);
-		sidepanel.add(rentaCompra);
-		rentaCompra.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				frame.dispose();
-				RentSaleController rsc = new RentSaleController();
-				rsc.rentSale();
-			}
-
-		});
-
-		SideBar juegos = new SideBar("Videojuegos", gamesIcon);
-		sidepanel.add(juegos);
-		juegos.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				frame.dispose();
-				GamesController pc = new GamesController();
-				pc.games();
-			}
-
-		});
-
-		SideBar peliculas = new SideBar("Películas", moviesIcon);
-		sidepanel.add(peliculas);
-		peliculas.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				frame.dispose();
-				MoviesController pc = new MoviesController();
-				pc.movies();
-			}
-
-		});
+		sidepanel.add(SideBar.inicio(frame));
+		sidepanel.add(SideBar.clientes(frame));
+		sidepanel.add(SideBar.nuevaOperacion(frame));
+		sidepanel.add(SideBar.rentaCompra(frame));
+		sidepanel.add(SideBar.juegos(frame));
+		sidepanel.add(SideBar.peliculas(frame));
 
 
 		//PANEL CENTRO
