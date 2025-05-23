@@ -29,3 +29,7 @@ El proyecto consiste en la creación de una aplicación o sistema de aspecto adm
 * Yonatan Aguirre de León  
 * Eduardo Rios Villanueva  
 * Alexia Arely Gomez Trujillo
+
+## **Login**
+* Usuario: jonaSoto
+* Contraseña: 101
