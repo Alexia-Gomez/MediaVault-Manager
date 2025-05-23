@@ -12,4 +12,8 @@ public class MoviesController {
 	public void movies() {
 		view.movies();
 	}
+	
+	public void viewMovies() {
+		view.viewMovie();
+	}
 }

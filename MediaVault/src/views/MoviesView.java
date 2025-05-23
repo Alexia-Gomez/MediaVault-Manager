@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import controllers.HomeController;
 import customClasses.Fuentes;
 import customClasses.RoundedButton;
 import customClasses.RoundedJTextField;
@@ -294,5 +295,57 @@ public class MoviesView {
 		centro.add(filtro);
 		centro.setComponentZOrder(filtro, 0);
 			
+	}
+
+	public void viewMovie() {
+		//VENTANA
+		JFrame frame = new JFrame();
+		frame.setBounds(100, 20, 823, 643);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
+		frame.setLocationRelativeTo(null);
+		frame.setResizable(false);
+
+		//PANEL LATERAL
+		RoundedPanel sidepanel = new RoundedPanel(10, blue);
+		sidepanel.setLocation(0, 0);
+		sidepanel.setSize(128, 606);
+		sidepanel.setLayout(new GridLayout(0, 1, 0, 0));
+		frame.getContentPane().add(sidepanel);
+
+		sidepanel.add(SideBar.inicio(frame));
+		sidepanel.add(SideBar.clientes(frame));
+		sidepanel.add(SideBar.nuevaOperacion(frame));
+		sidepanel.add(SideBar.rentaCompra(frame));
+		sidepanel.add(SideBar.juegos(frame));
+		sidepanel.add(SideBar.peliculas(frame));
+
+
+		//PANEL CENTRO
+		centro = new JPanel();
+		centro.setBounds(0, 0, 809, 606);
+		frame.getContentPane().add(centro);
+		centro.setLayout(null);
+
+		RoundedButton titleButton = new RoundedButton("Ver película");
+		titleButton.setIcon(new ImageIcon(((ImageIcon) arrow).getImage().getScaledInstance(15, 20, Image.SCALE_SMOOTH)));
+		titleButton.setBounds(151, 11, 200, 43);
+		titleButton.setBackground(Color.white);
+		titleButton.setForeground(Color.black);
+		titleButton.setFont(titles);
+		titleButton.setIconTextGap(20);
+		titleButton.setRadius(20);
+		titleButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				frame.dispose();
+				HomeController hc = new HomeController();
+				hc.home();
+			}
+
+		});
+		centro.add(titleButton);
 	}
 }

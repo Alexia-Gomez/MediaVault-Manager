@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -13,7 +15,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import controllers.ClientsController;
+import controllers.GamesController;
 import controllers.LoginController;
+import controllers.MoviesController;
+import controllers.RentSaleController;
 import customClasses.Fuentes;
 import customClasses.RoundedButton;
 import customClasses.RoundedPanel;
@@ -37,6 +43,12 @@ public class HomeView {
 	ImageIcon logo = new ImageIcon(HomeView.class.getResource("/images/logo.png"));
 	ImageIcon logOut = new ImageIcon(HomeView.class.getResource("/images/logOut.png"));
 	ImageIcon adminIcon = new ImageIcon(HomeView.class.getResource("/images/admin.png"));
+	
+
+	GamesController gc = new GamesController();
+	MoviesController mc = new MoviesController();
+	RentSaleController rc = new RentSaleController();
+	ClientsController cc = new ClientsController();
 
 	public HomeView() {
 
@@ -143,7 +155,18 @@ public class HomeView {
 		w1btn.setRadius(20);
 		w1btn.setBackground(blue);
 		w1btn.setSize(80, 30);
+		w1btn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				frame.dispose();
+				rc.rentSale();
+			}
+			
+		});
 		widget1.add(w1btn);
+		
 		
 		JLabel w1num = new JLabel("127");
 		w1num.setVerticalAlignment(SwingConstants.TOP);
@@ -179,6 +202,16 @@ public class HomeView {
 		w2btn.setBackground(blue);
 		w2btn.setFont(btntxt);
 		w2btn.setRadius(20);
+		w2btn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				frame.dispose();
+				rc.rentSale();
+			}
+			
+		});
 		widget2.add(w2btn);
 		
 		JLabel w2num = new JLabel("249");
@@ -215,6 +248,15 @@ public class HomeView {
 		w3btn.setBackground(blue);
 		w3btn.setFont(btntxt);
 		w3btn.setRadius(20);
+		w3btn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				cc.clients();
+			}
+			
+		});
 		widget3.add(w3btn);
 		
 		JLabel w3num = new JLabel("5,308");
@@ -266,6 +308,16 @@ public class HomeView {
 		gameBtn1.setBackground(blue);
 		gameBtn1.setFont(btntxt);
 		gameBtn1.setRadius(20);
+		gameBtn1.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				frame.dispose();
+				gc.viewGame();
+			}
+			
+		});
 		gamePanel.add(gameBtn1);
 		
 		RoundedButton gameBtn2 = new RoundedButton("Ver");
@@ -274,6 +326,16 @@ public class HomeView {
 		gameBtn2.setBackground(blue);
 		gameBtn2.setFont(btntxt);
 		gameBtn2.setRadius(20);
+		gameBtn2.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				frame.dispose();
+				gc.viewGame();
+			}
+			
+		});
 		gamePanel.add(gameBtn2);
 		
 		
@@ -309,6 +371,16 @@ public class HomeView {
 		movieBtn1.setBackground(blue);
 		movieBtn1.setFont(btntxt);
 		movieBtn1.setRadius(20);
+		movieBtn1.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				frame.dispose();
+				mc.viewMovies();
+			}
+			
+		});
 		moviePanel.add(movieBtn1);
 		
 		RoundedButton movieBtn2 = new RoundedButton("Ver");
@@ -317,6 +389,16 @@ public class HomeView {
 		movieBtn2.setBackground(blue);
 		movieBtn2.setFont(btntxt);
 		movieBtn2.setRadius(20);
+		movieBtn2.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				frame.dispose();
+				mc.viewMovies();
+			}
+			
+		});
 		moviePanel.add(movieBtn2);
 	}
 }

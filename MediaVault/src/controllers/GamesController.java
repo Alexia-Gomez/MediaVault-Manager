@@ -12,4 +12,8 @@ public class GamesController {
 	public void games() {
 		view.games();
 	}
+	
+	public void viewGame() {
+		view.viewGame();
+	}
 }
