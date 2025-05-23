@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -20,6 +22,9 @@ import customClasses.SideBar;
 
 public class OperationsView {
 
+	RoundedPanel filtro;
+	JPanel centro;
+	
 	Color blue = new Color(24, 130, 234);
 	Color border = new Color(186, 186, 186);
 	Color lightGray = new Color(117, 117, 117);
@@ -30,10 +35,11 @@ public class OperationsView {
 	Font btn = tipoFuentes.fuente("/fonts/GolosText-Regular.ttf", 14f);
 	Font txt = tipoFuentes.fuente("/fonts/GolosText-Regular.ttf", 12f);
 	
-	ImageIcon lupa = new ImageIcon(ClientsView.class.getResource("/images/lupa.png"));
-	ImageIcon mas = new ImageIcon(ClientsView.class.getResource("/images/mas.png"));
-	ImageIcon filter = new ImageIcon(ClientsView.class.getResource("/images/filter.png"));
-
+	ImageIcon lupa = new ImageIcon(OperationsView.class.getResource("/images/lupa.png"));
+	ImageIcon mas = new ImageIcon(OperationsView.class.getResource("/images/mas.png"));
+	ImageIcon filter = new ImageIcon(OperationsView.class.getResource("/images/filter.png"));
+	ImageIcon arrow = new ImageIcon(OperationsView.class.getResource("/images/arrow.png"));
+	
 	public OperationsView() {
 
 	}
@@ -64,7 +70,7 @@ public class OperationsView {
 		
 
 		//PANEL CENTRO
-		JPanel centro = new JPanel();
+		centro = new JPanel();
 		centro.setBounds(0, 0, 809, 606);
 		frame.getContentPane().add(centro);
 		centro.setLayout(null);
@@ -79,14 +85,24 @@ public class OperationsView {
 		titleLabel.setFont(titles);
 		titlePanel.add(titleLabel);
 		
-		RoundedButton newClient = new RoundedButton("Registrar operación");
-		newClient.setIcon(new ImageIcon(((ImageIcon) mas).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
-		newClient.setBounds(594, 11, 185, 43);
-		newClient.setIconTextGap(10);
-		newClient.setBackground(blue);
-		newClient.setFont(btn);
-		newClient.setRadius(30);
-		centro.add(newClient);
+		RoundedButton newOp= new RoundedButton("Registrar operación");
+		newOp.setIcon(new ImageIcon(((ImageIcon) mas).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
+		newOp.setBounds(594, 11, 200, 43);
+		newOp.setIconTextGap(10);
+		newOp.setBackground(blue);
+		newOp.setRadius(30);
+		newOp.setFont(btn);
+		newOp.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				frame.dispose();
+				newOperation();
+			}
+			
+		});
+		centro.add(newOp);
 		
 		//BARRA
 		RoundedPanel barra = new RoundedPanel(30, new Color(255, 255, 255));
@@ -112,6 +128,8 @@ public class OperationsView {
 		buscar.setFont(btn);
 		buscar.setRadius(20);
 		barra.add(buscar);
+		
+		filterPanel(centro);
 
 		RoundedButton filtrar = new RoundedButton("Filtrar");
 		filtrar.setIcon(new ImageIcon(((ImageIcon) filter).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
@@ -124,6 +142,15 @@ public class OperationsView {
 		filtrar.setIconTextGap(5);
 		filtrar.setRadius(20);
 		filtrar.setFont(btn);
+		filtrar.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				filtro.setVisible(true);
+			}
+			
+		});
 		barra.add(filtrar);
 
 
@@ -172,5 +199,89 @@ public class OperationsView {
 		centro.add(tablePanel);
 	}
 
+	public void newOperation() {
+		//VENTANA
+		JFrame frame = new JFrame();
+		frame.setBounds(100, 20, 823, 643);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
+		frame.setLocationRelativeTo(null);
+		frame.setResizable(false);
+
+		//PANEL LATERAL
+		RoundedPanel sidepanel = new RoundedPanel(10, blue);
+		sidepanel.setLocation(0, 0);
+		sidepanel.setSize(128, 606);
+		sidepanel.setLayout(new GridLayout(0, 1, 0, 0));
+		frame.getContentPane().add(sidepanel);
+
+		sidepanel.add(SideBar.inicio(frame));
+		sidepanel.add(SideBar.clientes(frame));
+		sidepanel.add(SideBar.nuevaOperacion(frame));
+		sidepanel.add(SideBar.rentaCompra(frame));
+		sidepanel.add(SideBar.juegos(frame));
+		sidepanel.add(SideBar.peliculas(frame));
+
+
+		//PANEL CENTRO
+		centro = new JPanel();
+		centro.setBounds(0, 0, 809, 606);
+		frame.getContentPane().add(centro);
+		centro.setLayout(null);
+
+		RoundedButton titleButton = new RoundedButton("Registrar operación");
+		titleButton.setIcon(new ImageIcon(((ImageIcon) arrow).getImage().getScaledInstance(15, 20, Image.SCALE_SMOOTH)));
+		titleButton.setBounds(151, 11, 230, 43);
+		titleButton.setBackground(Color.white);
+		titleButton.setForeground(Color.black);
+		titleButton.setFont(titles);
+		titleButton.setIconTextGap(20);
+		titleButton.setRadius(20);
+		titleButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				frame.dispose();
+				operations();
+			}
+
+		});
+		centro.add(titleButton);
+	}
+	
+	public void filterPanel(JPanel centro) {
+		filtro = new RoundedPanel(30, new Color(255, 255, 255),3);
+		filtro.setBounds(510, 115, 265, 200);
+		filtro.setLayout(null);
+		filtro.setVisible(false);
+		
+		RoundedButton aplicar = new RoundedButton("Aplicar");
+		aplicar.setBounds(150, 150, 85, 30);
+		aplicar.setRadius(20);
+		aplicar.setBackground(blue);
+		filtro.add(aplicar);
+		
+		RoundedButton cerrar = new RoundedButton("Cerrar");
+		cerrar.setBounds(45, 150, 85, 30);
+		cerrar.setRadius(20);
+		cerrar.setBackground(field);
+		cerrar.setForeground(Color.black);
+		cerrar.setBorderColor(border);
+		cerrar.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				filtro.setVisible(false);
+			}
+			
+		});
+		filtro.add(cerrar);
+		
+		centro.add(filtro);
+		centro.setComponentZOrder(filtro, 0);
+		
+	}
 
 }

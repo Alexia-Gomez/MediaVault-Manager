@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -20,6 +22,8 @@ import customClasses.SideBar;
 
 public class RentSaleView {
 
+	RoundedPanel filtro;
+	
 	Color blue = new Color(24, 130, 234);
 	Color border = new Color(186, 186, 186);
 	Color lightGray = new Color(117, 117, 117);
@@ -192,6 +196,8 @@ public class RentSaleView {
 		buscar.setRadius(20);
 		barra.add(buscar);
 
+		filterPanel(centro);
+		
 		RoundedButton filtrar = new RoundedButton("Filtrar");
 		filtrar.setIcon(new ImageIcon(((ImageIcon) filter).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
 		filtrar.setHorizontalTextPosition(SwingConstants.LEFT);
@@ -203,6 +209,15 @@ public class RentSaleView {
 		filtrar.setIconTextGap(5);
 		filtrar.setRadius(20);
 		filtrar.setFont(btn);
+		filtrar.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				filtro.setVisible(true);
+			}
+			
+		});
 		barra.add(filtrar);
 
 		//TABLA (HOLDER)
@@ -254,6 +269,40 @@ public class RentSaleView {
 		tablePanel.setLayout(new BorderLayout(0, 0));
 		tablePanel.setBackground(Color.white);
 		centro.add(tablePanel);
+	}
+
+	public void filterPanel(JPanel centro) {
+		filtro = new RoundedPanel(30, new Color(255, 255, 255),3);
+		filtro.setBounds(515, 220, 265, 200);
+		filtro.setLayout(null);
+		filtro.setVisible(false);
+
+		RoundedButton aplicar = new RoundedButton("Aplicar");
+		aplicar.setBounds(150, 150, 85, 30);
+		aplicar.setRadius(20);
+		aplicar.setBackground(blue);
+		filtro.add(aplicar);
+
+		RoundedButton cerrar = new RoundedButton("Cerrar");
+		cerrar.setBounds(45, 150, 85, 30);
+		cerrar.setRadius(20);
+		cerrar.setBackground(field);
+		cerrar.setForeground(Color.black);
+		cerrar.setBorderColor(border);
+		cerrar.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				filtro.setVisible(false);
+			}
+
+		});
+		filtro.add(cerrar);
+
+		centro.add(filtro);
+		centro.setComponentZOrder(filtro, 0);
+
 	}
 
 }
