@@ -134,6 +134,7 @@ public class LoginView {
 		        
 		        if(acceso) {
 		        	
+		        	frame.dispose();
  					HomeController hc = new HomeController();
  					hc.home();
 	                  
