@@ -4,21 +4,12 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import controllers.ClientsController;
-import controllers.GamesController;
-import controllers.HomeController;
-import controllers.MoviesController;
-import controllers.OperationsController;
-import controllers.RentSaleController;
 import customClasses.Fuentes;
 import customClasses.RoundedPanel;
 import customClasses.SideBar;
@@ -28,7 +19,7 @@ public class OperationsView {
 	Color blue = new Color(24, 130, 234);
 
 	Fuentes tipoFuentes = new Fuentes();
-	Font titles = tipoFuentes.fuente("/fonts/GolosText-Regular.ttf", Font.BOLD, 16f);
+	Font titles = tipoFuentes.fuente("/fonts/GolosText-Regular.ttf", 16f);
 
 
 	public OperationsView() {

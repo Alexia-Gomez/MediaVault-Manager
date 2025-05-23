@@ -28,7 +28,7 @@ public class ClientsView {
 	Color blue = new Color(24, 130, 234);
 
 	Fuentes tipoFuentes = new Fuentes();
-	Font titles = tipoFuentes.fuente("/fonts/GolosText-Regular.ttf", Font.BOLD, 16f);
+	Font titles = tipoFuentes.fuente("/fonts/GolosText-Regular.ttf", 16f);
 
 
 	public ClientsView() {

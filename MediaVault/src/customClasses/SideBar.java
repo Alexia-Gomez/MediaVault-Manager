@@ -27,7 +27,7 @@ public class SideBar extends JButton {
 	Color hover = new Color(128, 186, 243);
 	
 	Fuentes tipoFuentes = new Fuentes();
-	Font titles = tipoFuentes.fuente("/fonts/GolosText-SemiBold.ttf", Font.BOLD, 16f);
+	Font titles = tipoFuentes.fuente("/fonts/GolosText-SemiBold.ttf", 16f);
 	
 	static ImageIcon homeIcon = new ImageIcon(HomeView.class.getResource("/images/home.png"));
 	static ImageIcon usersIcon = new ImageIcon(HomeView.class.getResource("/images/users.png"));

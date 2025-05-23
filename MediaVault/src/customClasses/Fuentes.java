@@ -8,7 +8,7 @@ public class Fuentes {
 	    public String Golos = "GolosText-VariableFont_wght.ttf";
 	    public String Lexend = "Lexend-VariableFont_wght.ttf";
 
-	    public Font fuente( String fontName, int estilo, float tamanio)
+	    public Font fuente( String fontName, float tamanio)
 	    {
 	         try {
 	            InputStream is =  getClass().getResourceAsStream(fontName);
@@ -19,7 +19,7 @@ public class Fuentes {
 	            font = new Font("Arial", Font.PLAIN, 14);            
 	        }
 	         
-	        Font tfont = font.deriveFont(estilo, tamanio);
+	        Font tfont = font.deriveFont(tamanio);
 	        return tfont;
 	    }
 }

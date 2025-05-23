@@ -28,8 +28,8 @@ public class LoginView {
 	Color grayF = new Color(250, 250, 250);
 	
 	Fuentes tipoFuentes = new Fuentes();
-	Font txt = tipoFuentes.fuente("/fonts/GolosText-Regular.ttf", Font.PLAIN, 12f);
-	Font btntxt = tipoFuentes.fuente("/fonts/GolosText-Regular.ttf", Font.PLAIN, 15f);
+	Font txt = tipoFuentes.fuente("/fonts/GolosText-Regular.ttf", 12f);
+	Font btntxt = tipoFuentes.fuente("/fonts/GolosText-Regular.ttf", 15f);
 	
 	ImageIcon logo = new ImageIcon(LoginView.class.getResource("/images/logo.png"));
 	
