@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -20,6 +21,8 @@ import customClasses.RoundedButton;
 import customClasses.RoundedJTextField;
 import customClasses.RoundedPanel;
 import customClasses.SideBar;
+import models.Movie;
+import models.MoviesModel;
 
 public class MoviesView {
 	
@@ -205,11 +208,53 @@ public class MoviesView {
 		tableTitles.add(lblNewLabel_7);
 
 		//TABLA
-		JPanel tablePanel = new JPanel();
+		/*JPanel tablePanel = new JPanel();
 		tablePanel.setBounds(151, 184, 626, 322);
 		tablePanel.setLayout(new BorderLayout(0, 0));
 		tablePanel.setBackground(Color.white);
+		centro.add(tablePanel);*/
+		//TABLA
+		JPanel tablePanel = new JPanel();
+		tablePanel.setBounds(151, 184, 626, 322);
+		tablePanel.setLayout(new GridLayout(0, 7, 0, 10)); // una fila por película
+		tablePanel.setBackground(Color.white);
 		centro.add(tablePanel);
+
+		// Obtener datos de la BD
+		MoviesModel model = new MoviesModel();
+		ArrayList<Movie> movies = model.get();
+
+		// Mostrar datos
+		for (Movie movie : movies) {
+		    JLabel title = new JLabel(movie.getTitle(), SwingConstants.CENTER);
+		    title.setFont(txt);
+		    tablePanel.add(title);
+
+		    JLabel studio = new JLabel(movie.getStudio(), SwingConstants.CENTER);
+		    studio.setFont(txt);
+		    tablePanel.add(studio);
+
+		    JLabel classification = new JLabel(movie.getClassification(), SwingConstants.CENTER);
+		    classification.setFont(txt);
+		    tablePanel.add(classification);
+
+		    JLabel releaseDate = new JLabel(movie.getRelease_date(), SwingConstants.CENTER);
+		    releaseDate.setFont(txt);
+		    tablePanel.add(releaseDate);
+
+		    JLabel genre = new JLabel(movie.getGenre(), SwingConstants.CENTER);
+		    genre.setFont(txt);
+		    tablePanel.add(genre);
+
+		    JLabel rent = new JLabel(String.valueOf(movie.getRent_stock()), SwingConstants.CENTER);
+		    rent.setFont(txt);
+		    tablePanel.add(rent);
+
+		    JLabel sale = new JLabel(String.valueOf(movie.getRent_stock()), SwingConstants.CENTER);
+		    sale.setFont(txt);
+		    tablePanel.add(sale);
+		}
+
 	}
 
 	public void newMovie() {

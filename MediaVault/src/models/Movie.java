@@ -1,0 +1,81 @@
+package models;
+
+import java.util.Date;
+
+public class Movie {
+	
+	public int product_id, rent_stock, sale_stock;
+	public String title, platform, genre, classification, product_type, cover, studio;
+	public String release_date;
+	public double sale_price, rent_price;
+	
+
+	public Movie(String title, String studio, String classification, String release_date, String genre, int rent_stock, int sale_stock) {
+		//				Movie movie = new Movie(title, studio, classification, releaseDate, genre, rentStock, saleStock);
+
+		this.product_id = product_id;
+		this.rent_stock = rent_stock ;
+		this.sale_stock = sale_stock;
+		this.title = title;
+		this.platform = platform;
+		this.genre = genre;
+		this.classification = classification;
+		this.product_type = product_type;
+		this.cover = cover;
+		this.studio = studio;
+		this.release_date = release_date;
+		this.sale_price = sale_price;
+		this.rent_price = rent_price;
+		// TODO Auto-generated constructor stub
+	}
+
+
+	public int getProduct_id() { return product_id; }
+	public int getRent_stock() { return rent_stock; }
+	public int getSale_stock() { return sale_stock; }
+
+	public void setRent_stock(int rent_stock) { this.rent_stock = rent_stock; }
+	public void setSale_stock(int sale_stock) { this.sale_stock = sale_stock; }
+
+	public String getTitle() { return title; }
+	public void setTitle(String title) { this.title = title; }
+
+	public String getPlatform() { return platform; }
+	public void setPlatform(String platform) { this.platform = platform; }
+
+	public String getGenre() { return genre; }
+	public void setGenre(String genre) { this.genre = genre; }
+
+	public String getClassification() { return classification; }
+	public void setClassification(String classification) { this.classification = classification; }
+
+	public String getProduct_type() { return product_type; }
+	public void setProduct_type(String product_type) { this.product_type = product_type; }
+
+	public String getCover() { return cover; }
+	public void setCover(String cover) { this.cover = cover; }
+
+	public String getStudio() { return studio; }
+	public void setStudio(String studio) { this.studio = studio; }
+
+	public String getRelease_date() { return release_date; }
+	public void setRelease_date(String release_date) { this.release_date = release_date; }
+
+	public double getSale_price() { return sale_price; }
+	public void setSale_price(double sale_price) { this.sale_price = sale_price; }
+
+	public double getRent_price() { return rent_price; }
+	public void setRent_price(double rent_price) { this.rent_price = rent_price; }
+
+
+	@Override
+	public String toString() {
+		return "Movie [product_id=" + product_id + ", rent_stock=" + rent_stock + ", sale_stock=" + sale_stock
+				+ ", title=" + title + ", platform=" + platform + ", genre=" + genre + ", classification="
+				+ classification + ", product_type=" + product_type + ", cover=" + cover + ", studio=" + studio
+				+ ", release_date=" + release_date + ", sale_price=" + sale_price + ", rent_price=" + rent_price + "]";
+	}
+	
+	
+
+}
