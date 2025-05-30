@@ -128,17 +128,17 @@ public class LoginView {
 				String password = new String(passField.getPassword());
 				String username = userField.getText();
 				
-		        AdminController controller = new AdminController();
+		        /*AdminController controller = new AdminController();
 
 		        boolean acceso = controller.autenticar(username, password);
 		        
 		        if(acceso) {
-		        	
+		        	*/
 		        	frame.dispose();
  					HomeController hc = new HomeController();
  					hc.home();
 	                  
-		        }else {
+		        /*}else {
  					passField.setBorderColor(Color.red);
  					userField.setBorderColor(Color.red);
  					errorLabel.setVisible(true);
@@ -146,7 +146,7 @@ public class LoginView {
  					passField.setText("");
  					userField.setText("");
  					userField.requestFocus();
-		        }
+		        }*/
 
 			}
 

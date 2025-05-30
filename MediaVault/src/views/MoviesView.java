@@ -9,14 +9,27 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.RowFilter;
 import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 import controllers.HomeController;
+import customClasses.CustomJCheckBox;
+import customClasses.CustomJComboBox;
+import customClasses.CustomJRadioButton;
+import customClasses.CustomScrollBar;
+import customClasses.CustomScrollPane;
 import customClasses.Fuentes;
+import customClasses.IconCellRenderer;
 import customClasses.RoundedButton;
 import customClasses.RoundedJTextField;
 import customClasses.RoundedPanel;
@@ -32,12 +45,14 @@ public class MoviesView {
 	Color blue = new Color(24, 130, 234);
 	Color border = new Color(186, 186, 186);
 	Color lightGray = new Color(117, 117, 117);
+	Color gray = new Color(242, 242, 242);
 	Color field = new Color(250, 250, 250);
 
 	Fuentes tipoFuentes = new Fuentes();
 	Font titles = tipoFuentes.fuente("/fonts/GolosText-SemiBold.ttf", 17f);
 	Font btn = tipoFuentes.fuente("/fonts/GolosText-Regular.ttf", 14f);
 	Font txt = tipoFuentes.fuente("/fonts/GolosText-Regular.ttf", 12f);
+	Font fieldtxt = tipoFuentes.fuente("/fonts/GolosText-Regular.ttf", 11f);
 
 	ImageIcon lupa = new ImageIcon(MoviesView.class.getResource("/images/lupa.png"));
 	ImageIcon mas = new ImageIcon(MoviesView.class.getResource("/images/mas.png"));
@@ -51,7 +66,7 @@ public class MoviesView {
 	public void movies() {
 		// VENTANA
 		JFrame frame = new JFrame();
-		frame.setBounds(100, 20, 823, 643);
+		frame.setBounds(100, 20, 1000, 643);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
@@ -75,7 +90,7 @@ public class MoviesView {
 
 		//PANEL CENTRO
 		centro = new JPanel();
-		centro.setBounds(0, 0, 809, 606);
+		centro.setBounds(0, 0, 1000, 606);
 		frame.getContentPane().add(centro);
 		centro.setLayout(null);
 
@@ -91,7 +106,7 @@ public class MoviesView {
 
 		RoundedButton newMovie = new RoundedButton("Nueva película");
 		newMovie.setIcon(new ImageIcon(((ImageIcon) mas).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
-		newMovie.setBounds(594, 11, 185, 43);
+		newMovie.setBounds(780, 11, 185, 43);
 		newMovie.setIconTextGap(10);
 		newMovie.setBackground(blue);
 		newMovie.setFont(btn);
@@ -108,9 +123,110 @@ public class MoviesView {
 		});
 		centro.add(newMovie);
 
+
+		//TABLA (HOLDER)
+		//TITLES
+		JPanel tableTitles = new JPanel();
+		tableTitles.setBounds(151, 144, 810, 29);
+		tableTitles.setLayout(new GridLayout(0, 7, 0, 0));
+		centro.add(tableTitles);
+
+		JLabel title = new JLabel("Título");
+		title.setHorizontalAlignment(SwingConstants.CENTER);
+		title.setForeground(lightGray);
+		title.setFont(txt);
+		tableTitles.add(title);
+
+		JLabel studio = new JLabel("Estudio");
+		studio.setHorizontalAlignment(SwingConstants.CENTER);
+		studio.setForeground(lightGray);
+		studio.setFont(txt);
+		tableTitles.add(studio);
+
+		JLabel classification = new JLabel("Clasificación");
+		classification.setHorizontalAlignment(SwingConstants.CENTER);
+		classification.setForeground(lightGray);
+		classification.setFont(txt);
+		tableTitles.add(classification);
+
+		JLabel releaseDate = new JLabel("Año");
+		releaseDate.setHorizontalAlignment(SwingConstants.CENTER);
+		releaseDate.setForeground(lightGray);
+		releaseDate.setFont(txt);
+		tableTitles.add(releaseDate);
+
+		JLabel genre = new JLabel("Género");
+		genre.setHorizontalAlignment(SwingConstants.CENTER);
+		genre.setForeground(lightGray);
+		genre.setFont(txt);
+		tableTitles.add(genre);
+
+		JLabel rent = new JLabel("Renta");
+		rent.setHorizontalAlignment(SwingConstants.CENTER);
+		rent.setForeground(lightGray);
+		rent.setFont(txt);
+		tableTitles.add(rent);
+
+		JLabel sale = new JLabel("Venta");
+		sale.setHorizontalAlignment(SwingConstants.CENTER);
+		sale.setForeground(lightGray);
+		sale.setFont(txt);
+		tableTitles.add(sale);
+
+		//TABLA
+		JPanel tablePanel = new JPanel();
+		tablePanel.setBounds(151, 184, 810, 322);
+		tablePanel.setLayout(new BorderLayout(0, 0));
+		tablePanel.setBackground(Color.white);
+		centro.add(tablePanel);
+
+		// Obtener datos de la BD
+		MoviesModel model = new MoviesModel();
+		ArrayList<Movie> movies = model.get();
+		
+		String[] columnNames = {"", "", "", "", "", "", ""};
+		DefaultTableModel model1 = new DefaultTableModel(columnNames, 0);
+
+		for (Movie movie : movies) {
+		    model1.addRow(new Object[] {
+		        movie.getTitle(),
+		        movie.getStudio(),
+		        movie.getClassification(),
+		        movie.getRelease_date(),
+		        movie.getGenre(),
+		        movie.getRent_stock(),
+		        movie.getSale_stock()
+		    });
+		}
+
+		JTable table = new JTable(model1);
+		table.setRowHeight(80);
+		table.setShowVerticalLines(false);
+		table.setTableHeader(null);
+		table.setFont(fieldtxt);
+		
+		table.getColumnModel().getColumn(5).setCellRenderer(new IconCellRenderer());
+		
+		table.getColumnModel().getColumn(6).setCellRenderer(new IconCellRenderer());
+		
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+		//toda la tabla centrada
+		table.setDefaultRenderer(Object.class, centerRenderer);
+
+		CustomScrollPane scrollPane = new CustomScrollPane();
+		scrollPane.setBorder(BorderFactory.createEmptyBorder());
+		scrollPane.setViewportView(table);		
+
+		scrollPane.getVerticalScrollBar().setUI(new CustomScrollBar());
+		tablePanel.add(scrollPane);
+
+		TableRowSorter<DefaultTableModel> buscador = new TableRowSorter<>(model1);
+		table.setRowSorter(buscador);
+
 		//BARRA
 		RoundedPanel barra = new RoundedPanel(30, new Color(255, 255, 255));
-		barra.setBounds(151, 65, 626, 68);
+		barra.setBounds(151, 65, 810, 68);
 		barra.setLayout(null);
 		centro.add(barra);
 
@@ -121,25 +237,39 @@ public class MoviesView {
 		barra.add(lupaIcon);
 
 		RoundedJTextField searchBar = new RoundedJTextField(20);
-		searchBar.setBounds(65, 20, 348, 30);
+		searchBar.setBounds(65, 20, 520, 30);
 		searchBar.setBackground(field);
 		searchBar.setFont(txt);
 		barra.add(searchBar);
 
 		RoundedButton buscar = new RoundedButton("Buscar");
-		buscar.setBounds(423, 20, 86, 30);
+		buscar.setBounds(600, 20, 86, 30);
 		buscar.setBackground(blue);
 		buscar.setFont(btn);
 		buscar.setRadius(20);
+		buscar.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				String txt = searchBar.getText();
+				if(txt.isEmpty()) {
+					buscador.setRowFilter(null);
+				} else {
+					buscador.setRowFilter(RowFilter.regexFilter("(?i)" + txt));
+				}
+			}
+
+		});
 		barra.add(buscar);
 
 		filterPanel(centro);
-		
+
 		RoundedButton filtrar = new RoundedButton("Filtrar");
 		filtrar.setIcon(new ImageIcon(((ImageIcon) filter).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
 		filtrar.setHorizontalTextPosition(SwingConstants.LEFT);
 		filtrar.setHorizontalAlignment(SwingConstants.CENTER);
-		filtrar.setBounds(515, 20, 86, 30);
+		filtrar.setBounds(700, 20, 86, 30);
 		filtrar.setBackground(Color.white);
 		filtrar.setForeground(Color.black);
 		filtrar.setBorderColor(border);
@@ -153,79 +283,12 @@ public class MoviesView {
 				// TODO Auto-generated method stub
 				filtro.setVisible(true);
 			}
-			
+
 		});
 		barra.add(filtrar);
 
-
-		//TABLA (HOLDER)
-		//TITLES
-		JPanel tableTitles = new JPanel();
-		tableTitles.setBounds(151, 144, 626, 29);
-		tableTitles.setLayout(new GridLayout(0, 7, 0, 0));
-		centro.add(tableTitles);
-
-		JLabel lblNewLabel_1 = new JLabel("Título");
-		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_1.setForeground(lightGray);
-		lblNewLabel_1.setFont(txt);
-		tableTitles.add(lblNewLabel_1);
-
-		JLabel lblNewLabel_2 = new JLabel("Estudio");
-		lblNewLabel_2.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_2.setForeground(lightGray);
-		lblNewLabel_2.setFont(txt);
-		tableTitles.add(lblNewLabel_2);
-
-		JLabel lblNewLabel_3 = new JLabel("Clasificación");
-		lblNewLabel_3.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_3.setForeground(lightGray);
-		lblNewLabel_3.setFont(txt);
-		tableTitles.add(lblNewLabel_3);
-
-		JLabel lblNewLabel_4 = new JLabel("Año");
-		lblNewLabel_4.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_4.setForeground(lightGray);
-		lblNewLabel_4.setFont(txt);
-		tableTitles.add(lblNewLabel_4);
-
-		JLabel lblNewLabel_5 = new JLabel("Género");
-		lblNewLabel_5.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_5.setForeground(lightGray);
-		lblNewLabel_5.setFont(txt);
-		tableTitles.add(lblNewLabel_5);
-
-		JLabel lblNewLabel_6 = new JLabel("Renta");
-		lblNewLabel_6.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_6.setForeground(lightGray);
-		lblNewLabel_6.setFont(txt);
-		tableTitles.add(lblNewLabel_6);
-
-		JLabel lblNewLabel_7 = new JLabel("Venta");
-		lblNewLabel_7.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_7.setForeground(lightGray);
-		lblNewLabel_7.setFont(txt);
-		tableTitles.add(lblNewLabel_7);
-
-		//TABLA
-		/*JPanel tablePanel = new JPanel();
-		tablePanel.setBounds(151, 184, 626, 322);
-		tablePanel.setLayout(new BorderLayout(0, 0));
-		tablePanel.setBackground(Color.white);
-		centro.add(tablePanel);*/
-		//TABLA
-		JPanel tablePanel = new JPanel();
-		tablePanel.setBounds(151, 184, 626, 322);
-		tablePanel.setLayout(new GridLayout(0, 7, 0, 10)); // una fila por película
-		tablePanel.setBackground(Color.white);
-		centro.add(tablePanel);
-
-		// Obtener datos de la BD
-		MoviesModel model = new MoviesModel();
-		ArrayList<Movie> movies = model.get();
-
 		// Mostrar datos
-		for (Movie movie : movies) {
+		/*for (Movie movie : movies) {
 		    JLabel title = new JLabel(movie.getTitle(), SwingConstants.CENTER);
 		    title.setFont(txt);
 		    tablePanel.add(title);
@@ -253,14 +316,14 @@ public class MoviesView {
 		    JLabel sale = new JLabel(String.valueOf(movie.getRent_stock()), SwingConstants.CENTER);
 		    sale.setFont(txt);
 		    tablePanel.add(sale);
-		}
+		}*/
 
 	}
 
 	public void newMovie() {
 		//VENTANA
 		JFrame frame = new JFrame();
-		frame.setBounds(100, 20, 823, 643);
+		frame.setBounds(100, 20, 1000, 643);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
@@ -306,25 +369,226 @@ public class MoviesView {
 
 		});
 		centro.add(titleButton);
-	}
+		
+		//ENTRADA DE DATOS
+		RoundedPanel dataPanel = new RoundedPanel(30, new Color(255, 255, 255));
+		dataPanel.setBounds(150, 110, 810, 400);
+		dataPanel.setLayout(null);
+		centro.add(dataPanel);
+		
+		RoundedPanel foto = new RoundedPanel(30,gray);
+		foto.setBounds(35, 20, 165, 185);
+		dataPanel.add(foto);
+		foto.setLayout(null);
+		
+		RoundedButton movieId = new RoundedButton("ID: #12345");
+		movieId.setBounds(70, 250 ,100, 30);
+		movieId.setBackground(gray);
+		movieId.setForeground(Color.black);
+		movieId.setBorderColor(border);
+		movieId.setFont(txt);
+		movieId.setRadius(20);
+		dataPanel.add(movieId);
+		
+		JLabel titleLabel = new JLabel("Titulo de la película:");
+		titleLabel.setBounds(237, 20, 250, 15);
+		titleLabel.setFont(txt);
+		dataPanel.add(titleLabel);
+		
+		RoundedJTextField movieTitle = new RoundedJTextField(20);
+		movieTitle.setBounds(237, 40, 250, 30);
+		movieTitle.setFont(fieldtxt);
+		dataPanel.add(movieTitle);
+		
+		JLabel dateLabel = new JLabel("Año de estreno:");
+		dateLabel.setBounds(237, 85, 250, 15);
+		dateLabel.setFont(txt);
+		dataPanel.add(dateLabel);
+		
+		RoundedJTextField movieDate = new RoundedJTextField(20);
+		movieDate.setBounds(237, 105, 250, 27);
+		movieDate.setFont(fieldtxt);
+		dataPanel.add(movieDate);
+		
+		JLabel rentStockLabel = new JLabel("Stock de renta:");
+		rentStockLabel.setBounds(237, 215, 250, 15);
+		rentStockLabel.setFont(txt);
+		dataPanel.add(rentStockLabel);
+		
+		RoundedJTextField movieRentStock = new RoundedJTextField(20);
+		movieRentStock.setBounds(237, 235, 250, 27);
+		movieRentStock.setFont(fieldtxt);
+		dataPanel.add(movieRentStock);
+		
+		JLabel rentLabel = new JLabel("Precio de renta:");
+		rentLabel.setBounds(237, 280, 250, 15);
+		rentLabel.setFont(txt);
+		dataPanel.add(rentLabel);
+		
+		RoundedJTextField movieRent = new RoundedJTextField(20);
+		movieRent.setBounds(237, 300, 250, 27);
+		movieRent.setFont(fieldtxt);
+		dataPanel.add(movieRent);
+		
+		JLabel dispLabel = new JLabel("Disponibilidad:");
+		dispLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		dispLabel.setBounds(237, 150, 250, 15);
+		dispLabel.setFont(txt);
+		dataPanel.add(dispLabel);
+		
+		CustomJCheckBox renta = new CustomJCheckBox();
+		renta.setBounds(290, 170, 125, 27);
+		renta.setText("Renta");
+		renta.setFont(txt);
+		dataPanel.add(renta);
+		
+		CustomJCheckBox venta = new CustomJCheckBox();
+		venta.setBounds(380, 170, 125, 27);
+		venta.setText("Venta");
+		venta.setFont(txt);
+		dataPanel.add(venta);
+		
+		
+		JLabel studioLabel = new JLabel("Estudio:");
+		studioLabel.setBounds(520, 20, 250, 15);
+		studioLabel.setFont(txt);
+		dataPanel.add(studioLabel);
+		
+		RoundedJTextField movieStudio = new RoundedJTextField(20);
+		movieStudio.setBounds(520, 40, 250, 27);
+		movieStudio.setFont(fieldtxt);
+		dataPanel.add(movieStudio);
+		
+		JLabel classLabel = new JLabel("Clasificación:");
+		classLabel.setBounds(520, 85, 250, 15);
+		classLabel.setFont(txt);
+		dataPanel.add(classLabel);
+		
+		CustomJComboBox movieClass = new CustomJComboBox();
+		movieClass.setModel( new DefaultComboBoxModel( new String[] { "A", "B", "B-15", "C" }));
+		movieClass.setBounds(520, 105, 250, 27);
+		movieClass.setFont(fieldtxt);
+		dataPanel.add(movieClass);
+		
+		JLabel genreLabel = new JLabel("Género:");
+		genreLabel.setBounds(520, 150, 250, 15);
+		genreLabel.setFont(txt);
+		dataPanel.add(genreLabel);
+		
+		CustomJComboBox movieGenre = new CustomJComboBox();
+		movieGenre.setModel( new DefaultComboBoxModel( new String[] { "Sci-fi", "Aventura", "Horror", "Comedia", "Acción" }));
+		movieGenre.setBounds(520, 170, 250, 27);
+		movieGenre.setFont(fieldtxt);
+		dataPanel.add(movieGenre);
+		
+		JLabel saleStockLabel = new JLabel("Stock de venta:");
+		saleStockLabel.setBounds(520, 215, 250, 15);
+		saleStockLabel.setFont(txt);
+		dataPanel.add(saleStockLabel);
+		
+		RoundedJTextField movieSaleStock = new RoundedJTextField(20);
+		movieSaleStock.setBounds(520, 235, 250, 27);
+		movieSaleStock.setFont(fieldtxt);
+		dataPanel.add(movieSaleStock);
+		
+		JLabel saleLabel = new JLabel("Precio de venta:");
+		saleLabel.setBounds(520, 280, 250, 15);
+		saleLabel.setFont(txt);
+		dataPanel.add(saleLabel);
+		
+		RoundedJTextField movieSale = new RoundedJTextField(20);
+		movieSale.setBounds(520, 300, 250, 27);
+		movieSale.setFont(fieldtxt);
+		dataPanel.add(movieSale);
+		
+		RoundedButton guardar = new RoundedButton("Guardar película");
+		guardar.setBounds(620, 355, 150, 30);
+		guardar.setBackground(blue);
+		guardar.setFont(txt);
+		guardar.setRadius(20);
+		dataPanel.add(guardar);
+		
+		RoundedButton cancelar = new RoundedButton("Cancelar");
+		cancelar.setBounds(520, 355,80, 30);
+		cancelar.setBackground(Color.white);
+		cancelar.setForeground(Color.black);
+		cancelar.setBorderColor(border);
+		cancelar.setFont(txt);
+		cancelar.setRadius(20);
+		dataPanel.add(cancelar);
 
+		
+	}
+	
 	public void filterPanel(JPanel centro) {
 		filtro = new RoundedPanel(30, new Color(255, 255, 255),3);
-		filtro.setBounds(510, 115, 265, 200);
+		filtro.setBounds(625, 115, 340, 300);
 		filtro.setLayout(null);
 		filtro.setVisible(false);
 		
-		RoundedButton aplicar = new RoundedButton("Aplicar");
-		aplicar.setBounds(150, 150, 85, 30);
-		aplicar.setRadius(20);
-		aplicar.setBackground(blue);
-		filtro.add(aplicar);
+		JLabel clasif = new JLabel("Clasifición");
+		clasif.setBounds(40, 30, 100, 15);
+		clasif.setFont(txt);
+		filtro.add(clasif);
+		
+		CustomJRadioButton classA = new CustomJRadioButton();
+		classA.setBounds(45, 55, 50, 30);
+		classA.setFont(fieldtxt);
+		classA.setText("A");
+		filtro.add(classA);
+		
+		CustomJRadioButton classB = new CustomJRadioButton();
+		classB.setBounds(150, 55, 50, 30);
+		classB.setFont(fieldtxt);
+		classB.setText("B");
+		filtro.add(classB);
+		
+		CustomJRadioButton classB15 = new CustomJRadioButton();
+		classB15.setBounds(250, 55, 50, 30);
+		classB15.setFont(fieldtxt);
+		classB15.setText("B-15");
+		filtro.add(classB15);
+		
+		JLabel gen = new JLabel("Género");
+		gen.setBounds(40, 120, 100, 15);
+		gen.setFont(txt);
+		filtro.add(gen);
+		
+		CustomJRadioButton scifi = new CustomJRadioButton();
+		scifi.setBounds(35, 150, 100, 30);
+		scifi.setFont(fieldtxt);
+		scifi.setText("Sci-fi");
+		filtro.add(scifi);
+		
+		CustomJRadioButton adventure = new CustomJRadioButton();
+		adventure.setBounds(140, 150, 100, 30);
+		adventure.setFont(fieldtxt);
+		adventure.setText("Aventura");
+		filtro.add(adventure);
+		
+		CustomJRadioButton horror = new CustomJRadioButton();
+		horror.setBounds(240, 150, 100, 30);
+		horror.setFont(fieldtxt);
+		horror.setText("Horror");
+		filtro.add(horror);
+		
+		CustomJRadioButton comedy = new CustomJRadioButton();
+		comedy.setBounds(90, 195, 100, 30);
+		comedy.setFont(fieldtxt);
+		comedy.setText("Comedia");
+		filtro.add(comedy);
+		
+		CustomJRadioButton action = new CustomJRadioButton();
+		action.setBounds(200, 195, 100, 30);
+		action.setFont(fieldtxt);
+		action.setText("Acción");
+		filtro.add(action);
 		
 		RoundedButton cerrar = new RoundedButton("Cerrar");
-		cerrar.setBounds(45, 150, 85, 30);
+		cerrar.setBounds(60, 240, 85, 30);
 		cerrar.setRadius(20);
 		cerrar.setBackground(field);
-		cerrar.setForeground(Color.black);
+		cerrar.setForeground(Color.gray);
 		cerrar.setBorderColor(border);
 		cerrar.addActionListener(new ActionListener() {
 
@@ -336,6 +600,33 @@ public class MoviesView {
 			
 		});
 		filtro.add(cerrar);
+		
+		RoundedButton aplicar = new RoundedButton("Aplicar");
+		aplicar.setBounds(200, 240, 85, 30);
+		aplicar.setRadius(20);
+		aplicar.setBackground(blue);
+		/*aplicar.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        String clasificacion = null;
+		        if (classA.isSelected()) clasificacion = "A";
+		        else if (classB.isSelected()) clasificacion = "B";
+		        else if (classB15.isSelected()) clasificacion = "B-15";
+
+		        String genero = null;
+		        if (scifi.isSelected()) genero = "Sci-fi";
+		        else if (adventure.isSelected()) genero = "Aventura";
+		        else if (horror.isSelected()) genero = "Horror";
+		        else if (comedy.isSelected()) genero = "Comedia";
+		        else if (action.isSelected()) genero = "Acción";
+
+		        //filtroTabla(clasificacion, genero);
+		        filtro.setVisible(false);
+		    }
+		});*/
+		filtro.add(aplicar);
+		
+		
 		
 		centro.add(filtro);
 		centro.setComponentZOrder(filtro, 0);
