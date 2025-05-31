@@ -41,7 +41,7 @@ public class LoginView {
 		
 		// VENTANA
 		JFrame frame  = new JFrame();
-		frame.setBounds(100, 20, 823, 643);
+		frame.setBounds(100, 20, 1000, 643);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
@@ -54,13 +54,13 @@ public class LoginView {
 		panel.setLayout(null);
 
 		RoundedPanel roundPane = new RoundedPanel(30, Color.white, 3);
-		roundPane.setLocation(256, 125);
+		roundPane.setLocation(338, 125);
 		roundPane.setSize(310,365);
 		panel.add(roundPane);
 
 		JPanel back = new JPanel();
 		back.setBackground(blueBack);
-		back.setBounds(0, 0, 809, 240);
+		back.setBounds(0, 0, 986, 240);
 		panel.add(back);
 		roundPane.setLayout(null);
 
@@ -128,25 +128,41 @@ public class LoginView {
 				String password = new String(passField.getPassword());
 				String username = userField.getText();
 				
-		        /*AdminController controller = new AdminController();
-
-		        boolean acceso = controller.autenticar(username, password);
-		        
-		        if(acceso) {
-		        	*/
-		        	frame.dispose();
- 					HomeController hc = new HomeController();
- 					hc.home();
-	                  
-		        /*}else {
- 					passField.setBorderColor(Color.red);
- 					userField.setBorderColor(Color.red);
- 					errorLabel.setVisible(true);
- 					
- 					passField.setText("");
- 					userField.setText("");
- 					userField.requestFocus();
-		        }*/
+				Boolean flag1=false, flag2=false;
+				
+				if(username.equals("")){
+					userField.setBorderColor(Color.red);
+				} else
+					flag1=true;
+				
+				
+				if(password.equals("")){
+					passField.setBorderColor(Color.red);
+				} else
+					flag2=true;
+				
+				userField.requestFocus();
+				
+				if(flag1 && flag2) {
+					
+					AdminController controller = new AdminController();
+			        boolean acceso = controller.autenticar(username, password);
+			        
+			        if(acceso) {
+			        	
+			        	frame.dispose();
+	 					HomeController hc = new HomeController();
+	 					hc.home();
+		                  
+			        }else {
+	 					passField.setBorderColor(Color.red);
+	 					userField.setBorderColor(Color.red);
+	 					errorLabel.setVisible(true);
+	 					
+	 					passField.setText("");
+	 					userField.requestFocus();
+			        }
+				}
 
 			}
 
