@@ -72,7 +72,7 @@ public class LoginView {
 		logoLabel.setBounds(35, 11, 240, 96);
 		roundPane.add(logoLabel);
 
-		JLabel intro = new JLabel("<html><center>Por favor ingrese sus datos de inicio de<br>sesión</center></html>");
+		JLabel intro = new JLabel("<html><center>Por favor, ingrese sus datos de inicio de<br>sesión</center></html>");
 		intro.setHorizontalAlignment(SwingConstants.CENTER);
 		intro.setFont(txt);
 		intro.setBounds(37, 100, 236, 43);
