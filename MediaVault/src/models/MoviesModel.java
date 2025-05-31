@@ -45,4 +45,31 @@ public class MoviesModel {
 		}
 		return movies;
 	}
+	
+	public boolean delete(int product_id) {
+		String query = "DELETE FROM `Products` WHERE `product_id` = "+product_id+ "AND `product_type` = 'pelicula'";
+		Connection connection = ConexionBD.getConexion();
+		Statement stmt = null;
+		try {
+			stmt = connection.createStatement();
+			int rs = stmt.executeUpdate(query);
+			
+			if (rs>0) {
+				return true;
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				if (stmt != null) stmt.close();
+				if (connection != null) connection.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return false;
+	} 
+	
+	
 }
