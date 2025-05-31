@@ -53,6 +53,7 @@ public class ClientsView {
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
 		frame.setResizable(false);
+		frame.setTitle("Clientes");
 
 		//PANEL LATERAL
 		RoundedPanel sidepanel = new RoundedPanel(10, blue);
@@ -209,6 +210,7 @@ public class ClientsView {
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
 		frame.setResizable(false);
+		frame.setTitle("Nuevo cliente");
 
 		//PANEL LATERAL
 		RoundedPanel sidepanel = new RoundedPanel(10, blue);

@@ -55,6 +55,7 @@ public class GamesView {
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
 		frame.setResizable(false);
+		frame.setTitle("Videojuegos");
 
 		// PANEL LATERAL
 		RoundedPanel sidepanel = new RoundedPanel(10, blue);
@@ -221,6 +222,7 @@ public class GamesView {
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
 		frame.setResizable(false);
+		frame.setTitle("Nuevo videojuego");
 
 		//PANEL LATERAL
 		RoundedPanel sidepanel = new RoundedPanel(10, blue);

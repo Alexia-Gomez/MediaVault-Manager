@@ -53,6 +53,7 @@ public class OperationsView {
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
 		frame.setResizable(false);
+		frame.setTitle("Operaciones");
 
 		// PANEL LATERAL
 		RoundedPanel sidepanel = new RoundedPanel(10, blue);
@@ -207,6 +208,7 @@ public class OperationsView {
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
 		frame.setResizable(false);
+		frame.setTitle("Nueva operación");
 
 		//PANEL LATERAL
 		RoundedPanel sidepanel = new RoundedPanel(10, blue);

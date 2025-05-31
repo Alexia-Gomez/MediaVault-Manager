@@ -61,6 +61,7 @@ public class HomeView {
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
 		frame.setResizable(false);
+		frame.setTitle("Dashboard");
 
 
 		// PANEL LATERAL

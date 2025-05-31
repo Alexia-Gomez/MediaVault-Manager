@@ -57,6 +57,7 @@ public class RentSaleView {
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
 		frame.setResizable(false);
+		frame.setTitle("Rentas y Compras");
 
 		// PANEL LATERAL
 		RoundedPanel sidepanel = new RoundedPanel(10, blue);

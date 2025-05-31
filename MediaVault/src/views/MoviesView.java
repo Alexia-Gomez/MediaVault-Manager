@@ -71,6 +71,7 @@ public class MoviesView {
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
 		frame.setResizable(false);
+		frame.setTitle("Películas");
 
 
 		// PANEL LATERAL
@@ -328,6 +329,7 @@ public class MoviesView {
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
 		frame.setResizable(false);
+		frame.setTitle("Nueva película");
 
 		//PANEL LATERAL
 		RoundedPanel sidepanel = new RoundedPanel(10, blue);
