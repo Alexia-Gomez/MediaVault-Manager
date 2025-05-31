@@ -90,7 +90,7 @@ public class MoviesView {
 
 		//PANEL CENTRO
 		centro = new JPanel();
-		centro.setBounds(0, 0, 1000, 606);
+		centro.setBounds(0, 0, 809, 606);
 		frame.getContentPane().add(centro);
 		centro.setLayout(null);
 
