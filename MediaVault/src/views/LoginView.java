@@ -142,26 +142,26 @@ public class LoginView {
 					flag2=true;
 				
 				userField.requestFocus();
-				
+
 				if(flag1 && flag2) {
-					
+
 					AdminController controller = new AdminController();
-			        boolean acceso = controller.autenticar(username, password);
-			        
-			        if(acceso) {
-			        	
-			        	frame.dispose();
-	 					HomeController hc = new HomeController();
-	 					hc.home();
-		                  
-			        }else {
-	 					passField.setBorderColor(Color.red);
-	 					userField.setBorderColor(Color.red);
-	 					errorLabel.setVisible(true);
-	 					
-	 					passField.setText("");
-	 					userField.requestFocus();
-			        }
+					boolean acceso = controller.autenticar(username, password);
+
+					if(acceso) {
+
+						frame.dispose();
+						HomeController hc = new HomeController();
+						hc.home();
+
+					}else {
+						passField.setBorderColor(Color.red);
+						userField.setBorderColor(Color.red);
+						errorLabel.setVisible(true);
+
+						passField.setText("");
+						userField.requestFocus();
+					}
 				}
 
 			}

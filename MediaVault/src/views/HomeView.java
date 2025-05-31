@@ -29,12 +29,11 @@ public class HomeView {
 	
 	Color blue = new Color(24, 130, 234);
 	Color lightGray = new Color(117, 117, 117);
-	Color Gray = new Color(51, 51, 51);
+	Color gray = new Color(51, 51, 51);
 	
 	Fuentes tipoFuentes = new Fuentes();
 	Font titles = tipoFuentes.fuente("/fonts/GolosText-SemiBold.ttf", 17f);
 	Font subtitles = tipoFuentes.fuente("/fonts/GolosText-SemiBold.ttf", 13f);
-	Font txt = tipoFuentes.fuente("/fonts/GolosText-Regular.ttf", 12f);
 	Font btntxt = tipoFuentes.fuente("/fonts/GolosText-Regular.ttf", 15f);
 	Font btnNum = tipoFuentes.fuente("/fonts/GolosText-SemiBold.ttf", 18f);
 	Font small = tipoFuentes.fuente("/fonts/GolosText-Regular.ttf", 10f);
@@ -44,7 +43,6 @@ public class HomeView {
 	ImageIcon logOut = new ImageIcon(HomeView.class.getResource("/images/logOut.png"));
 	ImageIcon adminIcon = new ImageIcon(HomeView.class.getResource("/images/admin.png"));
 	
-
 	GamesController gc = new GamesController();
 	MoviesController mc = new MoviesController();
 	RentSaleController rc = new RentSaleController();
@@ -58,7 +56,7 @@ public class HomeView {
 
 		// VENTANA
 		JFrame frame = new JFrame();
-		frame.setBounds(100, 20, 823, 643);
+		frame.setBounds(100, 20, 1000, 643);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
@@ -88,26 +86,26 @@ public class HomeView {
 		
 			//BANNER
 		RoundedPanel banner = new RoundedPanel(10, Color.white);
-		banner.setBounds(140, 0, 654, 75);
+		banner.setBounds(140, 0, 830, 80);
 		centro.add(banner);
 		banner.setLayout(null);
 
 		JLabel logoLabel = new JLabel("");
-		logoLabel.setBounds(233, 5, 188, 64);
+		logoLabel.setBounds(331, 5, 195, 65);
 		logoLabel.setIcon(new ImageIcon(((ImageIcon) logo).getImage().getScaledInstance(200, 130, Image.SCALE_SMOOTH)));
 		banner.add(logoLabel);
 
 
 		JLabel logOutLabel = new JLabel("Cerrar Sesión");
-		logOutLabel.setHorizontalAlignment(SwingConstants.TRAILING);
-		logOutLabel.setForeground(new Color(51, 51, 51));
-		logOutLabel.setBounds(526, 47, 88, 14);
+		logOutLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		logOutLabel.setForeground(gray);
+		logOutLabel.setBounds(724, 45, 77, 14);
 		logOutLabel.setFont(small);
 		banner.add(logOutLabel);
 
 		JLabel logOutIcon = new JLabel("");
 		logOutIcon.setIcon(new ImageIcon(((ImageIcon) logOut).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
-		logOutIcon.setBounds(620, 44, 20, 20);
+		logOutIcon.setBounds(795, 40, 20, 20);
 		logOutIcon.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 
@@ -121,40 +119,38 @@ public class HomeView {
 		JLabel adminPhoto = new JLabel("");
 		adminPhoto.setIcon(new ImageIcon(((ImageIcon) adminIcon).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
 		adminPhoto.setHorizontalAlignment(SwingConstants.CENTER);
-		adminPhoto.setBounds(494, 15, 49, 49);
+		adminPhoto.setBounds(665, 15, 49, 49);
 		banner.add(adminPhoto);
 
 		JLabel extralabel = new JLabel("Bienvenido");
-		extralabel.setBounds(553, 15, 76, 14);
+		extralabel.setBounds(725, 15, 76, 14);
 		extralabel.setFont(extra);
 		banner.add(extralabel);
 
 		JLabel adminName = new JLabel("Admin");
-		adminName.setBounds(553, 29, 49, 14);
+		adminName.setBounds(725, 30, 49, 14);
 		adminName.setFont(extra);
 		banner.add(adminName);
 		
 			//WIDGETS SUP
 		//w1
 		RoundedPanel widget1 = new RoundedPanel(15, Color.white, 3);
-		widget1.setLocation(175, 112);
-		widget1.setSize(170,160);
-		centro.add(widget1);
+		widget1.setBounds(210, 105, 200, 190);
 		widget1.setLayout(null);
+		centro.add(widget1);
 		
 		JLabel w1title = new JLabel("Rentas");
 		w1title.setHorizontalAlignment(SwingConstants.CENTER);
-		w1title.setBounds(0, 23, 170, 15);
+		w1title.setBounds(15, 30, 170, 20);
 		w1title.setFont(titles);
 		widget1.add(w1title);
 		
 		RoundedButton w1btn = new RoundedButton("Ver");
-		w1btn.setForeground(new Color(255, 255, 255));
-		w1btn.setLocation(45, 108);
+		w1btn.setForeground(Color.white);
+		w1btn.setBounds(60, 130, 90, 30);
+		w1btn.setBackground(blue);
 		w1btn.setFont(btntxt);
 		w1btn.setRadius(20);
-		w1btn.setBackground(blue);
-		w1btn.setSize(80, 30);
 		w1btn.addActionListener(new ActionListener() {
 
 			@Override
@@ -172,13 +168,13 @@ public class HomeView {
 		w1num.setVerticalAlignment(SwingConstants.TOP);
 		w1num.setHorizontalAlignment(SwingConstants.CENTER);
 		w1num.setForeground(new Color(91, 161, 70));
-		w1num.setBounds(0, 48, 170, 35);
+		w1num.setBounds(15, 60, 170, 35);
 		w1num.setFont(btnNum);
 		widget1.add(w1num);
 		
 		JLabel w1date = new JLabel("06/06/2025");
 		w1date.setHorizontalAlignment(SwingConstants.CENTER);
-		w1date.setBounds(0, 83, 170, 14);
+		w1date.setBounds(15, 100, 170, 14);
 		w1date.setForeground(lightGray);
 		w1date.setFont(small);
 		widget1.add(w1date);
@@ -186,18 +182,18 @@ public class HomeView {
 		
 		//w2
 		RoundedPanel widget2 = new RoundedPanel(15, Color.WHITE, 3);
-		widget2.setBounds(384, 112, 170, 160);
+		widget2.setBounds(465, 105, 200, 190);
 		widget2.setLayout(null);
 		centro.add(widget2);
 		
 		JLabel w2title = new JLabel("Compras");
 		w2title.setHorizontalAlignment(SwingConstants.CENTER);
-		w2title.setBounds(0, 23, 170, 15);
+		w2title.setBounds(15, 30, 170, 20);
 		w2title.setFont(titles);
 		widget2.add(w2title);
 		
 		RoundedButton w2btn = new RoundedButton("Ver");
-		w2btn.setBounds(46, 108, 80, 30);
+		w2btn.setBounds(60, 130, 90, 30);
 		w2btn.setForeground(Color.WHITE);
 		w2btn.setBackground(blue);
 		w2btn.setFont(btntxt);
@@ -218,13 +214,13 @@ public class HomeView {
 		w2num.setVerticalAlignment(SwingConstants.TOP);
 		w2num.setHorizontalAlignment(SwingConstants.CENTER);
 		w2num.setForeground(new Color(49, 113, 223));
-		w2num.setBounds(0, 48, 170, 35);
+		w2num.setBounds(15, 60, 170, 35);
 		w2num.setFont(btnNum);
 		widget2.add(w2num);
 		
 		JLabel w2date = new JLabel("06/06/2025");
 		w2date.setHorizontalAlignment(SwingConstants.CENTER);
-		w2date.setBounds(0, 83, 170, 14);
+		w2date.setBounds(15, 100, 170, 14);
 		w2date.setForeground(lightGray);
 		w2date.setFont(small);
 		widget2.add(w2date);
@@ -232,18 +228,18 @@ public class HomeView {
 		
 		//w3
 		RoundedPanel widget3 = new RoundedPanel(15, Color.WHITE, 3);
-		widget3.setBounds(590, 112, 170, 160);
+		widget3.setBounds(710, 105, 200, 190);
 		widget3.setLayout(null);
 		centro.add(widget3);
 		
 		JLabel w3title = new JLabel("Clientes");
 		w3title.setHorizontalAlignment(SwingConstants.CENTER);
-		w3title.setBounds(0, 23, 170, 15);
+		w3title.setBounds(15, 30, 170, 20);
 		w3title.setFont(titles);
 		widget3.add(w3title);
 		
 		RoundedButton w3btn = new RoundedButton("Ver");
-		w3btn.setBounds(46, 108, 80, 30);
+		w3btn.setBounds(60, 130, 90, 30);
 		w3btn.setForeground(Color.WHITE);
 		w3btn.setBackground(blue);
 		w3btn.setFont(btntxt);
@@ -253,6 +249,7 @@ public class HomeView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
+				frame.dispose();
 				cc.clients();
 			}
 			
@@ -263,13 +260,13 @@ public class HomeView {
 		w3num.setHorizontalAlignment(SwingConstants.CENTER);
 		w3num.setVerticalAlignment(SwingConstants.TOP);
 		w3num.setForeground(new Color(66, 194, 168));
-		w3num.setBounds(0, 48, 170, 35);
+		w3num.setBounds(15, 60, 170, 35);
 		w3num.setFont(btnNum);
 		widget3.add(w3num);
 		
 		JLabel w3date = new JLabel("06/06/2025");
 		w3date.setHorizontalAlignment(SwingConstants.CENTER);
-		w3date.setBounds(0, 83, 170, 14);
+		w3date.setBounds(15, 100, 170, 14);
 		w3date.setForeground(lightGray);
 		w3date.setFont(small);
 		widget3.add(w3date);
@@ -277,33 +274,33 @@ public class HomeView {
 			//WIDGETS INF
 		//games
 		RoundedPanel gamePanel = new RoundedPanel(15, Color.white, 3);
-		gamePanel.setBounds(162, 305, 290, 260);
+		gamePanel.setBounds(180, 320, 360, 260);
 		centro.add(gamePanel);
 		gamePanel.setLayout(null);
 		
 		JLabel gPanelTitle = new JLabel("Videojuegos");
 		gPanelTitle.setHorizontalAlignment(SwingConstants.CENTER);
-		gPanelTitle.setBounds(0, 25, 290, 25);
+		gPanelTitle.setBounds(35, 25, 290, 25);
 		gPanelTitle.setFont(titles);
 		gamePanel.add(gPanelTitle);
 		
 		
 		JLabel gameSubtitle1 = new JLabel("Más rentado");
 		gameSubtitle1.setHorizontalAlignment(SwingConstants.CENTER);
-		gameSubtitle1.setBounds(30, 65, 93, 14);
-		gameSubtitle1.setForeground(Gray);
+		gameSubtitle1.setBounds(45, 65, 93, 15);
+		gameSubtitle1.setForeground(gray);
 		gameSubtitle1.setFont(subtitles);
 		gamePanel.add(gameSubtitle1);
 		
 		JLabel gameSubtitle2 = new JLabel("Más comprado");
 		gameSubtitle2.setHorizontalAlignment(SwingConstants.CENTER);
-		gameSubtitle2.setBounds(165, 65, 93, 14);
-		gameSubtitle2.setForeground(Gray);
+		gameSubtitle2.setBounds(220, 65, 93, 15);
+		gameSubtitle2.setForeground(gray);
 		gameSubtitle2.setFont(subtitles);
 		gamePanel.add(gameSubtitle2);
 		
 		RoundedButton gameBtn1 = new RoundedButton("Ver");
-		gameBtn1.setBounds(40, 210, 80, 30);
+		gameBtn1.setBounds(45, 205, 90, 30);
 		gameBtn1.setForeground(Color.WHITE);
 		gameBtn1.setBackground(blue);
 		gameBtn1.setFont(btntxt);
@@ -321,7 +318,7 @@ public class HomeView {
 		gamePanel.add(gameBtn1);
 		
 		RoundedButton gameBtn2 = new RoundedButton("Ver");
-		gameBtn2.setBounds(170, 210, 80, 30);
+		gameBtn2.setBounds(220, 205, 90, 30);
 		gameBtn2.setForeground(Color.WHITE);
 		gameBtn2.setBackground(blue);
 		gameBtn2.setFont(btntxt);
@@ -341,32 +338,32 @@ public class HomeView {
 		
 		//movies
 		RoundedPanel moviePanel = new RoundedPanel(15, Color.WHITE, 3);
-		moviePanel.setBounds(480, 305, 290, 260);
+		moviePanel.setBounds(575, 320, 360, 260);
 		centro.add(moviePanel);
 		moviePanel.setLayout(null);
 		
 		JLabel mPanelTitle = new JLabel("Películas");
 		mPanelTitle.setHorizontalAlignment(SwingConstants.CENTER);
-		mPanelTitle.setBounds(0, 25, 290, 25);
+		mPanelTitle.setBounds(35, 25, 290, 25);
 		mPanelTitle.setFont(titles);
 		moviePanel.add(mPanelTitle);
 		
 		JLabel movieSubtitle1 = new JLabel("Más rentado");
 		movieSubtitle1.setHorizontalAlignment(SwingConstants.CENTER);
-		movieSubtitle1.setBounds(30, 65, 95, 14);
+		movieSubtitle1.setBounds(45, 65, 93, 15);
 		movieSubtitle1.setFont(subtitles);
-		movieSubtitle1.setForeground(Gray);
+		movieSubtitle1.setForeground(gray);
 		moviePanel.add(movieSubtitle1);
 		
 		JLabel movieSubtitle2 = new JLabel("Más comprado");
 		movieSubtitle2.setHorizontalAlignment(SwingConstants.CENTER);
-		movieSubtitle2.setBounds(165, 65, 95, 14);
+		movieSubtitle2.setBounds(220, 65, 95, 15);
 		movieSubtitle2.setFont(subtitles);
-		movieSubtitle2.setForeground(Gray);
+		movieSubtitle2.setForeground(gray);
 		moviePanel.add(movieSubtitle2);
 		
 		RoundedButton movieBtn1 = new RoundedButton("Ver");
-		movieBtn1.setBounds(43, 210, 80, 30);
+		movieBtn1.setBounds(43, 205, 90, 30);
 		movieBtn1.setForeground(Color.WHITE);
 		movieBtn1.setBackground(blue);
 		movieBtn1.setFont(btntxt);
@@ -385,7 +382,7 @@ public class HomeView {
 		
 		RoundedButton movieBtn2 = new RoundedButton("Ver");
 		movieBtn2.setForeground(Color.WHITE);
-		movieBtn2.setBounds(173, 210, 80, 30);
+		movieBtn2.setBounds(220, 205, 90, 30);
 		movieBtn2.setBackground(blue);
 		movieBtn2.setFont(btntxt);
 		movieBtn2.setRadius(20);
