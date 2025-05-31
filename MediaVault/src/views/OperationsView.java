@@ -39,7 +39,8 @@ public class OperationsView {
 	ImageIcon mas = new ImageIcon(OperationsView.class.getResource("/images/mas.png"));
 	ImageIcon filter = new ImageIcon(OperationsView.class.getResource("/images/filter.png"));
 	ImageIcon arrow = new ImageIcon(OperationsView.class.getResource("/images/arrow.png"));
-	
+	ImageIcon iconoFrame = new ImageIcon(LoginView.class.getResource("/images/iconoPrincipal.PNG"));
+
 	public OperationsView() {
 
 	}
@@ -54,6 +55,7 @@ public class OperationsView {
 		frame.setLocationRelativeTo(null);
 		frame.setResizable(false);
 		frame.setTitle("Operaciones");
+		frame.setIconImage(iconoFrame.getImage());
 
 		// PANEL LATERAL
 		RoundedPanel sidepanel = new RoundedPanel(10, blue);
@@ -209,6 +211,7 @@ public class OperationsView {
 		frame.setLocationRelativeTo(null);
 		frame.setResizable(false);
 		frame.setTitle("Nueva operación");
+		frame.setIconImage(iconoFrame.getImage());
 
 		//PANEL LATERAL
 		RoundedPanel sidepanel = new RoundedPanel(10, blue);

@@ -58,7 +58,8 @@ public class MoviesView {
 	ImageIcon mas = new ImageIcon(MoviesView.class.getResource("/images/mas.png"));
 	ImageIcon filter = new ImageIcon(MoviesView.class.getResource("/images/filter.png"));
 	ImageIcon arrow = new ImageIcon(MoviesView.class.getResource("/images/arrow.png"));
-	
+	ImageIcon iconoFrame = new ImageIcon(LoginView.class.getResource("/images/iconoPrincipal.PNG"));
+
 	public MoviesView() {
 
 	}
@@ -72,6 +73,7 @@ public class MoviesView {
 		frame.setLocationRelativeTo(null);
 		frame.setResizable(false);
 		frame.setTitle("Películas");
+		frame.setIconImage(iconoFrame.getImage());
 
 
 		// PANEL LATERAL
@@ -330,6 +332,7 @@ public class MoviesView {
 		frame.setLocationRelativeTo(null);
 		frame.setResizable(false);
 		frame.setTitle("Nueva película");
+		frame.setIconImage(iconoFrame.getImage());
 
 		//PANEL LATERAL
 		RoundedPanel sidepanel = new RoundedPanel(10, blue);

@@ -40,7 +40,8 @@ public class ClientsView {
 	ImageIcon mas = new ImageIcon(ClientsView.class.getResource("/images/mas.png"));
 	ImageIcon filter = new ImageIcon(ClientsView.class.getResource("/images/filter.png"));
 	ImageIcon arrow = new ImageIcon(ClientsView.class.getResource("/images/arrow.png"));
-	
+	ImageIcon iconoFrame = new ImageIcon(LoginView.class.getResource("/images/iconoPrincipal.PNG"));
+
 	public ClientsView() {
 
 	}
@@ -54,6 +55,7 @@ public class ClientsView {
 		frame.setLocationRelativeTo(null);
 		frame.setResizable(false);
 		frame.setTitle("Clientes");
+		frame.setIconImage(iconoFrame.getImage());
 
 		//PANEL LATERAL
 		RoundedPanel sidepanel = new RoundedPanel(10, blue);
@@ -211,6 +213,7 @@ public class ClientsView {
 		frame.setLocationRelativeTo(null);
 		frame.setResizable(false);
 		frame.setTitle("Nuevo cliente");
+		frame.setIconImage(iconoFrame.getImage());
 
 		//PANEL LATERAL
 		RoundedPanel sidepanel = new RoundedPanel(10, blue);

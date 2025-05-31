@@ -40,7 +40,8 @@ public class GamesView {
 	ImageIcon mas = new ImageIcon(GamesView.class.getResource("/images/mas.png"));
 	ImageIcon filter = new ImageIcon(GamesView.class.getResource("/images/filter.png"));
 	ImageIcon arrow = new ImageIcon(GamesView.class.getResource("/images/arrow.png"));
-	
+	ImageIcon iconoFrame = new ImageIcon(LoginView.class.getResource("/images/iconoPrincipal.PNG"));
+
 	
 	public GamesView() {
 
@@ -56,6 +57,7 @@ public class GamesView {
 		frame.setLocationRelativeTo(null);
 		frame.setResizable(false);
 		frame.setTitle("Videojuegos");
+		frame.setIconImage(iconoFrame.getImage());
 
 		// PANEL LATERAL
 		RoundedPanel sidepanel = new RoundedPanel(10, blue);
@@ -223,6 +225,7 @@ public class GamesView {
 		frame.setLocationRelativeTo(null);
 		frame.setResizable(false);
 		frame.setTitle("Nuevo videojuego");
+		frame.setIconImage(iconoFrame.getImage());
 
 		//PANEL LATERAL
 		RoundedPanel sidepanel = new RoundedPanel(10, blue);

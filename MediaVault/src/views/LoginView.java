@@ -32,6 +32,8 @@ public class LoginView {
 	Font btntxt = tipoFuentes.fuente("/fonts/GolosText-Regular.ttf", 15f);
 	
 	ImageIcon logo = new ImageIcon(LoginView.class.getResource("/images/logo.png"));
+	ImageIcon iconoFrame = new ImageIcon(LoginView.class.getResource("/images/iconoPrincipal.PNG"));
+
 	
 	public LoginView() {
 		
@@ -47,6 +49,8 @@ public class LoginView {
 		frame.setLocationRelativeTo(null);
 		frame.setResizable(false);
 		frame.setTitle("Iniciar sesión");
+		frame.setIconImage(iconoFrame.getImage());
+
 
 		// PANELES
 		JPanel panel = new JPanel();

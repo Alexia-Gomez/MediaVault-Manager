@@ -41,6 +41,7 @@ public class RentSaleView {
 	ImageIcon lupa = new ImageIcon(ClientsView.class.getResource("/images/lupa.png"));
 	ImageIcon mas = new ImageIcon(ClientsView.class.getResource("/images/mas.png"));
 	ImageIcon filter = new ImageIcon(ClientsView.class.getResource("/images/filter.png"));
+	ImageIcon iconoFrame = new ImageIcon(LoginView.class.getResource("/images/iconoPrincipal.PNG"));
 
 
 	public RentSaleView() {
@@ -58,6 +59,7 @@ public class RentSaleView {
 		frame.setLocationRelativeTo(null);
 		frame.setResizable(false);
 		frame.setTitle("Rentas y Compras");
+		frame.setIconImage(iconoFrame.getImage());
 
 		// PANEL LATERAL
 		RoundedPanel sidepanel = new RoundedPanel(10, blue);
