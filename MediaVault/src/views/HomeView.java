@@ -42,7 +42,8 @@ public class HomeView {
 	ImageIcon logo = new ImageIcon(HomeView.class.getResource("/images/logo.png"));
 	ImageIcon logOut = new ImageIcon(HomeView.class.getResource("/images/logOut.png"));
 	ImageIcon adminIcon = new ImageIcon(HomeView.class.getResource("/images/admin.png"));
-	
+	ImageIcon iconoFrame = new ImageIcon(LoginView.class.getResource("/images/iconoPrincipal.PNG"));
+
 	GamesController gc = new GamesController();
 	MoviesController mc = new MoviesController();
 	RentSaleController rc = new RentSaleController();
@@ -62,6 +63,7 @@ public class HomeView {
 		frame.setLocationRelativeTo(null);
 		frame.setResizable(false);
 		frame.setTitle("Dashboard");
+		frame.setIconImage(iconoFrame.getImage());
 
 
 		// PANEL LATERAL
