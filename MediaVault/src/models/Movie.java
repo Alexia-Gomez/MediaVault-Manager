@@ -4,10 +4,11 @@ import java.util.Date;
 
 public class Movie {
 	
-	public int product_id, rent_stock, sale_stock;
-	public String title, platform, genre, classification, product_type, cover, studio;
+	public int product_id, rent_stock, sale_stock,fk_promotion_id;
+	public String title, platform, genre, classification, product_type, studio;
 	public String release_date;
 	public double sale_price, rent_price;
+	public byte[] cover;
 	
 
 	public Movie(String title, String studio, String classification, String release_date, String genre, int rent_stock, int sale_stock) {
@@ -26,6 +27,7 @@ public class Movie {
 		this.release_date = release_date;
 		this.sale_price = sale_price;
 		this.rent_price = rent_price;
+		this.fk_promotion_id=fk_promotion_id;
 		// TODO Auto-generated constructor stub
 	}
 
@@ -33,6 +35,7 @@ public class Movie {
 	public int getProduct_id() { return product_id; }
 	public int getRent_stock() { return rent_stock; }
 	public int getSale_stock() { return sale_stock; }
+	public int get_fk_promotion_id() { return fk_promotion_id; }
 
 	public void setRent_stock(int rent_stock) { this.rent_stock = rent_stock; }
 	public void setSale_stock(int sale_stock) { this.sale_stock = sale_stock; }
@@ -52,8 +55,8 @@ public class Movie {
 	public String getProduct_type() { return product_type; }
 	public void setProduct_type(String product_type) { this.product_type = product_type; }
 
-	public String getCover() { return cover; }
-	public void setCover(String cover) { this.cover = cover; }
+	public byte[] getCover() { return cover; }
+	public void setCover(byte[] cover) { this.cover = cover; }
 
 	public String getStudio() { return studio; }
 	public void setStudio(String studio) { this.studio = studio; }
