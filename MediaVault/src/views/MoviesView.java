@@ -381,10 +381,16 @@ public class MoviesView {
 		dataPanel.setLayout(null);
 		centro.add(dataPanel);
 		
-		RoundedPanel foto = new RoundedPanel(30,gray);
+		/*RoundedPanel foto = new RoundedPanel(30,gray);
 		foto.setBounds(35, 20, 165, 185);
 		dataPanel.add(foto);
-		foto.setLayout(null);
+		foto.setLayout(null);*/
+		
+		RoundedButton foto = new RoundedButton();
+		foto.setBounds(35, 20, 165, 185);
+		foto.setBackground(gray);
+		foto.setRadius(20);
+		dataPanel.add(foto);
 		
 		RoundedButton movieId = new RoundedButton("ID: #12345");
 		movieId.setBounds(70, 250 ,100, 30);
