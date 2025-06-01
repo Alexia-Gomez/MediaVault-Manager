@@ -405,7 +405,7 @@ public class MoviesView {
 		movieTitle.setFont(fieldtxt);
 		dataPanel.add(movieTitle);
 		
-		JLabel dateLabel = new JLabel("Año de estreno:");
+		JLabel dateLabel = new JLabel("Fecha de estreno(AAAA-MM-DD):");
 		dateLabel.setBounds(237, 85, 250, 15);
 		dateLabel.setFont(txt);
 		dataPanel.add(dateLabel);
