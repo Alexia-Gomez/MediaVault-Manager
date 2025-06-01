@@ -11,7 +11,7 @@ public class Movie {
 	public byte[] cover;
 	
 
-	public Movie(String title, String studio, String classification, String release_date, String genre, int rent_stock, int sale_stock) {
+	public Movie(String title, String studio, String classification, String release_date, String genre, int rent_stock, int sale_stock, byte[] cover, double sale_price, double rent_price) {
 		//				Movie movie = new Movie(title, studio, classification, releaseDate, genre, rentStock, saleStock);
 
 		this.product_id = product_id;
