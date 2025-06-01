@@ -549,7 +549,7 @@ public class MoviesView {
 		filtro.setLayout(null);
 		filtro.setVisible(false);
 		
-		JLabel clasif = new JLabel("Clasifición");
+		JLabel clasif = new JLabel("Clasificación");
 		clasif.setBounds(40, 30, 100, 15);
 		clasif.setFont(txt);
 		filtro.add(clasif);
