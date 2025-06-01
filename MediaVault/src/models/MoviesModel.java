@@ -13,7 +13,7 @@ public class MoviesModel {
 	public MoviesModel() {}
 
 	public ArrayList<Movie> get() {
-		String query = "SELECT title, studio, classification, release_date, genre, rent_stock, sale_stock FROM Products WHERE product_type = 'movie'";
+		String query = "SELECT title, studio, classification, release_date, genre, rent_stock, sale_stock,cover, sale_price, rent_price FROM Products WHERE product_type = 'movie'";
 		Connection connection = ConexionBD.getConexion();
 		Statement stmt = null;
 
@@ -29,8 +29,12 @@ public class MoviesModel {
 				String genre = rs.getString("genre");
 				int rent_stock = rs.getInt("rent_stock");
 				int sale_stock = rs.getInt("sale_stock");
+				byte[] cover = rs.getBytes("cover");       
+	            double sale_price = rs.getDouble("sale_price");
+	            double rent_price = rs.getDouble("rent_price");
+				
 
-				Movie movie = new Movie(title, studio, classification, release_date, genre, rent_stock, sale_stock);
+				Movie movie = new Movie(title, studio, classification, release_date, genre, rent_stock, sale_stock,cover,sale_price,rent_price);
 				movies.add(movie);
 			}
 			rs.close();
