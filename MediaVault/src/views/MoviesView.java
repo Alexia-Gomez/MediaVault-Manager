@@ -512,6 +512,24 @@ public class MoviesView {
 		guardar.setFont(txt);
 		guardar.setRadius(20);
 		dataPanel.add(guardar);
+		guardar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int rent_stock =  Integer.parseInt(movieRentStock.getText());
+				int sale_stock =  Integer.parseInt(movieSaleStock.getText());
+
+
+				Movie pelicula = new Movie(movieTitle.getText(), movieStudio.getText(), (String) movieClass.getSelectedItem(),
+						movieDate.getText(), (String) movieGenre.getSelectedItem(), rent_stock, sale_stock);
+				
+				MoviesModel mm = new MoviesModel();
+				
+				if(mm.add(pelicula)) {
+					System.out.println("Se agrego una pelicula nueva");
+				}
+						
+			}
+		});
+
 		
 		RoundedButton cancelar = new RoundedButton("Cancelar");
 		cancelar.setBounds(520, 355,80, 30);

@@ -21,7 +21,7 @@ public class Movie {
 		this.platform = platform;
 		this.genre = genre;
 		this.classification = classification;
-		this.product_type = product_type;
+		this.product_type = "movie";
 		this.cover = cover;
 		this.studio = studio;
 		this.release_date = release_date;
