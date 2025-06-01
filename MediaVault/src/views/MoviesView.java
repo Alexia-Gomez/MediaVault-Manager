@@ -618,7 +618,16 @@ public class MoviesView {
 		cancelar.setFont(txt);
 		cancelar.setRadius(20);
 		dataPanel.add(cancelar);
+		cancelar.addActionListener(new ActionListener() {
 
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				MoviesController mc = new MoviesController();
+				mc.movies();
+			}
+			
+		});
 		
 	}
 	
