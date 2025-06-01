@@ -3,17 +3,30 @@ package views;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.RowFilter;
@@ -23,6 +36,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
 import controllers.HomeController;
+import controllers.MoviesController;
 import customClasses.CustomJCheckBox;
 import customClasses.CustomJComboBox;
 import customClasses.CustomJRadioButton;
@@ -59,6 +73,8 @@ public class MoviesView {
 	ImageIcon filter = new ImageIcon(MoviesView.class.getResource("/images/filter.png"));
 	ImageIcon arrow = new ImageIcon(MoviesView.class.getResource("/images/arrow.png"));
 	ImageIcon iconoFrame = new ImageIcon(LoginView.class.getResource("/images/iconoPrincipal.PNG"));
+	
+	byte[] coverBinario = null;
 
 	public MoviesView() {
 
@@ -392,6 +408,62 @@ public class MoviesView {
 		foto.setRadius(20);
 		dataPanel.add(foto);
 		
+		foto.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				JFileChooser chooserImagen = new JFileChooser();
+				chooserImagen.setDialogTitle("Selecciona una imagen");
+                chooserImagen.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter(
+                        "JPEG, PNG", "jpg", "jpeg", "png"));
+                int result = chooserImagen.showOpenDialog(null);
+                
+                if(result == JFileChooser.APPROVE_OPTION) {
+                	File archivoSeleccionado = chooserImagen.getSelectedFile();
+                	long tamaño = archivoSeleccionado.length();
+                	
+                	if (tamaño>65535) {
+                		JOptionPane.showMessageDialog(foto,"Imagen mayor a 2MB","Error", JOptionPane.ERROR_MESSAGE);
+                		return;
+                	}
+                	else {
+                		try {
+                			BufferedImage imgOriginal = ImageIO.read(archivoSeleccionado);
+
+                			int nuevoAncho = foto.getWidth()-20;
+                			int nuevoAlto = (imgOriginal.getHeight() * nuevoAncho) / imgOriginal.getWidth();
+
+                			BufferedImage imgEscalada = new BufferedImage(nuevoAncho, nuevoAlto, BufferedImage.TYPE_INT_RGB);
+                			Graphics2D g2 = imgEscalada.createGraphics();
+                			
+                			g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+                			g2.drawImage(imgOriginal, 0, 0, nuevoAncho, nuevoAlto, null);
+                			g2.dispose();
+
+                			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                			ImageIO.write(imgEscalada, "jpg", baos);
+                			baos.flush();
+                			coverBinario = baos.toByteArray();
+                			baos.close();
+                			
+                			ImageIcon imagenReducida = new ImageIcon(imgEscalada);
+                			int width = foto.getWidth()-20;
+                    		int height = foto.getHeight()-20;
+                    		
+                    		JLabel labelImagen = new JLabel(imagenReducida);
+                            labelImagen.setBounds(10, 10, width, height);
+                            foto.removeAll();
+                            foto.add(labelImagen);    
+                            foto.revalidate();
+                            foto.repaint();
+                    		
+                    	}catch(Exception x) {
+                    		System.out.println(x.getMessage());
+                    	}
+                	}
+                	
+                }
+			}
+		});
+
 		RoundedButton movieId = new RoundedButton("ID: #12345");
 		movieId.setBounds(70, 250 ,100, 30);
 		movieId.setBackground(gray);
@@ -522,14 +594,15 @@ public class MoviesView {
 			public void actionPerformed(ActionEvent e) {
 				int rent_stock =  Integer.parseInt(movieRentStock.getText());
 				int sale_stock =  Integer.parseInt(movieSaleStock.getText());
-
+				
+				double precioVenta = Double.parseDouble(movieSale.getText());
+				double precioRenta = Double.parseDouble(movieRent.getText());
 
 				Movie pelicula = new Movie(movieTitle.getText(), movieStudio.getText(), (String) movieClass.getSelectedItem(),
-						movieDate.getText(), (String) movieGenre.getSelectedItem(), rent_stock, sale_stock);
+						movieDate.getText(), (String) movieGenre.getSelectedItem(), rent_stock, sale_stock,coverBinario,precioVenta,precioRenta);
+				MoviesController mc = new MoviesController();
 				
-				MoviesModel mm = new MoviesModel();
-				
-				if(mm.add(pelicula)) {
+				if(mc.addMovie(pelicula)) {
 					System.out.println("Se agrego una pelicula nueva");
 				}
 						
