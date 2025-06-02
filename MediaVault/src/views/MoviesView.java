@@ -19,12 +19,9 @@ import java.io.ByteArrayOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -83,12 +80,6 @@ public class MoviesView {
 	ImageIcon delete = new ImageIcon(MoviesView.class.getResource("/images/eliminarW.png"));
 	
 	byte[] coverBinario = null;
-	
-	TableRowSorter<DefaultTableModel> buscador;
-	RoundedJTextField searchBar;
-	CustomJRadioButton classA, classB, classB15,classC;
-    CustomJRadioButton scifi, adventure, horror, comedy, action,allGen,allClass;
-     
 
 	public MoviesView() {
 
@@ -274,7 +265,7 @@ public class MoviesView {
 		scrollPane.getVerticalScrollBar().setUI(new CustomScrollBar());
 		tablePanel.add(scrollPane);
 
-		buscador = new TableRowSorter<>(model1);
+		TableRowSorter<DefaultTableModel> buscador = new TableRowSorter<>(model1);
 		table.setRowSorter(buscador);
 
 		//BARRA
@@ -289,7 +280,7 @@ public class MoviesView {
 		lupaIcon.setBounds(20, 20, 30, 30);
 		barra.add(lupaIcon);
 
-		searchBar = new RoundedJTextField(20);
+		RoundedJTextField searchBar = new RoundedJTextField(20);
 		searchBar.setBounds(65, 20, 520, 30);
 		searchBar.setBackground(field);
 		searchBar.setFont(txt);
@@ -305,7 +296,12 @@ public class MoviesView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				filtrar();
+				String txt = searchBar.getText();
+				if(txt.isEmpty()) {
+					buscador.setRowFilter(null);
+				} else {
+					buscador.setRowFilter(RowFilter.regexFilter("(?i)" + txt));
+				}
 			}
 
 		});
@@ -444,7 +440,7 @@ public class MoviesView {
                 	File archivoSeleccionado = chooserImagen.getSelectedFile();
                 	long tamaño = archivoSeleccionado.length();
                 	
-                	if (tamaño>5242880) {
+                	if (tamaño>65535) {
                 		JOptionPane.showMessageDialog(foto,"Imagen mayor a 2MB","Error", JOptionPane.ERROR_MESSAGE);
                 		return;
                 	}
@@ -890,8 +886,63 @@ public class MoviesView {
 		guardar.setFont(txt);
 		guardar.setRadius(20);
 		dataPanel.add(guardar);
-		guardar.setVisible(false);
-		
+		guardar.setVisible(false); 
+		guardar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					String title = movieTitle.getText();
+					String releaseDate = movieDate.getText();
+					int rentStock = Integer.parseInt(movieRentStock.getText());
+					double rentPrice = Double.parseDouble(movieRent.getText().replace("$", ""));
+					int saleStock = Integer.parseInt(movieSaleStock.getText());
+					double salePrice = Double.parseDouble(movieSale.getText().replace("$", ""));
+					String studio = movieStudio.getText();
+					String classification = movieClass.getSelectedItem().toString();
+					String genre = movieGenre.getSelectedItem().toString();
+					boolean isRentAvailable = renta.isSelected();
+					boolean isSaleAvailable = venta.isSelected();
+
+					Movie updatedMovie = new Movie();
+					updatedMovie.product_id = movie.product_id;
+					updatedMovie.setTitle(title);
+					updatedMovie.release_date = releaseDate;
+					updatedMovie.rent_stock = rentStock;
+					updatedMovie.rent_price = rentPrice;
+					updatedMovie.sale_stock = saleStock;
+					updatedMovie.sale_price = salePrice;
+					updatedMovie.studio = studio;
+					updatedMovie.classification = classification;
+					updatedMovie.genre = genre;
+
+					MoviesController controller = new MoviesController();
+					boolean success = controller.updateMovie(updatedMovie, updatedMovie.product_id);
+
+					if (success) {
+						JOptionPane.showMessageDialog(null, "Película actualizada correctamente.");
+						
+						movieTitle.setFocusable(false);
+						movieDate.setFocusable(false);
+						movieRentStock.setFocusable(false);
+						movieRent.setFocusable(false);
+						movieStudio.setFocusable(false);
+						movieClass.setEnabled(false);
+						movieGenre.setEnabled(false);
+						movieSaleStock.setFocusable(false);
+						movieSale.setFocusable(false);
+						descargar.setEnabled(true);
+						cancelar.setVisible(false);
+						guardar.setVisible(false);
+						
+					} else {
+						JOptionPane.showMessageDialog(null, "Error al actualizar la película.", "Error", JOptionPane.ERROR_MESSAGE);
+					}
+				} catch (NumberFormatException ex) {
+					JOptionPane.showMessageDialog(null, "Verifica los campos numéricos (precio y stock).", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
+				} catch (Exception ex) {
+					JOptionPane.showMessageDialog(null, "Ocurrió un error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
 		RoundedButton editar = new RoundedButton();
 		editar.setIcon(new ImageIcon(((ImageIcon) edit).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
 		editar.setBounds(740, 355, 30, 30);
@@ -928,91 +979,58 @@ public class MoviesView {
 		clasif.setFont(txt);
 		filtro.add(clasif);
 		
-		classA = new CustomJRadioButton();
-		classA.setBounds(35, 55, 50, 30);
+		CustomJRadioButton classA = new CustomJRadioButton();
+		classA.setBounds(45, 55, 50, 30);
 		classA.setFont(fieldtxt);
 		classA.setText("A");
 		filtro.add(classA);
 		
-		classB = new CustomJRadioButton();
-		classB.setBounds(140, 55, 50, 30);
+		CustomJRadioButton classB = new CustomJRadioButton();
+		classB.setBounds(150, 55, 50, 30);
 		classB.setFont(fieldtxt);
 		classB.setText("B");
 		filtro.add(classB);
 		
-		classB15 = new CustomJRadioButton();
-		classB15.setBounds(240, 55, 50, 30);
+		CustomJRadioButton classB15 = new CustomJRadioButton();
+		classB15.setBounds(250, 55, 50, 30);
 		classB15.setFont(fieldtxt);
 		classB15.setText("B-15");
 		filtro.add(classB15);
 		
-		classC = new CustomJRadioButton();
-		classC.setBounds(140, 100, 50, 30);
-		classC.setFont(fieldtxt);
-		classC.setText("C");
-		filtro.add(classC);
-		
-		allClass = new CustomJRadioButton();
-		allClass.setBounds(240, 100, 100, 30);
-		allClass.setFont(fieldtxt);
-		allClass.setText("Todos");
-		filtro.add(allClass);
-		
-		ButtonGroup grupoClass = new ButtonGroup();
-		grupoClass.add(classA);
-		grupoClass.add(classB);
-		grupoClass.add(classB15);
-		grupoClass.add(classC);
-		grupoClass.add(allClass);
-		
 		JLabel gen = new JLabel("Género");
-		gen.setBounds(40, 125, 100, 15);
+		gen.setBounds(40, 120, 100, 15);
 		gen.setFont(txt);
 		filtro.add(gen);
 		
-		scifi = new CustomJRadioButton();
+		CustomJRadioButton scifi = new CustomJRadioButton();
 		scifi.setBounds(35, 150, 100, 30);
 		scifi.setFont(fieldtxt);
 		scifi.setText("Sci-fi");
 		filtro.add(scifi);
 		
-		adventure = new CustomJRadioButton();
+		CustomJRadioButton adventure = new CustomJRadioButton();
 		adventure.setBounds(140, 150, 100, 30);
 		adventure.setFont(fieldtxt);
 		adventure.setText("Aventura");
 		filtro.add(adventure);
 		
-		horror = new CustomJRadioButton();
+		CustomJRadioButton horror = new CustomJRadioButton();
 		horror.setBounds(240, 150, 100, 30);
 		horror.setFont(fieldtxt);
 		horror.setText("Horror");
 		filtro.add(horror);
 		
-		comedy = new CustomJRadioButton();
-		comedy.setBounds(140, 195, 100, 30);
+		CustomJRadioButton comedy = new CustomJRadioButton();
+		comedy.setBounds(90, 195, 100, 30);
 		comedy.setFont(fieldtxt);
 		comedy.setText("Comedia");
 		filtro.add(comedy);
 		
-		action = new CustomJRadioButton();
-		action.setBounds(35, 195, 100, 30);
+		CustomJRadioButton action = new CustomJRadioButton();
+		action.setBounds(200, 195, 100, 30);
 		action.setFont(fieldtxt);
 		action.setText("Acción");
 		filtro.add(action);
-		
-		allGen = new CustomJRadioButton();
-		allGen.setBounds(240, 195, 100, 30);
-		allGen.setFont(fieldtxt);
-		allGen.setText("Todos");
-		filtro.add(allGen);
-		
-		ButtonGroup grupoGenero = new ButtonGroup();
-		grupoGenero.add(scifi);
-		grupoGenero.add(adventure);
-		grupoGenero.add(horror);
-		grupoGenero.add(comedy);
-		grupoGenero.add(action);
-		grupoGenero.add(allGen);
 		
 		RoundedButton cerrar = new RoundedButton("Cerrar");
 		cerrar.setBounds(60, 240, 85, 30);
@@ -1035,75 +1053,32 @@ public class MoviesView {
 		aplicar.setBounds(200, 240, 85, 30);
 		aplicar.setRadius(20);
 		aplicar.setBackground(blue);
-		aplicar.addActionListener(new ActionListener() {
+		/*aplicar.addActionListener(new ActionListener() {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
-		        filtrar();
+		        String clasificacion = null;
+		        if (classA.isSelected()) clasificacion = "A";
+		        else if (classB.isSelected()) clasificacion = "B";
+		        else if (classB15.isSelected()) clasificacion = "B-15";
+
+		        String genero = null;
+		        if (scifi.isSelected()) genero = "Sci-fi";
+		        else if (adventure.isSelected()) genero = "Aventura";
+		        else if (horror.isSelected()) genero = "Horror";
+		        else if (comedy.isSelected()) genero = "Comedia";
+		        else if (action.isSelected()) genero = "Acción";
+
+		        //filtroTabla(clasificacion, genero);
 		        filtro.setVisible(false);
 		    }
-		});
+		});*/
 		filtro.add(aplicar);
+		
+		
+		
 		centro.add(filtro);
 		centro.setComponentZOrder(filtro, 0);
+			
 	}
-	
-	public void filtrar() {
-		String textoBarra = searchBar.getText();
-		RowFilter<DefaultTableModel, Object> filtroTexto;
-		if(textoBarra.isEmpty()) {
-			filtroTexto = RowFilter.regexFilter(".*", 0);
-		} else {
-			filtroTexto = RowFilter.regexFilter("(?i)^" + Pattern.quote(textoBarra), 0);
-		}
-		
-		String classSelec=null;
-		RowFilter<DefaultTableModel, Object> filtroClass;
-	    if (classA.isSelected())        
-	    	classSelec = "A";
-	    else if (classB.isSelected())   
-	    	classSelec = "B";
-	    else if (classB15.isSelected()) 
-	    	classSelec = "B-15";
-	    else if (classC.isSelected()) 
-	    	classSelec = "C";
-	    else if (allClass.isSelected())                            
-	    	classSelec = "Todos"; 
-	    
-	    if (classSelec == null || classSelec.equals("Todos")  ) {
-	    	filtroClass = RowFilter.regexFilter(".*", 2);
-	    }
-	    else {
-	    	filtroClass = RowFilter.regexFilter("^" + Pattern.quote(classSelec) + "$", 2);
-	    }
-	    
-	    String generoSelec =null;
-	    RowFilter<DefaultTableModel, Object> filtroGenero;
-	    if (scifi.isSelected())         
-	    	generoSelec = "Sci-fi";
-	    else if (adventure.isSelected()) 
-	    	generoSelec = "Aventura";
-	    else if (horror.isSelected())    
-	    	generoSelec = "Horror";
-	    else if (comedy.isSelected())    
-	    	generoSelec = "Comedia";
-	    else if (action.isSelected())    
-	    	generoSelec = "Acción";
-	    else if (allGen.isSelected())                             
-	    	generoSelec = "Todos";
-	    
-	    if (generoSelec == null || generoSelec.equals("Todos")) {
-	    	filtroGenero = RowFilter.regexFilter(".*", 4);
-	    } else {
-	    	filtroGenero = RowFilter.regexFilter("^" + Pattern.quote(generoSelec) + "$", 4);
-	    }
-		
-	    List<RowFilter<DefaultTableModel, Object>> listaFiltros = new ArrayList<>();
-	    listaFiltros.add(filtroTexto);
-	    listaFiltros.add(filtroClass);
-	    listaFiltros.add(filtroGenero);
-	    RowFilter<DefaultTableModel, Object> filtroCombinado = RowFilter.andFilter(listaFiltros);
-		buscador.setRowFilter(filtroCombinado);
-	}
-	
 
 }

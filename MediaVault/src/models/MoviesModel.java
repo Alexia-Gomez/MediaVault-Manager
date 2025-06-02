@@ -13,7 +13,7 @@ public class MoviesModel {
 	public MoviesModel() {}
 
 	public ArrayList<Movie> get() {
-		String query = "SELECT title, studio, classification, release_date, genre, rent_stock, sale_stock,cover, sale_price, rent_price FROM Products WHERE product_type = 'movie'";
+		String query = "SELECT product_id, title, studio, classification, release_date, genre, rent_stock, sale_stock, cover, sale_price, rent_price FROM Products WHERE product_type = 'movie'";
 		Connection connection = ConexionBD.getConexion();
 		Statement stmt = null;
 
@@ -22,6 +22,7 @@ public class MoviesModel {
 			ResultSet rs = stmt.executeQuery(query);
 			
 			while (rs.next()) {
+				int product_id = rs.getInt("product_id");
 				String title = rs.getString("title");
 				String studio = rs.getString("studio");
 				String classification = rs.getString("classification");
@@ -34,7 +35,7 @@ public class MoviesModel {
 	            double rent_price = rs.getDouble("rent_price");
 				
 
-				Movie movie = new Movie(title, studio, classification, release_date, genre, rent_stock, sale_stock,cover,sale_price,rent_price);
+				Movie movie = new Movie(product_id, title, studio, classification, release_date, genre, rent_stock, sale_stock,cover,sale_price,rent_price);
 				movies.add(movie);
 			}
 			rs.close();
@@ -77,49 +78,58 @@ public class MoviesModel {
 	}
 	
 	public boolean add(Movie product) {
-		String query = "INSERT INTO `Products`(title, platform, genre, classification, release_date, product_type, rent_stock, sale_stock, cover,sale_price, rent_price, studio, fk_promotion_id_product) "
-		                +"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-		Connection connection = ConexionBD.getConexion();
-		PreparedStatement stmt = null;
-		try {
-			stmt = connection.prepareStatement(query);
-			
-			stmt.setString(1, product.getTitle());
-			stmt.setString(2, product.getPlatform());
-			stmt.setString(3, product.getGenre());
-			stmt.setString(4, product.getClassification());
-			stmt.setString(5, product.getRelease_date());
-			stmt.setString(6, product.getProduct_type());
-			stmt.setInt(7, product.getRent_stock());
-			stmt.setInt(8, product.getSale_stock());
-			if (product.getCover()!=null) {
-				stmt.setBytes(9, product.getCover());
-			}
-			else 
-				stmt.setNull(9, java.sql.Types.BLOB);
-			stmt.setDouble(10, product.getSale_price());
-			stmt.setDouble(11, product.getRent_price());
-			stmt.setString(12, product.getStudio());
-			stmt.setNull(13, java.sql.Types.INTEGER);
-			
-			int rs = stmt.executeUpdate();
-			if (rs>0) {
-				return true;
-			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (stmt != null) stmt.close();
-				if (connection != null) connection.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		return false;
+	    String query = "INSERT INTO `Products`(title, platform, genre, classification, release_date, product_type, rent_stock, sale_stock, cover, sale_price, rent_price, studio, fk_promotion_id_product) "
+	                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	    
+	    Connection connection = ConexionBD.getConexion();
+	    PreparedStatement stmt = null;
+	    
+	    try {
+	        stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+	        
+	        stmt.setString(1, product.getTitle());
+	        stmt.setString(2, product.getPlatform());
+	        stmt.setString(3, product.getGenre());
+	        stmt.setString(4, product.getClassification());
+	        stmt.setString(5, product.getRelease_date());
+	        stmt.setString(6, product.getProduct_type());
+	        stmt.setInt(7, product.getRent_stock());
+	        stmt.setInt(8, product.getSale_stock());
+	        
+	        if (product.getCover() != null) {
+	            stmt.setBytes(9, product.getCover());
+	        } else {
+	            stmt.setNull(9, java.sql.Types.BLOB);
+	        }
+
+	        stmt.setDouble(10, product.getSale_price());
+	        stmt.setDouble(11, product.getRent_price());
+	        stmt.setString(12, product.getStudio());
+	        stmt.setNull(13, java.sql.Types.INTEGER);
+
+	        int rowsAffected = stmt.executeUpdate();
+	        if (rowsAffected > 0) {
+	            ResultSet generatedKeys = stmt.getGeneratedKeys();
+	            if (generatedKeys.next()) {
+	                int id = generatedKeys.getInt(1);
+	                product.setProduct_id(id); 
+	                System.out.println("Nuevo producto insertado con ID: " + id);
+	            }
+	            return true;
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        try {
+	            if (stmt != null) stmt.close();
+	            if (connection != null) connection.close();
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	    }
+	    return false;
 	}
-	
+
 	public boolean update(Movie product, int product_id) {
 	    String query = "UPDATE `Products` SET "
 	        + "title = ?, "
