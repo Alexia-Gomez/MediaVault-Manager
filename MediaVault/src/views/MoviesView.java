@@ -217,7 +217,12 @@ public class MoviesView {
 		ArrayList<Movie> movies = model.get();
 		
 		String[] columnNames = {"", "", "", "", "", "", "", ""};
-		DefaultTableModel model1 = new DefaultTableModel(columnNames, 0);
+		DefaultTableModel model1 = new DefaultTableModel(columnNames, 0){
+		    @Override
+		    public boolean isCellEditable(int row, int column) {
+		        return false;
+		    }
+		};
 
 		for (Movie movie : movies) {
 		    model1.addRow(new Object[] {
