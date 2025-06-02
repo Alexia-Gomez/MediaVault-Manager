@@ -18,7 +18,7 @@ public class MoviesController {
 	}
 	
 	public void viewMovies() {
-		view.viewMovie();
+		view.viewMovie(null);
 	}
 	
 	public boolean addMovie(Movie movie) {

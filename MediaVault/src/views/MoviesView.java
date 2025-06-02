@@ -33,6 +33,7 @@ import javax.swing.RowFilter;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
 
 import controllers.HomeController;
@@ -203,7 +204,7 @@ public class MoviesView {
 		MoviesModel model = new MoviesModel();
 		ArrayList<Movie> movies = model.get();
 		
-		String[] columnNames = {"", "", "", "", "", "", ""};
+		String[] columnNames = {"", "", "", "", "", "", "", ""};
 		DefaultTableModel model1 = new DefaultTableModel(columnNames, 0);
 
 		for (Movie movie : movies) {
@@ -214,7 +215,8 @@ public class MoviesView {
 		        movie.getRelease_date(),
 		        movie.getGenre(),
 		        movie.getRent_stock(),
-		        movie.getSale_stock()
+		        movie.getSale_stock(),
+		        movie
 		    });
 		}
 
@@ -227,6 +229,23 @@ public class MoviesView {
 		table.getColumnModel().getColumn(5).setCellRenderer(new IconCellRenderer());
 		
 		table.getColumnModel().getColumn(6).setCellRenderer(new IconCellRenderer());
+		
+		TableColumnModel cm = table.getColumnModel();
+		cm.removeColumn(cm.getColumn(7));
+		
+		table.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				int fila = table.rowAtPoint(e.getPoint());
+		        int col = table.columnAtPoint(e.getPoint());
+
+		        if (col == 0 && fila != -1) {
+		            int modeloFila = table.convertRowIndexToModel(fila);
+		            Movie movie = (Movie) model1.getValueAt(modeloFila, 7);
+		            viewMovie(movie);
+		        }
+			}
+		});
+
 		
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
@@ -744,10 +763,10 @@ public class MoviesView {
 			
 	}
 
-	public void viewMovie() {
+	public void viewMovie(Movie movie) {
 		//VENTANA
 		JFrame frame = new JFrame();
-		frame.setBounds(100, 20, 823, 643);
+		frame.setBounds(100, 20, 1000, 643);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
@@ -788,11 +807,16 @@ public class MoviesView {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				frame.dispose();
-				HomeController hc = new HomeController();
-				hc.home();
+				MoviesController hc = new MoviesController();
+				hc.movies();
 			}
 
 		});
 		centro.add(titleButton);
+		
+		 JLabel label = new JLabel("Película: " + movie.getTitle() );
+		 label.setBounds(151, 200, 200, 30);
+		 label.setFont(titles);
+		 centro.add(label);
 	}
 }
