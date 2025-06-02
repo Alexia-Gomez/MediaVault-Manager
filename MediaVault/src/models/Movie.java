@@ -1,6 +1,13 @@
 package models;
 
+import java.io.ByteArrayInputStream;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.Date;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 public class Movie {
 	
@@ -70,6 +77,18 @@ public class Movie {
 	public double getRent_price() { return rent_price; }
 	public void setRent_price(double rent_price) { this.rent_price = rent_price; }
 
+	public ImageIcon getCoverAsIcon(int w, int h) {
+	    if (cover != null) {
+	        try {
+	            BufferedImage img = ImageIO.read(new ByteArrayInputStream(cover));
+	            Image scaledImg = img.getScaledInstance(w, h, Image.SCALE_SMOOTH);
+	            return new ImageIcon(scaledImg);
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+	    }
+	    return null;
+	}
 
 	@Override
 	public String toString() {

@@ -32,8 +32,7 @@ public class RoundedButton extends JButton{
 	}
 	
 	public void setImageIcon(ImageIcon icon) {
-		this.image = icon;
-		repaint();
+		this.setIcon(icon);
 	}
 
 	public RoundedButton(String string) {
