@@ -49,7 +49,7 @@ public class OperationsView {
 
 		// VENTANA
 		JFrame frame = new JFrame();
-		frame.setBounds(100, 20, 823, 643);
+		frame.setBounds(100, 20, 1000, 643);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
@@ -90,7 +90,7 @@ public class OperationsView {
 		
 		RoundedButton newOp= new RoundedButton("Registrar operación");
 		newOp.setIcon(new ImageIcon(((ImageIcon) mas).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
-		newOp.setBounds(594, 11, 200, 43);
+		newOp.setBounds(765, 11, 200, 43);
 		newOp.setIconTextGap(10);
 		newOp.setBackground(blue);
 		newOp.setRadius(30);
@@ -109,7 +109,7 @@ public class OperationsView {
 		
 		//BARRA
 		RoundedPanel barra = new RoundedPanel(30, new Color(255, 255, 255));
-		barra.setBounds(151, 65, 626, 68);
+		barra.setBounds(151, 65, 810, 68);
 		barra.setLayout(null);
 		centro.add(barra);
 
@@ -120,13 +120,13 @@ public class OperationsView {
 		barra.add(lupaIcon);
 
 		RoundedJTextField searchBar = new RoundedJTextField(20);
-		searchBar.setBounds(65, 20, 348, 30);
+		searchBar.setBounds(65, 20, 520, 30);
 		searchBar.setBackground(field);
 		searchBar.setFont(txt);
 		barra.add(searchBar);
 
 		RoundedButton buscar = new RoundedButton("Buscar");
-		buscar.setBounds(423, 20, 86, 30);
+		buscar.setBounds(600, 20, 86, 30);
 		buscar.setBackground(blue);
 		buscar.setFont(btn);
 		buscar.setRadius(20);
@@ -138,7 +138,7 @@ public class OperationsView {
 		filtrar.setIcon(new ImageIcon(((ImageIcon) filter).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
 		filtrar.setHorizontalTextPosition(SwingConstants.LEFT);
 		filtrar.setHorizontalAlignment(SwingConstants.CENTER);
-		filtrar.setBounds(515, 20, 86, 30);
+		filtrar.setBounds(700, 20, 86, 30);
 		filtrar.setBackground(Color.white);
 		filtrar.setForeground(Color.black);
 		filtrar.setBorderColor(border);
@@ -160,7 +160,7 @@ public class OperationsView {
 		//TABLA (HOLDER)
 		//TITLES
 		JPanel tableTitles = new JPanel();
-		tableTitles.setBounds(151, 144, 626, 29);
+		tableTitles.setBounds(151, 144, 810, 29);
 		tableTitles.setLayout(new GridLayout(0, 5, 0, 0));
 		centro.add(tableTitles);
 
@@ -196,7 +196,7 @@ public class OperationsView {
 
 		//TABLA
 		JPanel tablePanel = new JPanel();
-		tablePanel.setBounds(151, 184, 626, 322);
+		tablePanel.setBounds(151, 184, 810, 322);
 		tablePanel.setLayout(new BorderLayout(0, 0));
 		tablePanel.setBackground(Color.white);
 		centro.add(tablePanel);
@@ -205,7 +205,7 @@ public class OperationsView {
 	public void newOperation() {
 		//VENTANA
 		JFrame frame = new JFrame();
-		frame.setBounds(100, 20, 823, 643);
+		frame.setBounds(100, 20, 1000, 643);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
