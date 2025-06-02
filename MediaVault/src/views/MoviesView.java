@@ -239,6 +239,9 @@ public class MoviesView {
 		        int col = table.columnAtPoint(e.getPoint());
 
 		        if (col == 0 && fila != -1) {
+		        	frame.dispose();
+		        	
+		        	
 		            int modeloFila = table.convertRowIndexToModel(fila);
 		            Movie movie = (Movie) model1.getValueAt(modeloFila, 7);
 		            viewMovie(movie);
