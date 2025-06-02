@@ -22,6 +22,10 @@ public class MoviesController {
 	}
 	
 	public boolean addMovie(Movie movie) {
-		return model.add(movie);
+		return model.add(movie); 
+	}
+	
+	public boolean updateMovie(Movie movie, int product_id) {
+		return model.update(movie, product_id);
 	}
 }

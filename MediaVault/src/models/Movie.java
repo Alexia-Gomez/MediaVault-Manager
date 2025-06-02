@@ -7,7 +7,7 @@ public class Movie {
 	public int product_id, rent_stock, sale_stock,fk_promotion_id;
 	public String title, platform, genre, classification, product_type, studio;
 	public String release_date;
-	public double sale_price, rent_price;
+	public double sale_price, rent_price; 
 	public byte[] cover;
 	
 

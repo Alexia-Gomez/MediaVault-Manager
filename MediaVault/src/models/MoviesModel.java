@@ -120,5 +120,64 @@ public class MoviesModel {
 		return false;
 	}
 	
+	public boolean update(Movie product, int product_id) {
+	    String query = "UPDATE `Products` SET "
+	        + "title = ?, "
+	        + "platform = ?, "
+	        + "genre = ?, "
+	        + "classification = ?, "
+	        + "release_date = ?, "
+	        + "rent_stock = ?, "
+	        + "sale_stock = ?, "
+	        + "cover = ?, "
+	        + "sale_price = ?, "
+	        + "rent_price = ?, "
+	        + "studio = ? "
+	        + "WHERE product_id = ? AND product_type = 'movie'";
+	    
+	    Connection connection = ConexionBD.getConexion();
+	    PreparedStatement stmt = null;
+	    
+	    try {
+	        stmt = connection.prepareStatement(query);
+	        
+	        stmt.setString(1, product.getTitle());
+	        stmt.setString(2, product.getPlatform());
+	        stmt.setString(3, product.getGenre());
+	        stmt.setString(4, product.getClassification());
+	        stmt.setString(5, product.getRelease_date());
+	        stmt.setInt(6, product.getRent_stock());
+	        stmt.setInt(7, product.getSale_stock());
+	        
+	        if (product.getCover() != null) {
+	            stmt.setBytes(8, product.getCover());
+	        } else {
+	            stmt.setNull(8, java.sql.Types.BLOB);
+	        }
+	        
+	        stmt.setDouble(9, product.getSale_price());
+	        stmt.setDouble(10, product.getRent_price());
+	        stmt.setString(11, product.getStudio());
+	        stmt.setInt(12, product_id); 
+	        
+	        int rowsAffected = stmt.executeUpdate();
+	        
+	        if (rowsAffected > 0) {
+	            return true;
+	        }
+	        
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        try {
+	            if (stmt != null) stmt.close();
+	            if (connection != null) connection.close();
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	    }
+	    return false;
+	}
+	
 	
 }
