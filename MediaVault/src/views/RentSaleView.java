@@ -53,7 +53,7 @@ public class RentSaleView {
 
 		// VENTANA
 		JFrame frame = new JFrame();
-		frame.setBounds(100, 20, 823, 643);
+		frame.setBounds(100, 20, 1000, 643);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
@@ -95,7 +95,7 @@ public class RentSaleView {
 		//WIDGETS
 			//w1
 		RoundedPanel widget1 = new RoundedPanel(30, Color.WHITE);
-		widget1.setBounds(235, 70, 120, 95);
+		widget1.setBounds(324, 70, 120, 95);
 		widget1.setLayout(null);
 		centro.add(widget1);
 		
@@ -122,7 +122,7 @@ public class RentSaleView {
 		
 			//w2
 		RoundedPanel widget2 = new RoundedPanel(30, Color.WHITE);
-		widget2.setBounds(385, 70, 120, 95);
+		widget2.setBounds(484, 70, 120, 95);
 		widget2.setLayout(null);
 		centro.add(widget2);
 		
@@ -149,7 +149,7 @@ public class RentSaleView {
 		
 			//w3
 		RoundedPanel widget3 = new RoundedPanel(30, Color.WHITE);
-		widget3.setBounds(540, 70, 120, 95);
+		widget3.setBounds(644, 70, 120, 95);
 		widget3.setLayout(null);
 		centro.add(widget3);
 		
@@ -176,7 +176,7 @@ public class RentSaleView {
 
 		//BARRA
 		RoundedPanel barra = new RoundedPanel(30, Color.WHITE);
-		barra.setBounds(151, 180, 626, 50);
+		barra.setBounds(151, 180, 810, 50);
 		barra.setLayout(null);
 		centro.add(barra);
 
@@ -187,13 +187,13 @@ public class RentSaleView {
 		barra.add(lupaIcon);
 
 		RoundedJTextField searchBar = new RoundedJTextField(20);
-		searchBar.setBounds(65, 10, 348, 30);
+		searchBar.setBounds(65, 10, 520, 30);
 		searchBar.setBackground(field);
 		searchBar.setFont(txt);
 		barra.add(searchBar);
 
 		RoundedButton buscar = new RoundedButton("Buscar");
-		buscar.setBounds(423, 10, 86, 30);
+		buscar.setBounds(600, 10, 86, 30);
 		buscar.setBackground(blue);
 		buscar.setFont(btn);
 		buscar.setRadius(20);
@@ -205,7 +205,7 @@ public class RentSaleView {
 		filtrar.setIcon(new ImageIcon(((ImageIcon) filter).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
 		filtrar.setHorizontalTextPosition(SwingConstants.LEFT);
 		filtrar.setHorizontalAlignment(SwingConstants.CENTER);
-		filtrar.setBounds(515, 10, 86, 30);
+		filtrar.setBounds(700, 10, 86, 30);
 		filtrar.setBackground(Color.white);
 		filtrar.setForeground(Color.black);
 		filtrar.setBorderColor(border);
@@ -226,7 +226,7 @@ public class RentSaleView {
 		//TABLA (HOLDER)
 		//TITLES
 		JPanel tableTitles = new JPanel();
-		tableTitles.setBounds(151, 240, 626, 29);
+		tableTitles.setBounds(151, 240, 810, 29);
 		tableTitles.setLayout(new GridLayout(0, 6, 0, 0));
 		centro.add(tableTitles);
 
@@ -268,7 +268,7 @@ public class RentSaleView {
 
 		//TABLA
 		JPanel tablePanel = new JPanel();
-		tablePanel.setBounds(151, 275, 626, 275);
+		tablePanel.setBounds(151, 275, 810, 225);
 		tablePanel.setLayout(new BorderLayout(0, 0));
 		tablePanel.setBackground(Color.white);
 		centro.add(tablePanel);
