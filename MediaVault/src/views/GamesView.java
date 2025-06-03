@@ -7,19 +7,26 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import controllers.GamesController;
 import controllers.HomeController;
+import customClasses.CustomJCheckBox;
+import customClasses.CustomJComboBox;
 import customClasses.Fuentes;
 import customClasses.RoundedButton;
 import customClasses.RoundedJTextField;
 import customClasses.RoundedPanel;
 import customClasses.SideBar;
+import customClasses.Validaciones;
 
 public class GamesView {
 
@@ -29,19 +36,21 @@ public class GamesView {
 	Color blue = new Color(24, 130, 234);
 	Color border = new Color(186, 186, 186);
 	Color lightGray = new Color(117, 117, 117);
+	Color gray = new Color(242, 242, 242);
 	Color field = new Color(250, 250, 250);
-
+	
 	Fuentes tipoFuentes = new Fuentes();
 	Font titles = tipoFuentes.fuente("/fonts/GolosText-SemiBold.ttf", 17f);
 	Font btn = tipoFuentes.fuente("/fonts/GolosText-Regular.ttf", 14f);
 	Font txt = tipoFuentes.fuente("/fonts/GolosText-Regular.ttf", 12f);
+	Font fieldtxt = tipoFuentes.fuente("/fonts/GolosText-Regular.ttf", 11f);
 	
 	ImageIcon lupa = new ImageIcon(GamesView.class.getResource("/images/lupa.png"));
 	ImageIcon mas = new ImageIcon(GamesView.class.getResource("/images/mas.png"));
 	ImageIcon filter = new ImageIcon(GamesView.class.getResource("/images/filter.png"));
 	ImageIcon arrow = new ImageIcon(GamesView.class.getResource("/images/arrow.png"));
 	ImageIcon iconoFrame = new ImageIcon(LoginView.class.getResource("/images/iconoPrincipal.PNG"));
-
+	ImageIcon upImage = new ImageIcon(MoviesView.class.getResource("/images/upImage.png"));
 	
 	public GamesView() {
 
@@ -267,11 +276,203 @@ public class GamesView {
 
 		});
 		centro.add(titleButton);
+
+		//ENTRADA DE DATOS
+		RoundedPanel dataPanel = new RoundedPanel(30, new Color(255, 255, 255));
+		dataPanel.setBounds(150, 110, 810, 400);
+		dataPanel.setLayout(null);
+		centro.add(dataPanel);
+
+		RoundedButton foto = new RoundedButton();
+		foto.setBounds(35, 20, 165, 185);
+		foto.setImageIcon(upImage);
+		foto.setBackground(gray);
+		foto.setRadius(20);
+		dataPanel.add(foto);
+
+
+		RoundedButton gameId = new RoundedButton("ID: #12345");
+		gameId.setBounds(70, 250 ,100, 30);
+		gameId.setBackground(gray);
+		gameId.setForeground(Color.black);
+		gameId.setBorderColor(border);
+		gameId.setFont(txt);
+		gameId.setRadius(20);
+		dataPanel.add(gameId);
+
+		JLabel titleLabel = new JLabel("Titulo del juego:");
+		titleLabel.setBounds(237, 20, 250, 15);
+		titleLabel.setFont(txt);
+		dataPanel.add(titleLabel);
+
+		RoundedJTextField gameTitle = new RoundedJTextField(20);
+		gameTitle.setBounds(237, 40, 250, 30);
+		gameTitle.setFont(fieldtxt);
+		dataPanel.add(gameTitle);
+
+		JLabel dateLabel = new JLabel("Fecha de lanzamiento(AAAA-MM-DD):");
+		dateLabel.setBounds(237, 85, 250, 15);
+		dateLabel.setFont(txt);
+		dataPanel.add(dateLabel);
+
+		RoundedJTextField gameDate = new RoundedJTextField(20);
+		gameDate.setBounds(237, 105, 250, 27);
+		gameDate.setFont(fieldtxt);
+		dataPanel.add(gameDate);
+
+		JLabel rentStockLabel = new JLabel("Stock de renta:");
+		rentStockLabel.setBounds(237, 215, 250, 15);
+		rentStockLabel.setFont(txt);
+		dataPanel.add(rentStockLabel);
+
+		RoundedJTextField gameRentStock = new RoundedJTextField(20);
+		gameRentStock.setBounds(237, 235, 250, 27);
+		gameRentStock.addKeyListener(Validaciones.enteros());
+		gameRentStock.setFont(fieldtxt);
+		gameRentStock.setEnabled(false);
+		dataPanel.add(gameRentStock);
+
+		JLabel rentLabel = new JLabel("Precio de renta:");
+		rentLabel.setBounds(237, 280, 250, 15);
+		rentLabel.setFont(txt);
+		dataPanel.add(rentLabel);
+
+		RoundedJTextField gameRent = new RoundedJTextField(20);
+		gameRent.setBounds(237, 300, 250, 27);
+		gameRent.addKeyListener(Validaciones.conDecimal());
+		gameRent.setFont(fieldtxt);
+		gameRent.setEnabled(false);
+		dataPanel.add(gameRent);
+
+		JLabel dispLabel = new JLabel("Disponibilidad:");
+		dispLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		dispLabel.setBounds(237, 150, 250, 15);
+		dispLabel.setFont(txt);
+		dataPanel.add(dispLabel);
+
+		JLabel platformLabel = new JLabel("Plataforma:");
+		platformLabel.setBounds(520, 20, 250, 15);
+		platformLabel.setFont(txt);
+		dataPanel.add(platformLabel);
+
+		RoundedJTextField gamePlatform = new RoundedJTextField(20);
+		gamePlatform.setBounds(520, 40, 250, 27);
+		gamePlatform.setFont(fieldtxt);
+		dataPanel.add(gamePlatform);
+
+		JLabel classLabel = new JLabel("Clasificación:");
+		classLabel.setBounds(520, 85, 250, 15);
+		classLabel.setFont(txt);
+		dataPanel.add(classLabel);
+
+		CustomJComboBox gameClass = new CustomJComboBox();
+		gameClass.setModel( new DefaultComboBoxModel( new String[] { "E", "T", "M", "A" }));
+		gameClass.setBounds(520, 105, 250, 27);
+		gameClass.setFont(fieldtxt);
+		dataPanel.add(gameClass);
+
+		JLabel genreLabel = new JLabel("Género:");
+		genreLabel.setBounds(520, 150, 250, 15);
+		genreLabel.setFont(txt);
+		dataPanel.add(genreLabel);
+
+		CustomJComboBox gameGenre = new CustomJComboBox();
+		gameGenre.setModel( new DefaultComboBoxModel( new String[] { "Deportes", "Acciones", "Carreras", "Aventura", "Disparos", "Terror" }));
+		gameGenre.setBounds(520, 170, 250, 27);
+		gameGenre.setFont(fieldtxt);
+		dataPanel.add(gameGenre);
+
+		JLabel saleStockLabel = new JLabel("Stock de venta:");
+		saleStockLabel.setBounds(520, 215, 250, 15);
+		saleStockLabel.setFont(txt);
+		dataPanel.add(saleStockLabel);
+
+		RoundedJTextField gameSaleStock = new RoundedJTextField(20);
+		gameSaleStock.setBounds(520, 235, 250, 27);
+		gameSaleStock.addKeyListener(Validaciones.enteros());
+		gameSaleStock.setFont(fieldtxt);
+		gameSaleStock.setEnabled(false);
+		dataPanel.add(gameSaleStock);
+
+		JLabel saleLabel = new JLabel("Precio de venta:");
+		saleLabel.setBounds(520, 280, 250, 15);
+		saleLabel.setFont(txt);
+		dataPanel.add(saleLabel);
+
+		RoundedJTextField gameSale = new RoundedJTextField(20);
+		gameSale.setBounds(520, 300, 250, 27);
+		gameSale.addKeyListener(Validaciones.conDecimal());
+		gameSale.setFont(fieldtxt);
+		gameSale.setEnabled(false);
+		dataPanel.add(gameSale);
+
+		CustomJCheckBox renta = new CustomJCheckBox();
+		renta.setBounds(290, 170, 60, 27);
+		renta.setText("Renta");
+		renta.setFont(txt);
+		dataPanel.add(renta);
+		renta.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				boolean check = (e.getStateChange() == ItemEvent.SELECTED);
+				gameRentStock.setEnabled(check);
+				gameRent.setEnabled(check);
+				if(!check) {
+					gameRentStock.setText("");
+					gameRent.setText("");
+				}
+			}
+
+		});
+
+		CustomJCheckBox venta = new CustomJCheckBox();
+		venta.setBounds(380, 170, 60, 27);
+		venta.setText("Venta");
+		venta.setFont(txt);
+		dataPanel.add(venta);
+		venta.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				boolean check = (e.getStateChange() == ItemEvent.SELECTED);
+				gameSaleStock.setEnabled(check);
+				gameSale.setEnabled(check);
+				if(!check) {
+					gameRentStock.setText("");
+					gameRent.setText("");
+				}
+			}
+
+		});
+
+		RoundedButton guardar = new RoundedButton("Guardar videojuego");
+		guardar.setBounds(620, 355, 150, 30);
+		guardar.setBackground(blue);
+		guardar.setFont(txt);
+		guardar.setRadius(20);
+		dataPanel.add(guardar);
+
+		RoundedButton cancelar = new RoundedButton("Cancelar");
+		cancelar.setBounds(520, 355,80, 30);
+		cancelar.setBackground(Color.white);
+		cancelar.setForeground(Color.black);
+		cancelar.setBorderColor(border);
+		cancelar.setFont(txt);
+		cancelar.setRadius(20);
+		dataPanel.add(cancelar);
+		cancelar.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				GamesController gc = new GamesController();
+				gc.games();
+			}
+			
+		});
+
 	}
-	
+
 	public void filterPanel(JPanel centro) {
 		filtro = new RoundedPanel(30, new Color(255, 255, 255),3);
-		filtro.setBounds(510, 115, 265, 200);
+		filtro.setBounds(700, 115, 265, 200);
 		filtro.setLayout(null);
 		filtro.setVisible(false);
 		
