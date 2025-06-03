@@ -269,7 +269,7 @@ public class MoviesView {
 
 		        if (col == 0 && fila != -1) {
 		        	int modeloFila = table.convertRowIndexToModel(fila);
-		            Movie movie = (Movie) model1.getValueAt(modeloFila, 7);
+		            Movie movie = (Movie) table.getModel().getValueAt(modeloFila, 7);
 		            
 		            frame.dispose();
 		            viewMovie(movie);
@@ -1152,6 +1152,8 @@ public class MoviesView {
 	    listaFiltros.add(filtroGenero);
 	    RowFilter<DefaultTableModel, Object> filtroCombinado = RowFilter.andFilter(listaFiltros);
 		buscador.setRowFilter(filtroCombinado);
+		
+		
 	}
 
 	public void filterPanel(JPanel centro) {
