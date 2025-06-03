@@ -8,24 +8,24 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="resources"/>
 	<classpathentry kind="lib" path="resources/external_libraries/mysql-connector-j-9.3.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/yonatan.deleon/Downloads/iText-Core-9.2.0-only-jars/layout-9.2.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/yonatan.deleon/Downloads/iText-Core-9.2.0-only-jars/pdfa-9.2.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/yonatan.deleon/Downloads/iText-Core-9.2.0-only-jars/pdftest-9.2.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/yonatan.deleon/Downloads/iText-Core-9.2.0-only-jars/pdfua-9.2.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/yonatan.deleon/Downloads/iText-Core-9.2.0-only-jars/sign-9.2.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/yonatan.deleon/Downloads/iText-Core-9.2.0-only-jars/styled-xml-parser-9.2.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/yonatan.deleon/Downloads/iText-Core-9.2.0-only-jars/svg-9.2.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/yonatan.deleon/Downloads/iText-Core-9.2.0-only-jars/barcodes-9.2.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/yonatan.deleon/Downloads/iText-Core-9.2.0-only-jars/bouncy-castle-adapter-9.2.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/yonatan.deleon/Downloads/iText-Core-9.2.0-only-jars/bouncy-castle-connector-9.2.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/yonatan.deleon/Downloads/iText-Core-9.2.0-only-jars/bouncy-castle-fips-adapter-9.2.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/yonatan.deleon/Downloads/iText-Core-9.2.0-only-jars/commons-9.2.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/yonatan.deleon/Downloads/iText-Core-9.2.0-only-jars/font-asian-9.2.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/yonatan.deleon/Downloads/iText-Core-9.2.0-only-jars/forms-9.2.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/yonatan.deleon/Downloads/iText-Core-9.2.0-only-jars/hyph-9.2.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/yonatan.deleon/Downloads/iText-Core-9.2.0-only-jars/io-9.2.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/yonatan.deleon/Downloads/iText-Core-9.2.0-only-jars/kernel-9.2.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/yonatan.deleon/Downloads/slf4j-simple-1.7.36.jar"/>
-	<classpathentry kind="lib" path="C:/Users/yonatan.deleon/Downloads/slf4j-api-1.7.36.jar"/>
+	<classpathentry kind="lib" path="resources/external_libraries/barcodes-9.2.0.jar"/>
+	<classpathentry kind="lib" path="resources/external_libraries/bouncy-castle-adapter-9.2.0.jar"/>
+	<classpathentry kind="lib" path="resources/external_libraries/bouncy-castle-connector-9.2.0.jar"/>
+	<classpathentry kind="lib" path="resources/external_libraries/bouncy-castle-fips-adapter-9.2.0.jar"/>
+	<classpathentry kind="lib" path="resources/external_libraries/commons-9.2.0.jar"/>
+	<classpathentry kind="lib" path="resources/external_libraries/font-asian-9.2.0.jar"/>
+	<classpathentry kind="lib" path="resources/external_libraries/forms-9.2.0.jar"/>
+	<classpathentry kind="lib" path="resources/external_libraries/hyph-9.2.0.jar"/>
+	<classpathentry kind="lib" path="resources/external_libraries/io-9.2.0.jar"/>
+	<classpathentry kind="lib" path="resources/external_libraries/kernel-9.2.0.jar"/>
+	<classpathentry kind="lib" path="resources/external_libraries/layout-9.2.0.jar"/>
+	<classpathentry kind="lib" path="resources/external_libraries/pdfa-9.2.0.jar"/>
+	<classpathentry kind="lib" path="resources/external_libraries/pdftest-9.2.0.jar"/>
+	<classpathentry kind="lib" path="resources/external_libraries/pdfua-9.2.0.jar"/>
+	<classpathentry kind="lib" path="resources/external_libraries/sign-9.2.0.jar"/>
+	<classpathentry kind="lib" path="resources/external_libraries/slf4j-api-1.7.36.jar"/>
+	<classpathentry kind="lib" path="resources/external_libraries/slf4j-simple-1.7.36.jar"/>
+	<classpathentry kind="lib" path="resources/external_libraries/styled-xml-parser-9.2.0.jar"/>
+	<classpathentry kind="lib" path="resources/external_libraries/svg-9.2.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
