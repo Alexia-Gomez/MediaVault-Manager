@@ -745,9 +745,9 @@ public class MoviesView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				frame.dispose();
+				/*frame.dispose();
 				MoviesController mc = new MoviesController();
-				mc.movies();
+				mc.movies();*/
 			}
 
 		});
@@ -761,7 +761,12 @@ public class MoviesView {
 		RoundedButton foto = new RoundedButton();
 		foto.setBounds(35, 20, 165, 185);
 		foto.setBackground(gray);
-		foto.setImageIcon(movie.getCoverAsIcon(foto.getWidth(), foto.getHeight()));
+		try {
+			foto.setImageIcon(movie.getCoverAsIcon(foto.getWidth(), foto.getHeight()));
+		}
+		catch(NullPointerException e) {
+			System.out.println(e.getMessage());
+		}
 		foto.setRadius(20);
 		foto.setEnabled(false);
 		dataPanel.add(foto);
@@ -827,7 +832,7 @@ public class MoviesView {
 		movieId.setForeground(Color.black);
 		movieId.setBorderColor(border);
 		movieId.setBackground(gray);
-		movieId.setText("ID: #"+String.valueOf(movie.product_id));
+		if(movie.product_id>0) {movieId.setText("ID: #"+String.valueOf(movie.product_id));}
 		movieId.setFont(txt);
 		movieId.setRadius(20);
 		dataPanel.add(movieId);
@@ -839,7 +844,7 @@ public class MoviesView {
 		
 		RoundedJTextField movieTitle = new RoundedJTextField(20);
 		movieTitle.setBounds(237, 40, 250, 30);
-		movieTitle.setText(movie.getTitle());
+		if(movie.getTitle()!=null) movieTitle.setText(movie.getTitle());
 		movieTitle.setFocusable(false);
 		movieTitle.setFont(fieldtxt);
 		dataPanel.add(movieTitle);
@@ -851,7 +856,7 @@ public class MoviesView {
 		
 		RoundedJTextField movieDate = new RoundedJTextField(20);
 		movieDate.setBounds(237, 105, 250, 27);
-		movieDate.setText(movie.release_date);
+		if (movie.getRelease_date()!=null)movieDate.setText(movie.release_date);
 		movieDate.setFocusable(false);
 		movieDate.setFont(fieldtxt);
 		dataPanel.add(movieDate);
@@ -859,7 +864,7 @@ public class MoviesView {
 		CustomJCheckBox renta = new CustomJCheckBox();
 		renta.setBounds(290, 170, 60, 27);
 		renta.setEnabled(false);
-		renta.setSelected(movie.getRent_stock()>0);
+		if (movie.getRent_stock()>0) renta.setSelected(movie.getRent_stock()>0);
 		renta.setText("Renta");
 		renta.setFont(txt);
 		dataPanel.add(renta);
@@ -867,7 +872,7 @@ public class MoviesView {
 		CustomJCheckBox venta = new CustomJCheckBox();
 		venta.setBounds(380, 170, 60, 27);
 		venta.setEnabled(false);
-		venta.setSelected(movie.getSale_stock()>0);
+		if(movie.getSale_stock()>0) venta.setSelected(movie.getSale_stock()>0);
 		venta.setText("Venta");
 		venta.setFont(txt);
 		dataPanel.add(venta);
@@ -879,7 +884,7 @@ public class MoviesView {
 		
 		RoundedJTextField movieRentStock = new RoundedJTextField(20);
 		movieRentStock.setBounds(237, 235, 250, 27);
-		movieRentStock.setText(String.valueOf(movie.rent_stock));
+		if(movie.getRent_stock()>0) movieRentStock.setText(String.valueOf(movie.rent_stock));
 		movieRentStock.addKeyListener(Validaciones.enteros());
 		movieRentStock.setFocusable(false);
 		movieRentStock.setFont(fieldtxt);
@@ -892,7 +897,7 @@ public class MoviesView {
 		
 		RoundedJTextField movieRent = new RoundedJTextField(20);
 		movieRent.setBounds(237, 300, 250, 27);
-		movieRent.setText("$"+String.valueOf(movie.rent_price));
+		if(movie.rent_price>0)   movieRent.setText("$"+String.valueOf(movie.rent_price));
 		movieRent.addKeyListener(Validaciones.conDecimal());
 		movieRent.setFocusable(false);
 		movieRent.setFont(fieldtxt);
@@ -911,7 +916,7 @@ public class MoviesView {
 		
 		RoundedJTextField movieStudio = new RoundedJTextField(20);
 		movieStudio.setBounds(520, 40, 250, 27);
-		movieStudio.setText(movie.studio);
+		if(movie.getStudio()!=null)   movieStudio.setText(movie.studio);
 		movieStudio.setFocusable(false);
 		movieStudio.setFont(fieldtxt);
 		dataPanel.add(movieStudio);
@@ -925,7 +930,7 @@ public class MoviesView {
 		movieClass.setModel( new DefaultComboBoxModel( new String[] { "A", "B", "B-15", "C", "R" }));
 		movieClass.setBounds(520, 105, 250, 27);
 		movieClass.setEnabled(false);
-		movieClass.setSelectedItem(movie.classification);
+		if(movie.getClassification()!=null)  movieClass.setSelectedItem(movie.classification);
 		movieClass.setFont(fieldtxt);
 		dataPanel.add(movieClass);
 		
@@ -939,7 +944,7 @@ public class MoviesView {
 		movieGenre.setBounds(520, 170, 250, 27);
 		movieGenre.setFont(fieldtxt);
 		movieGenre.setEnabled(false);
-		movieGenre.setSelectedItem(movie.genre);
+		if(movie.getGenre()!=null)   movieGenre.setSelectedItem(movie.genre);
 		dataPanel.add(movieGenre);
 		
 		JLabel saleStockLabel = new JLabel("Stock de venta:");
@@ -949,7 +954,7 @@ public class MoviesView {
 		
 		RoundedJTextField movieSaleStock = new RoundedJTextField(20);
 		movieSaleStock.setBounds(520, 235, 250, 27);
-		movieSaleStock.setText(String.valueOf(movie.sale_stock));
+		if(movie.getSale_stock()>0)  movieSaleStock.setText(String.valueOf(movie.sale_stock));
 		movieSaleStock.addKeyListener(Validaciones.enteros());
 		movieSaleStock.setFocusable(false);
 		movieSaleStock.setFont(fieldtxt);
@@ -962,7 +967,7 @@ public class MoviesView {
 		
 		RoundedJTextField movieSale = new RoundedJTextField(20);
 		movieSale.setBounds(520, 300, 250, 27);
-		movieSale.setText("$"+String.valueOf(movie.sale_price));
+		if(movie.getSale_price()>0)  movieSale.setText("$"+String.valueOf(movie.sale_price));
 		movieSale.addKeyListener(Validaciones.conDecimal());
 		movieSale.setFocusable(false);
 		movieSale.setFont(fieldtxt);
@@ -1332,7 +1337,7 @@ public class MoviesView {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
 		    	 filtrar();
-		    }
+		    	 filtro.setVisible(false);		    }
 		});
 		filtro.add(aplicar);
 		centro.add(filtro);
