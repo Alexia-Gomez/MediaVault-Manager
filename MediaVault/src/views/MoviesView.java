@@ -91,6 +91,7 @@ public class MoviesView {
 	ImageIcon edit = new ImageIcon(MoviesView.class.getResource("/images/edit.png"));
 	ImageIcon descarga = new ImageIcon(MoviesView.class.getResource("/images/descarga.png"));
 	ImageIcon delete = new ImageIcon(MoviesView.class.getResource("/images/eliminarW.png"));
+	ImageIcon upImage = new ImageIcon(MoviesView.class.getResource("/images/upImage.png"));
 	
 	byte[] coverBinario = null;
 	
@@ -443,6 +444,7 @@ public class MoviesView {
 		
 		RoundedButton foto = new RoundedButton();
 		foto.setBounds(35, 20, 165, 185);
+		foto.setImageIcon(upImage);
 		foto.setBackground(gray);
 		foto.setRadius(20);
 		dataPanel.add(foto);
@@ -681,7 +683,8 @@ public class MoviesView {
 				if(mc.addMovie(pelicula)) {
 					System.out.println("Se agrego una pelicula nueva");
 				}
-						
+					frame.dispose();
+					movies();
 			}
 		});
 
