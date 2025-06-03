@@ -14,6 +14,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.nio.file.Files;
@@ -21,6 +22,11 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
+
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Paragraph;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -39,6 +45,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
+
 
 import controllers.HomeController;
 import controllers.MoviesController;
@@ -859,7 +866,7 @@ public class MoviesView {
 		movieSale.setFont(fieldtxt);
 		dataPanel.add(movieSale);
 		
-		RoundedButton descargar = new RoundedButton("Descargar ficha");
+		RoundedButton descargar = new RoundedButton("Descargar ficha"); 
 		descargar.setIcon(new ImageIcon(((ImageIcon) descarga).getImage().getScaledInstance(15, 17, Image.SCALE_SMOOTH)));
 		descargar.setHorizontalTextPosition(SwingConstants.RIGHT);
 		descargar.setIconTextGap(10);
@@ -868,6 +875,14 @@ public class MoviesView {
 		descargar.setFont(txt);
 		descargar.setRadius(20);
 		dataPanel.add(descargar);
+		descargar.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        generarPDF(movie);
+		        JOptionPane.showMessageDialog(null, "PDF generado con éxito.");
+		    }
+		});
+
+
 		
 		RoundedButton eliminar = new RoundedButton("Eliminar película");
 		eliminar.setIcon(new ImageIcon(((ImageIcon) delete).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
@@ -1183,6 +1198,36 @@ public class MoviesView {
 		centro.add(filtro);
 		centro.setComponentZOrder(filtro, 0);
 			
+	}
+	
+	public void generarPDF(Movie movie) {
+		String movieTitle = movie.getTitle();
+	    String dest = "resources/files/"+movieTitle+"_ficha.pdf";
+
+	    try {
+	        PdfWriter writer = new PdfWriter(dest);
+	        PdfDocument pdfDoc = new PdfDocument(writer);
+	        Document document = new Document(pdfDoc);
+
+	        document.add(new Paragraph("Ficha de Película").setFontSize(18));
+	        document.add(new Paragraph("ID: " + movie.product_id));
+	        document.add(new Paragraph("Título: " + movie.getTitle()));
+	        document.add(new Paragraph("Fecha de estreno: " + movie.release_date));
+	        document.add(new Paragraph("Precio renta: $" + movie.rent_price));
+	        document.add(new Paragraph("Stock renta: " + movie.rent_stock));
+	        document.add(new Paragraph("Precio venta: $" + movie.sale_price));
+	        document.add(new Paragraph("Stock venta: " + movie.sale_stock));
+	        document.add(new Paragraph("Estudio: " + movie.studio));
+	        document.add(new Paragraph("Clasificación: " + movie.classification));
+	        document.add(new Paragraph("Género: " + movie.genre));
+
+	        document.close();
+
+	        System.out.println("PDF generado correctamente: " + dest);
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
 	}
 
 }
