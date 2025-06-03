@@ -666,6 +666,8 @@ public class MoviesView {
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
 		frame.setResizable(false);
+		frame.setTitle("Detalles de película");
+		frame.setIconImage(iconoFrame.getImage());
 
 		//PANEL LATERAL
 		RoundedPanel sidepanel = new RoundedPanel(10, blue);
@@ -876,6 +878,26 @@ public class MoviesView {
 		eliminar.setFont(txt);
 		eliminar.setRadius(20);
 		dataPanel.add(eliminar);
+		eliminar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int confirm = JOptionPane.showConfirmDialog(null, "¿Estás seguro de eliminar esta película?", 
+						"Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+
+				if (confirm == JOptionPane.YES_OPTION) {
+					int productId = movie.getProduct_id(); 
+					MoviesController mc = new MoviesController();
+
+					if (mc.deleteMovie(productId)) {
+						JOptionPane.showMessageDialog(null, "Película eliminada con éxito.");
+						frame.dispose(); 
+						movies(); 
+					} else {
+						JOptionPane.showMessageDialog(null, "Error al eliminar la película.", 
+								"Error", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			}
+		});
 		
 		RoundedButton cancelar = new RoundedButton("Cancelar");
 		cancelar.setBounds(237, 354,80, 30);

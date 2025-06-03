@@ -28,4 +28,11 @@ public class MoviesController {
 	public boolean updateMovie(Movie movie, int product_id) {
 		return model.update(movie, product_id);
 	}
+	
+	public boolean  deleteMovie(int product_id) { 
+		MoviesModel model = new MoviesModel();
+		
+		return model.delete(product_id);
+		
+	}
 }

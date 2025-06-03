@@ -53,20 +53,20 @@ public class MoviesModel {
 	}
 	
 	public boolean delete(int product_id) {
-		String query = "DELETE FROM `Products` WHERE `product_id` = "+product_id+ "AND `product_type` = 'pelicula'";
+		String query = "DELETE FROM Products WHERE product_id = ? AND product_type = 'movie'";
 		Connection connection = ConexionBD.getConexion();
-		Statement stmt = null;
+		PreparedStatement stmt = null;
+
 		try {
-			stmt = connection.createStatement();
-			int rs = stmt.executeUpdate(query);
-			
-			if (rs>0) {
-				return true;
-			}
-			
+			stmt = connection.prepareStatement(query);
+			stmt.setInt(1, product_id);
+
+			int affectedRows = stmt.executeUpdate();
+			return affectedRows > 0;
+
 		} catch (Exception e) {
 			e.printStackTrace();
-		}finally {
+		} finally {
 			try {
 				if (stmt != null) stmt.close();
 				if (connection != null) connection.close();
