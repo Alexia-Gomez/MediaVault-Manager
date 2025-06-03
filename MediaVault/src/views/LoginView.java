@@ -148,18 +148,18 @@ public class LoginView {
 				
 				userField.requestFocus();
 				
-				/*if(flag1 && flag2) {
+				if(flag1 && flag2) {
 					
 					AdminController controller = new AdminController();
 			        boolean acceso = controller.autenticar(username, password);
 			        
 			        if(acceso) {
-			        	*/
+			        	
 			        	frame.dispose();
 	 					HomeController hc = new HomeController();
 	 					hc.home();
 		                  
-			       /* }else {
+			        }else {
 	 					passField.setBorderColor(Color.red);
 	 					userField.setBorderColor(Color.red);
 	 					errorLabel.setVisible(true);
@@ -168,7 +168,7 @@ public class LoginView {
 	 					userField.requestFocus();
 			        }
 				}
-*/
+
 			}
 
 		});
