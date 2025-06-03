@@ -49,6 +49,7 @@ import javax.swing.table.TableRowSorter;
 
 import controllers.HomeController;
 import controllers.MoviesController;
+import customClasses.CoverTitleCellRenderer;
 import customClasses.CustomJCheckBox;
 import customClasses.CustomJComboBox;
 import customClasses.CustomJRadioButton;
@@ -249,6 +250,8 @@ public class MoviesView {
 		table.setShowVerticalLines(false);
 		table.setTableHeader(null);
 		table.setFont(fieldtxt);
+		
+		table.getColumnModel().getColumn(0).setCellRenderer(new CoverTitleCellRenderer());
 		
 		table.getColumnModel().getColumn(5).setCellRenderer(new IconCellRenderer());
 		
