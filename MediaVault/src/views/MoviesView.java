@@ -62,6 +62,7 @@ import customClasses.RoundedButton;
 import customClasses.RoundedJTextField;
 import customClasses.RoundedPanel;
 import customClasses.SideBar;
+import customClasses.Validaciones;
 import models.Movie;
 import models.MoviesModel;
 
@@ -538,6 +539,7 @@ public class MoviesView {
 		
 		RoundedJTextField movieRentStock = new RoundedJTextField(20);
 		movieRentStock.setBounds(237, 235, 250, 27);
+		movieRentStock.addKeyListener(Validaciones.enteros());
 		movieRentStock.setFont(fieldtxt);
 		movieRentStock.setEnabled(false);
 		dataPanel.add(movieRentStock);
@@ -549,6 +551,7 @@ public class MoviesView {
 		
 		RoundedJTextField movieRent = new RoundedJTextField(20);
 		movieRent.setBounds(237, 300, 250, 27);
+		movieRent.addKeyListener(Validaciones.conDecimal());
 		movieRent.setFont(fieldtxt);
 		movieRent.setEnabled(false);
 		dataPanel.add(movieRent);
@@ -598,6 +601,7 @@ public class MoviesView {
 		
 		RoundedJTextField movieSaleStock = new RoundedJTextField(20);
 		movieSaleStock.setBounds(520, 235, 250, 27);
+		movieSaleStock.addKeyListener(Validaciones.enteros());
 		movieSaleStock.setFont(fieldtxt);
 		movieSaleStock.setEnabled(false);
 		dataPanel.add(movieSaleStock);
@@ -609,6 +613,7 @@ public class MoviesView {
 		
 		RoundedJTextField movieSale = new RoundedJTextField(20);
 		movieSale.setBounds(520, 300, 250, 27);
+		movieSale.addKeyListener(Validaciones.conDecimal());
 		movieSale.setFont(fieldtxt);
 		movieSale.setEnabled(false);
 		dataPanel.add(movieSale);
@@ -825,6 +830,7 @@ public class MoviesView {
 		RoundedJTextField movieRentStock = new RoundedJTextField(20);
 		movieRentStock.setBounds(237, 235, 250, 27);
 		movieRentStock.setText(String.valueOf(movie.rent_stock));
+		movieRentStock.addKeyListener(Validaciones.enteros());
 		movieRentStock.setFocusable(false);
 		movieRentStock.setFont(fieldtxt);
 		dataPanel.add(movieRentStock);
@@ -837,6 +843,7 @@ public class MoviesView {
 		RoundedJTextField movieRent = new RoundedJTextField(20);
 		movieRent.setBounds(237, 300, 250, 27);
 		movieRent.setText("$"+String.valueOf(movie.rent_price));
+		movieRent.addKeyListener(Validaciones.conDecimal());
 		movieRent.setFocusable(false);
 		movieRent.setFont(fieldtxt);
 		dataPanel.add(movieRent);
@@ -891,6 +898,7 @@ public class MoviesView {
 		RoundedJTextField movieSaleStock = new RoundedJTextField(20);
 		movieSaleStock.setBounds(520, 235, 250, 27);
 		movieSaleStock.setText(String.valueOf(movie.sale_stock));
+		movieSaleStock.addKeyListener(Validaciones.enteros());
 		movieSaleStock.setFocusable(false);
 		movieSaleStock.setFont(fieldtxt);
 		dataPanel.add(movieSaleStock);
@@ -903,6 +911,7 @@ public class MoviesView {
 		RoundedJTextField movieSale = new RoundedJTextField(20);
 		movieSale.setBounds(520, 300, 250, 27);
 		movieSale.setText("$"+String.valueOf(movie.sale_price));
+		movieSale.addKeyListener(Validaciones.conDecimal());
 		movieSale.setFocusable(false);
 		movieSale.setFont(fieldtxt);
 		dataPanel.add(movieSale);
@@ -1142,8 +1151,7 @@ public class MoviesView {
 	    RowFilter<DefaultTableModel, Object> filtroCombinado = RowFilter.andFilter(listaFiltros);
 		buscador.setRowFilter(filtroCombinado);
 	}
-	
-	
+
 	public void filterPanel(JPanel centro) {
 		filtro = new RoundedPanel(30, new Color(255, 255, 255),3);
 		filtro.setBounds(625, 115, 340, 300);
