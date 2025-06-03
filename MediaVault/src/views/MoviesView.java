@@ -14,20 +14,11 @@ import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
-
-import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.layout.Document;
-import com.itextpdf.layout.element.Paragraph;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -47,8 +38,13 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
 
+import com.itextpdf.io.image.ImageData;
+import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Paragraph;
 
-import controllers.HomeController;
 import controllers.MoviesController;
 import customClasses.CoverTitleCellRenderer;
 import customClasses.CustomJCheckBox;
@@ -462,14 +458,14 @@ public class MoviesView {
                 	long tamaño = archivoSeleccionado.length();
                 	
                 	if (tamaño>5242880) {
-                		JOptionPane.showMessageDialog(foto,"Imagen mayor a 2MB","Error", JOptionPane.ERROR_MESSAGE);
+                		JOptionPane.showMessageDialog(foto,"Imagen muy grande","Error", JOptionPane.ERROR_MESSAGE);
                 		return;
                 	}
                 	else {
                 		try {
                 			BufferedImage imgOriginal = ImageIO.read(archivoSeleccionado);
 
-                			int nuevoAncho = foto.getWidth()-20;
+                			int nuevoAncho = foto.getWidth();
                 			int nuevoAlto = (imgOriginal.getHeight() * nuevoAncho) / imgOriginal.getWidth();
 
                 			BufferedImage imgEscalada = new BufferedImage(nuevoAncho, nuevoAlto, BufferedImage.TYPE_INT_RGB);
@@ -486,15 +482,9 @@ public class MoviesView {
                 			baos.close();
                 			
                 			ImageIcon imagenReducida = new ImageIcon(imgEscalada);
-                			int width = foto.getWidth()-20;
-                    		int height = foto.getHeight()-20;
-                    		
-                    		JLabel labelImagen = new JLabel(imagenReducida);
-                            labelImagen.setBounds(10, 10, width, height);
-                            foto.removeAll();
-                            foto.add(labelImagen);    
-                            foto.revalidate();
-                            foto.repaint();
+                			int width = foto.getWidth();
+                    		int height = foto.getHeight();
+                    		foto.setIcon(imagenReducida);
                     		
                     	}catch(Exception x) {
                     		System.out.println(x.getMessage());
@@ -773,7 +763,64 @@ public class MoviesView {
 		foto.setBackground(gray);
 		foto.setImageIcon(movie.getCoverAsIcon(foto.getWidth(), foto.getHeight()));
 		foto.setRadius(20);
+		foto.setEnabled(false);
 		dataPanel.add(foto);
+		foto.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (!foto.isEnabled()) return;
+				
+				JFileChooser chooserImagen = new JFileChooser();
+				chooserImagen.setDialogTitle("Selecciona una imagen");
+                chooserImagen.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter(
+                        "JPEG, PNG", "jpg", "jpeg", "png"));
+                int result = chooserImagen.showOpenDialog(null);
+                
+                if(result == JFileChooser.APPROVE_OPTION) {
+                	File archivoSeleccionado = chooserImagen.getSelectedFile();
+                	long tamaño = archivoSeleccionado.length();
+                	
+                	if (tamaño>5242880) {
+                		JOptionPane.showMessageDialog(foto,"Imagen muy grande","Error", JOptionPane.ERROR_MESSAGE);
+                		return;
+                	}
+                	else {
+                		try {
+                			BufferedImage imgOriginal = ImageIO.read(archivoSeleccionado);
+
+                			int nuevoAncho = foto.getWidth();
+                			int nuevoAlto = (imgOriginal.getHeight() * nuevoAncho) / imgOriginal.getWidth();
+
+                			BufferedImage imgEscalada = new BufferedImage(nuevoAncho, nuevoAlto, BufferedImage.TYPE_INT_RGB);
+                			Graphics2D g2 = imgEscalada.createGraphics();
+                			
+                			g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+                			g2.drawImage(imgOriginal, 0, 0, nuevoAncho, nuevoAlto, null);
+                			g2.dispose();
+
+                			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                			ImageIO.write(imgEscalada, "jpg", baos);
+                			baos.flush();
+                			byte[] coverBinario = baos.toByteArray();
+                			baos.close();
+                			
+                			movie.setCover(coverBinario);
+                			
+                			ImageIcon imagenReducida = new ImageIcon(imgEscalada);
+                    		
+                    		foto.setImageIcon(imagenReducida);
+                            
+                    	}catch(Exception x) {
+                    		System.out.println(x.getMessage());
+                    	}
+                	}
+                	
+                }
+				
+			}
+			
+		});
 		
 		RoundedButton movieId = new RoundedButton();
 		movieId.setBounds(70, 250 ,100, 30);
@@ -1044,6 +1091,7 @@ public class MoviesView {
 					updatedMovie.studio = studio;
 					updatedMovie.classification = classification;
 					updatedMovie.genre = genre;
+					updatedMovie.setCover(movie.getCover());
 
 					MoviesController controller = new MoviesController();
 					boolean success = controller.updateMovie(updatedMovie, updatedMovie.product_id);
@@ -1063,7 +1111,7 @@ public class MoviesView {
 						descargar.setEnabled(true);
 						cancelar.setVisible(false);
 						guardar.setVisible(false);
-						
+						foto.setEnabled(false);
 					} else {
 						JOptionPane.showMessageDialog(null, "Error al actualizar la película.", "Error", JOptionPane.ERROR_MESSAGE);
 					}
@@ -1095,6 +1143,8 @@ public class MoviesView {
 				movieRent.setFocusable(renta.isSelected());
 				movieSaleStock.setFocusable(venta.isSelected());
 				movieSale.setFocusable(venta.isSelected());
+				foto.setEnabled(true);
+				
 			}
 		});
 	}
@@ -1298,6 +1348,14 @@ public class MoviesView {
 	        PdfWriter writer = new PdfWriter(dest);
 	        PdfDocument pdfDoc = new PdfDocument(writer);
 	        Document document = new Document(pdfDoc);
+	        
+	        byte[] imagenBytes = movie.getCover();
+	        com.itextpdf.layout.element.Image poster=null;
+	        if (imagenBytes != null && imagenBytes.length > 0) {
+	            
+	        	 ImageData imgData = ImageDataFactory.create(imagenBytes);
+	             poster = new com.itextpdf.layout.element.Image(imgData);
+	        }
 
 	        document.add(new Paragraph("Ficha de Película").setFontSize(18));
 	        document.add(new Paragraph("ID: " + movie.product_id));
@@ -1310,7 +1368,10 @@ public class MoviesView {
 	        document.add(new Paragraph("Estudio: " + movie.studio));
 	        document.add(new Paragraph("Clasificación: " + movie.classification));
 	        document.add(new Paragraph("Género: " + movie.genre));
-
+	        document.add(new Paragraph("Portada"));
+	        if (poster != null) {
+	            document.add(poster);
+	        }
 	        document.close();
 
 	        System.out.println("PDF generado correctamente: " + dest);
