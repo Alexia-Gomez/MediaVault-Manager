@@ -286,7 +286,7 @@ public class ClientsView {
 		dataPanel.add(namefield);
 		
 		JLabel birthLabel = new JLabel("Fecha de nacimiento(AAAA-MM-DD):");
-		birthLabel.setBounds(230, 80, 170, 15);
+		birthLabel.setBounds(230, 80, 250, 15);
 		birthLabel.setFont(txt);
 		dataPanel.add(birthLabel);
 		

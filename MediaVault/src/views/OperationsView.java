@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import controllers.OperationsController;
 import customClasses.Fuentes;
 import customClasses.RoundedButton;
 import customClasses.RoundedJTextField;
@@ -34,12 +35,14 @@ public class OperationsView {
 	Font titles = tipoFuentes.fuente("/fonts/GolosText-SemiBold.ttf", 17f);
 	Font btn = tipoFuentes.fuente("/fonts/GolosText-Regular.ttf", 14f);
 	Font txt = tipoFuentes.fuente("/fonts/GolosText-Regular.ttf", 12f);
+	Font fieldtxt = tipoFuentes.fuente("/fonts/GolosText-Regular.ttf", 11f);
 	
 	ImageIcon lupa = new ImageIcon(OperationsView.class.getResource("/images/lupa.png"));
 	ImageIcon mas = new ImageIcon(OperationsView.class.getResource("/images/mas.png"));
 	ImageIcon filter = new ImageIcon(OperationsView.class.getResource("/images/filter.png"));
 	ImageIcon arrow = new ImageIcon(OperationsView.class.getResource("/images/arrow.png"));
 	ImageIcon iconoFrame = new ImageIcon(LoginView.class.getResource("/images/iconoPrincipal.PNG"));
+	ImageIcon checkW = new ImageIcon(OperationsView.class.getResource("/images/checkW.png"));
 
 	public OperationsView() {
 
@@ -253,11 +256,149 @@ public class OperationsView {
 
 		});
 		centro.add(titleButton);
+
+		//ENTRADA DE DATOS
+		RoundedPanel dataPanel = new RoundedPanel(30, new Color(255, 255, 255));
+		dataPanel.setBounds(151, 65, 810, 345);
+		dataPanel.setLayout(null);
+		centro.add(dataPanel);
+		
+		JLabel clientLabel = new JLabel("Cliente");
+		clientLabel.setBounds(50, 20, 100, 15);
+		clientLabel.setFont(txt);
+		dataPanel.add(clientLabel);
+		
+		JLabel lupaIcon = new JLabel("");
+		lupaIcon.setIcon(new ImageIcon(((ImageIcon) lupa).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
+		lupaIcon.setHorizontalAlignment(SwingConstants.CENTER);
+		lupaIcon.setBounds(65, 40, 30, 30);
+		dataPanel.add(lupaIcon);
+
+		RoundedJTextField searchBar = new RoundedJTextField(20);
+		searchBar.setBounds(115, 40, 520, 30);
+		searchBar.setBackground(field);
+		searchBar.setFont(txt);
+		dataPanel.add(searchBar);
+
+		RoundedButton buscar = new RoundedButton("Buscar");
+		buscar.setBounds(665, 40, 86, 30);
+		buscar.setBackground(blue);
+		buscar.setFont(btn);
+		buscar.setRadius(20);
+		dataPanel.add(buscar);
+		
+		JLabel operationLabel = new JLabel("Tipo de operación");
+		operationLabel.setBounds(50, 80, 150, 15);
+		operationLabel.setFont(txt);
+		dataPanel.add(operationLabel);
+		
+		RoundedButton renta = new RoundedButton("Renta");
+		renta.setBounds(45, 100, 310, 30);
+		renta.setBackground(Color.white);
+		renta.setForeground(Color.black);
+		renta.setBorderColor(border);
+		renta.setFont(txt);
+		renta.setRadius(20);
+		dataPanel.add(renta);
+		
+		RoundedButton compra = new RoundedButton("Compra");
+		compra.setBounds(440, 100, 310, 30);
+		compra.setBackground(Color.white);
+		compra.setForeground(Color.black);
+		compra.setBorderColor(border);
+		compra.setFont(txt);
+		compra.setRadius(20);
+		dataPanel.add(compra);
+		
+		JLabel productLabel = new JLabel("Tipo de producto");
+		productLabel.setBounds(50, 150, 150, 15);
+		productLabel.setFont(txt);
+		dataPanel.add(productLabel);
+		
+		RoundedButton game = new RoundedButton("Videojuego");
+		game.setBounds(45, 170, 310, 30);
+		game.setBackground(Color.white);
+		game.setForeground(Color.black);
+		game.setBorderColor(border);
+		game.setFont(txt);
+		game.setRadius(20);
+		dataPanel.add(game);
+		
+		RoundedButton movie = new RoundedButton("Película");
+		movie.setBounds(440, 170, 310, 30);
+		movie.setBackground(Color.white);
+		movie.setForeground(Color.black);
+		movie.setBorderColor(border);
+		movie.setFont(txt);
+		movie.setRadius(20);
+		dataPanel.add(movie);
+		
+		JLabel titleLabel = new JLabel("Seleccionar título");
+		titleLabel.setBounds(50, 215, 150, 15);
+		titleLabel.setFont(txt);
+		dataPanel.add(titleLabel);
+		
+		JLabel lupaIcon2 = new JLabel("");
+		lupaIcon2.setIcon(new ImageIcon(((ImageIcon) lupa).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
+		lupaIcon2.setHorizontalAlignment(SwingConstants.CENTER);
+		lupaIcon2.setBounds(65, 235, 30, 30);
+		dataPanel.add(lupaIcon2);
+
+		RoundedJTextField searchBar2 = new RoundedJTextField(20);
+		searchBar2.setBounds(115, 235, 520, 30);
+		searchBar2.setBackground(field);
+		searchBar2.setFont(txt);
+		dataPanel.add(searchBar2);
+
+		RoundedButton buscar2 = new RoundedButton("Buscar");
+		buscar2.setBounds(665, 235, 86, 30);
+		buscar2.setBackground(blue);
+		buscar2.setFont(btn);
+		buscar2.setRadius(20);
+		dataPanel.add(buscar2);
+		
+		JLabel saleLabel = new JLabel("Fecha de compra");
+		saleLabel.setBounds(50, 275, 150, 15);
+		saleLabel.setFont(txt);
+		dataPanel.add(saleLabel);
+		
+		RoundedJTextField saleDate = new RoundedJTextField(20);
+		saleDate.setBounds(45, 295, 310, 27);
+		saleDate.setFont(fieldtxt);
+		dataPanel.add(saleDate);
+		
+		RoundedButton cancelar = new RoundedButton("Cancelar");
+		cancelar.setBounds(680, 540,80, 30);
+		cancelar.setBackground(Color.white);
+		cancelar.setForeground(Color.black);
+		cancelar.setBorderColor(border);
+		cancelar.setFont(txt);
+		cancelar.setRadius(20);
+		centro.add(cancelar);
+		cancelar.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				OperationsController oc = new OperationsController();
+				oc.operations();
+			}
+			
+		});
+		
+		RoundedButton guardar = new RoundedButton("Completar operación");
+		guardar.setIcon(new ImageIcon(((ImageIcon) checkW).getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH)));
+		guardar.setBounds(780, 540, 170, 30);
+		guardar.setBackground(blue);
+		guardar.setFont(txt);
+		guardar.setRadius(20);
+		centro.add(guardar);
+
 	}
 	
 	public void filterPanel(JPanel centro) {
 		filtro = new RoundedPanel(30, new Color(255, 255, 255),3);
-		filtro.setBounds(510, 115, 265, 200);
+		filtro.setBounds(700, 115, 265, 200);
 		filtro.setLayout(null);
 		filtro.setVisible(false);
 		
