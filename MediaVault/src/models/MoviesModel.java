@@ -13,6 +13,7 @@ public class MoviesModel {
 	public MoviesModel() {}
 
 	public ArrayList<Movie> get() {
+		movies.clear();
 		String query = "SELECT product_id, title, studio, classification, release_date, genre, rent_stock, sale_stock, cover, sale_price, rent_price FROM Products WHERE product_type = 'movie'";
 		Connection connection = ConexionBD.getConexion();
 		Statement stmt = null;
