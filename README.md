@@ -18,9 +18,14 @@ El proyecto consiste en la creación de una aplicación o sistema de aspecto adm
 ## **Herramientas Utilizadas (hasta el momento)**
 
 
-* Figma: Empleado para la creación del prototipo del proyecto  
+* Figma: Empleado para la creación del prototipo del proyecto  https://www.figma.com/design/yKz43RCoLVIXCSjQbbja7t/MediaVault-Manager?node-id=0-1&p=f&t=NCWvw0rHrBNJLGrV-0
 * Dropbox: Se creó y subió una carpeta con la tipografía, logo y elementos gráficos usados en el prototipo  
 * Loom: Usado para la grabación de un breve video explicativo sobre el proyecto
+* IDE Eclipse: Entorno de desarrollo usado para la creacion del programa a traves de codigo en JAVA.
+* GitHub Desktop: Empleado en la organizacion y control de los cambios hechos al proyecto para que estos se reflejen en el repositorio del mismo.
+* MySQL Workbench: Se usó para crear las tablas e insertar algunos datos en la DB del proyecto. Se hizo una conexion con el servidor Aiven
+* Aiven: servicio que permite tener una DB remota a traves de un servidor proporcionado. Con este servicio se almaceno la DB remotamente.
+  
 
 
 ## **Integrantes**
