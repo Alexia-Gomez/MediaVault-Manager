@@ -8,12 +8,15 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import controllers.ClientsController;
+import customClasses.CustomJComboBox;
 import customClasses.CustomJRadioButton;
 import customClasses.Fuentes;
 import customClasses.RoundedButton;
@@ -29,18 +32,21 @@ public class ClientsView {
 	Color blue = new Color(24, 130, 234);
 	Color border = new Color(186, 186, 186);
 	Color lightGray = new Color(117, 117, 117);
+	Color gray = new Color(242, 242, 242);
 	Color field = new Color(250, 250, 250);
 
 	Fuentes tipoFuentes = new Fuentes();
 	Font titles = tipoFuentes.fuente("/fonts/GolosText-SemiBold.ttf", 17f);
 	Font btn = tipoFuentes.fuente("/fonts/GolosText-Regular.ttf", 14f);
 	Font txt = tipoFuentes.fuente("/fonts/GolosText-Regular.ttf", 12f);
+	Font fieldtxt = tipoFuentes.fuente("/fonts/GolosText-Regular.ttf", 11f);
 	
 	ImageIcon lupa = new ImageIcon(ClientsView.class.getResource("/images/lupa.png"));
 	ImageIcon mas = new ImageIcon(ClientsView.class.getResource("/images/mas.png"));
 	ImageIcon filter = new ImageIcon(ClientsView.class.getResource("/images/filter.png"));
 	ImageIcon arrow = new ImageIcon(ClientsView.class.getResource("/images/arrow.png"));
-	ImageIcon iconoFrame = new ImageIcon(LoginView.class.getResource("/images/iconoPrincipal.PNG"));
+	ImageIcon iconoFrame = new ImageIcon(ClientsView.class.getResource("/images/iconoPrincipal.PNG"));
+	ImageIcon upImage = new ImageIcon(ClientsView.class.getResource("/images/upImage.png"));
 
 	public ClientsView() {
 
@@ -255,8 +261,137 @@ public class ClientsView {
 			
 		});
 		centro.add(titleButton);
+
+		//ENTRADA DE DATOS
+		RoundedPanel dataPanel = new RoundedPanel(30, new Color(255, 255, 255));
+		dataPanel.setBounds(150, 65, 810, 245);
+		dataPanel.setLayout(null);
+		centro.add(dataPanel);
 		
+		RoundedButton foto = new RoundedButton();
+		foto.setBounds(35, 27, 165, 175);
+		foto.setImageIcon(upImage);
+		foto.setBackground(gray);
+		foto.setRadius(20);
+		dataPanel.add(foto);
 		
+		JLabel nameLabel = new JLabel("Nombre:");
+		nameLabel.setBounds(230, 20, 1700, 15);
+		nameLabel.setFont(txt);
+		dataPanel.add(nameLabel);
+		
+		RoundedJTextField namefield = new RoundedJTextField(20);
+		namefield.setBounds(237, 40, 250, 27);
+		namefield.setFont(fieldtxt);
+		dataPanel.add(namefield);
+		
+		JLabel birthLabel = new JLabel("Fecha de nacimiento(AAAA-MM-DD):");
+		birthLabel.setBounds(230, 80, 170, 15);
+		birthLabel.setFont(txt);
+		dataPanel.add(birthLabel);
+		
+		RoundedJTextField clientBirth = new RoundedJTextField(20);
+		clientBirth.setBounds(230, 100, 250, 27);
+		clientBirth.setFont(fieldtxt);
+		dataPanel.add(clientBirth);
+		
+		JLabel emailLabel = new JLabel("Correo electrónico:");
+		emailLabel.setBounds(230, 140, 170, 15);
+		emailLabel.setFont(txt);
+		dataPanel.add(emailLabel);
+
+		RoundedJTextField clientEmail = new RoundedJTextField(20);
+		clientEmail.setBounds(230, 160, 250, 27);
+		clientEmail.setFont(fieldtxt);
+		dataPanel.add(clientEmail);
+		
+		RoundedButton clientId = new RoundedButton("ID: #12345");
+		clientId.setBounds(230, 200 ,90, 30);
+		clientId.setBackground(gray);
+		clientId.setForeground(Color.black);
+		clientId.setBorderColor(border);
+		clientId.setFont(txt);
+		clientId.setRadius(20);
+		dataPanel.add(clientId);
+		
+		JLabel surnameLabel = new JLabel("Apellidos:");
+		surnameLabel.setBounds(520, 20, 170, 15);
+		surnameLabel.setFont(txt);
+		dataPanel.add(surnameLabel);
+
+		RoundedJTextField clientSurname = new RoundedJTextField(20);
+		clientSurname.setBounds(520, 40, 250, 27);
+		clientSurname.setFont(fieldtxt);
+		dataPanel.add(clientSurname);
+		
+		JLabel phoneLabel = new JLabel("Teléfono:");
+		phoneLabel.setBounds(520, 80, 170, 15);
+		phoneLabel.setFont(txt);
+		dataPanel.add(phoneLabel);
+
+		RoundedJTextField clientPhone = new RoundedJTextField(20);
+		clientPhone.setBounds(520, 100, 250, 27);
+		clientPhone.setFont(fieldtxt);
+		dataPanel.add(clientPhone);
+		
+		JLabel fidelityLabel = new JLabel("Nivel de fidelidad:");
+		fidelityLabel.setBounds(520, 140, 170, 15);
+		fidelityLabel.setFont(txt);
+		dataPanel.add(fidelityLabel);
+
+		CustomJComboBox clientFidelity = new CustomJComboBox();
+		clientFidelity.setModel( new DefaultComboBoxModel( new String[] { "Ninguno", "Cliente frecuente", "Aficionado" }));
+		clientFidelity.setBounds(520, 160, 250, 27);
+		clientFidelity.setFont(fieldtxt);
+		dataPanel.add(clientFidelity);
+		
+		RoundedButton cancelar = new RoundedButton("Cancelar");
+		cancelar.setBounds(520, 200, 80, 30);
+		cancelar.setBackground(Color.white);
+		cancelar.setForeground(Color.black);
+		cancelar.setBorderColor(border);
+		cancelar.setFont(txt);
+		cancelar.setRadius(20);
+		dataPanel.add(cancelar);
+		cancelar.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				ClientsController cc = new ClientsController();
+				cc.clients();
+			}
+			
+		});
+		
+		RoundedButton guardar = new RoundedButton("Guardar cliente");
+		guardar.setBounds(660, 200, 110, 30);
+		guardar.setBackground(blue);
+		guardar.setFont(txt);
+		guardar.setRadius(20);
+		dataPanel.add(guardar);
+		
+		//Tablas
+		JPanel tableTitles = new JPanel();
+		tableTitles.setBounds(151, 321, 810, 50);
+		tableTitles.setLayout(new GridLayout(0, 5, 0, 0));
+		tableTitles.setBackground(Color.white);
+		centro.add(tableTitles);
+		
+		JLabel activeRents = new JLabel("Rentas activas");
+		activeRents.setHorizontalAlignment(SwingConstants.CENTER);
+		activeRents.setFont(txt);
+		tableTitles.add(activeRents);
+		
+		JLabel rentsHistory = new JLabel("Historial de rentas");
+		rentsHistory.setHorizontalAlignment(SwingConstants.CENTER);
+		rentsHistory.setFont(txt);
+		tableTitles.add(rentsHistory);
+		
+		JLabel purchaseHistory = new JLabel("Historial de compras");
+		purchaseHistory.setHorizontalAlignment(SwingConstants.CENTER);
+		purchaseHistory.setFont(txt);
+		tableTitles.add(purchaseHistory);
 
 	}
 

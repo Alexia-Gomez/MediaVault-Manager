@@ -276,7 +276,7 @@ public class RentSaleView {
 
 	public void filterPanel(JPanel centro) {
 		filtro = new RoundedPanel(30, new Color(255, 255, 255),3);
-		filtro.setBounds(515, 220, 265, 200);
+		filtro.setBounds(700, 220, 265, 200);
 		filtro.setLayout(null);
 		filtro.setVisible(false);
 
