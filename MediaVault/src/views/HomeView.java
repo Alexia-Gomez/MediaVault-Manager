@@ -313,8 +313,8 @@ public class HomeView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				frame.dispose();
-				gc.viewGame();
+				/*frame.dispose();
+				gc.viewGame();*/
 			}
 			
 		});
@@ -331,8 +331,8 @@ public class HomeView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				frame.dispose();
-				gc.viewGame();
+				/*frame.dispose();
+				gc.viewGame();*/
 			}
 			
 		});
@@ -376,8 +376,8 @@ public class HomeView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				frame.dispose();
-				mc.viewMovies();
+				/*frame.dispose();
+				mc.viewMovies();*/
 			}
 			
 		});
@@ -394,8 +394,8 @@ public class HomeView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				frame.dispose();
-				mc.viewMovies();
+				/*frame.dispose();
+				mc.viewMovies();*/
 			}
 			
 		});
