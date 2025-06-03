@@ -39,7 +39,8 @@ public class CoverTitleCellRenderer extends JPanel implements TableCellRenderer{
 	public Component getTableCellRendererComponent(JTable table, Object value,
 			boolean isSelected, boolean hasFocus, int row, int column) {
 
-		Movie movie = (Movie) table.getModel().getValueAt(row, 7);
+		int modelRow = table.convertRowIndexToModel(row);
+		Movie movie = (Movie) table.getModel().getValueAt(modelRow, 7);
 		titleLabel.setText(movie.getTitle());
 
 		ImageIcon icon = movie.getCircularIcon(40);
