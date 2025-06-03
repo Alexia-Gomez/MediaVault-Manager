@@ -33,6 +33,7 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.RowFilter;
 import javax.swing.SwingConstants;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
@@ -745,9 +746,9 @@ public class MoviesView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				/*frame.dispose();
+				frame.dispose();
 				MoviesController mc = new MoviesController();
-				mc.movies();*/
+				mc.movies();
 			}
 
 		});
@@ -1005,7 +1006,7 @@ public class MoviesView {
 		descargar.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
 		        generarPDF(movie);
-		        JOptionPane.showMessageDialog(null, "PDF generado con éxito.");
+		        //JOptionPane.showMessageDialog(null, "PDF generado con éxito.");
 		    }
 		});
 
@@ -1346,43 +1347,55 @@ public class MoviesView {
 	}
 	
 	public void generarPDF(Movie movie) {
-		String movieTitle = movie.getTitle();
-	    String dest = "resources/files/"+movieTitle+"_ficha.pdf";
+	    JFileChooser fileChooser = new JFileChooser();
+	    fileChooser.setDialogTitle("Guardar ficha de película como...");
+	    fileChooser.setFileFilter(new FileNameExtensionFilter("Archivos PDF (*.pdf)", "pdf"));
 
-	    try {
-	        PdfWriter writer = new PdfWriter(dest);
-	        PdfDocument pdfDoc = new PdfDocument(writer);
-	        Document document = new Document(pdfDoc);
-	        
-	        byte[] imagenBytes = movie.getCover();
-	        com.itextpdf.layout.element.Image poster=null;
-	        if (imagenBytes != null && imagenBytes.length > 0) {
-	            
-	        	 ImageData imgData = ImageDataFactory.create(imagenBytes);
-	             poster = new com.itextpdf.layout.element.Image(imgData);
+	    int userSelection = fileChooser.showSaveDialog(null);
+
+	    if (userSelection == JFileChooser.APPROVE_OPTION) {
+	        File fileToSave = fileChooser.getSelectedFile();
+	        String filePath = fileToSave.getAbsolutePath();
+
+	        if (!filePath.toLowerCase().endsWith(".pdf")) {
+	            filePath += ".pdf";
 	        }
 
-	        document.add(new Paragraph("Ficha de Película").setFontSize(18));
-	        document.add(new Paragraph("ID: " + movie.product_id));
-	        document.add(new Paragraph("Título: " + movie.getTitle()));
-	        document.add(new Paragraph("Fecha de estreno: " + movie.release_date));
-	        document.add(new Paragraph("Precio renta: $" + movie.rent_price));
-	        document.add(new Paragraph("Stock renta: " + movie.rent_stock));
-	        document.add(new Paragraph("Precio venta: $" + movie.sale_price));
-	        document.add(new Paragraph("Stock venta: " + movie.sale_stock));
-	        document.add(new Paragraph("Estudio: " + movie.studio));
-	        document.add(new Paragraph("Clasificación: " + movie.classification));
-	        document.add(new Paragraph("Género: " + movie.genre));
-	        document.add(new Paragraph("Portada"));
-	        if (poster != null) {
-	            document.add(poster);
+	        try {
+	            PdfWriter writer = new PdfWriter(filePath);
+	            PdfDocument pdfDoc = new PdfDocument(writer);
+	            Document document = new Document(pdfDoc);
+
+	            byte[] imagenBytes = movie.getCover();
+	            com.itextpdf.layout.element.Image poster = null;
+	            if (imagenBytes != null && imagenBytes.length > 0) {
+	                ImageData imgData = ImageDataFactory.create(imagenBytes);
+	                poster = new com.itextpdf.layout.element.Image(imgData);
+	            }
+
+	            document.add(new Paragraph("Ficha de Película").setFontSize(18));
+	            document.add(new Paragraph("ID: " + movie.product_id));
+	            document.add(new Paragraph("Título: " + movie.getTitle()));
+	            document.add(new Paragraph("Fecha de estreno: " + movie.release_date));
+	            document.add(new Paragraph("Precio renta: $" + movie.rent_price));
+	            document.add(new Paragraph("Stock renta: " + movie.rent_stock));
+	            document.add(new Paragraph("Precio venta: $" + movie.sale_price));
+	            document.add(new Paragraph("Stock venta: " + movie.sale_stock));
+	            document.add(new Paragraph("Estudio: " + movie.studio));
+	            document.add(new Paragraph("Clasificación: " + movie.classification));
+	            document.add(new Paragraph("Género: " + movie.genre));
+	            document.add(new Paragraph("Portada"));
+	            if (poster != null) {
+	                document.add(poster);
+	            }
+	            document.close();
+
+		        JOptionPane.showMessageDialog(null, "PDF generado correctamente.");
+
+
+	        } catch (Exception e) {
+	            e.printStackTrace();
 	        }
-	        document.close();
-
-	        System.out.println("PDF generado correctamente: " + dest);
-
-	    } catch (Exception e) {
-	        e.printStackTrace();
 	    }
 	}
 
