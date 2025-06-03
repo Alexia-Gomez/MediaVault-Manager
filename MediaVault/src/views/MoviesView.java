@@ -268,7 +268,7 @@ public class MoviesView {
 		        int col = table.columnAtPoint(e.getPoint());
 
 		        if (col == 0 && fila != -1) {
-		            int modeloFila = table.convertRowIndexToModel(fila);
+		        	int modeloFila = table.convertRowIndexToModel(fila);
 		            Movie movie = (Movie) model1.getValueAt(modeloFila, 7);
 		            
 		            frame.dispose();
@@ -872,10 +872,11 @@ public class MoviesView {
 		dataPanel.add(classLabel);
 		
 		CustomJComboBox movieClass = new CustomJComboBox();
-		movieClass.setModel( new DefaultComboBoxModel( new String[] { "A", "B", "B-15", "C" }));
+		movieClass.setModel( new DefaultComboBoxModel( new String[] { "A", "B", "B-15", "C", "R" }));
 		movieClass.setBounds(520, 105, 250, 27);
-		movieClass.setFont(fieldtxt);
 		movieClass.setEnabled(false);
+		movieClass.setSelectedItem(movie.classification);
+		movieClass.setFont(fieldtxt);
 		dataPanel.add(movieClass);
 		
 		JLabel genreLabel = new JLabel("Género:");
@@ -884,10 +885,11 @@ public class MoviesView {
 		dataPanel.add(genreLabel);
 		
 		CustomJComboBox movieGenre = new CustomJComboBox();
-		movieGenre.setModel( new DefaultComboBoxModel( new String[] { "Sci-fi", "Aventura", "Horror", "Comedia", "Acción" }));
+		movieGenre.setModel( new DefaultComboBoxModel( new String[] { "Sci-fi", "Aventura", "Horror", "Comedia", "Acción", "Crimen" }));
 		movieGenre.setBounds(520, 170, 250, 27);
 		movieGenre.setFont(fieldtxt);
 		movieGenre.setEnabled(false);
+		movieGenre.setSelectedItem(movie.genre);
 		dataPanel.add(movieGenre);
 		
 		JLabel saleStockLabel = new JLabel("Stock de venta:");
