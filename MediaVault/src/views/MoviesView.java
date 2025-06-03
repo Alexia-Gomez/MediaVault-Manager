@@ -10,6 +10,7 @@ import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -538,6 +539,7 @@ public class MoviesView {
 		RoundedJTextField movieRentStock = new RoundedJTextField(20);
 		movieRentStock.setBounds(237, 235, 250, 27);
 		movieRentStock.setFont(fieldtxt);
+		movieRentStock.setEnabled(false);
 		dataPanel.add(movieRentStock);
 		
 		JLabel rentLabel = new JLabel("Precio de renta:");
@@ -548,6 +550,7 @@ public class MoviesView {
 		RoundedJTextField movieRent = new RoundedJTextField(20);
 		movieRent.setBounds(237, 300, 250, 27);
 		movieRent.setFont(fieldtxt);
+		movieRent.setEnabled(false);
 		dataPanel.add(movieRent);
 		
 		JLabel dispLabel = new JLabel("Disponibilidad:");
@@ -555,19 +558,6 @@ public class MoviesView {
 		dispLabel.setBounds(237, 150, 250, 15);
 		dispLabel.setFont(txt);
 		dataPanel.add(dispLabel);
-		
-		CustomJCheckBox renta = new CustomJCheckBox();
-		renta.setBounds(290, 170, 60, 27);
-		renta.setText("Renta");
-		renta.setFont(txt);
-		dataPanel.add(renta);
-		
-		CustomJCheckBox venta = new CustomJCheckBox();
-		venta.setBounds(380, 170, 60, 27);
-		venta.setText("Venta");
-		venta.setFont(txt);
-		dataPanel.add(venta);
-		
 		
 		JLabel studioLabel = new JLabel("Estudio:");
 		studioLabel.setBounds(520, 20, 250, 15);
@@ -609,6 +599,7 @@ public class MoviesView {
 		RoundedJTextField movieSaleStock = new RoundedJTextField(20);
 		movieSaleStock.setBounds(520, 235, 250, 27);
 		movieSaleStock.setFont(fieldtxt);
+		movieSaleStock.setEnabled(false);
 		dataPanel.add(movieSaleStock);
 		
 		JLabel saleLabel = new JLabel("Precio de venta:");
@@ -619,7 +610,44 @@ public class MoviesView {
 		RoundedJTextField movieSale = new RoundedJTextField(20);
 		movieSale.setBounds(520, 300, 250, 27);
 		movieSale.setFont(fieldtxt);
+		movieSale.setEnabled(false);
 		dataPanel.add(movieSale);
+		
+		CustomJCheckBox renta = new CustomJCheckBox();
+		renta.setBounds(290, 170, 60, 27);
+		renta.setText("Renta");
+		renta.setFont(txt);
+		dataPanel.add(renta);
+		renta.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				boolean check = (e.getStateChange() == ItemEvent.SELECTED);
+				movieRentStock.setEnabled(check);
+				movieRent.setEnabled(check);
+				if(!check) {
+					movieRentStock.setText("");
+					movieRent.setText("");
+				}
+			}
+			
+		});
+		
+		CustomJCheckBox venta = new CustomJCheckBox();
+		venta.setBounds(380, 170, 60, 27);
+		venta.setText("Venta");
+		venta.setFont(txt);
+		dataPanel.add(venta);
+		venta.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				boolean check = (e.getStateChange() == ItemEvent.SELECTED);
+				movieSaleStock.setEnabled(check);
+				movieSale.setEnabled(check);
+				if(!check) {
+					movieRentStock.setText("");
+					movieRent.setText("");
+				}
+			}
+			
+		});
 		
 		RoundedButton guardar = new RoundedButton("Guardar película");
 		guardar.setBounds(620, 355, 150, 30);
@@ -629,14 +657,20 @@ public class MoviesView {
 		dataPanel.add(guardar);
 		guardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int rent_stock =  Integer.parseInt(movieRentStock.getText());
+				/*int rent_stock =  Integer.parseInt(movieRentStock.getText());
 				int sale_stock =  Integer.parseInt(movieSaleStock.getText());
 				
 				double precioVenta = Double.parseDouble(movieSale.getText());
-				double precioRenta = Double.parseDouble(movieRent.getText());
-
+				double precioRenta = Double.parseDouble(movieRent.getText());*/
+				int rent_stock = renta.isSelected() ? Integer.parseInt(movieRentStock.getText()) : 0;
+	            int sale_stock = venta.isSelected() ? Integer.parseInt(movieSaleStock.getText()) : 0;
+	            
+	            double precioVenta = venta.isSelected() ? Double.parseDouble(movieSale.getText()) : 0.0;
+	            double precioRenta = renta.isSelected() ? Double.parseDouble(movieRent.getText()) : 0.0;
+	            
 				Movie pelicula = new Movie(movieTitle.getText(), movieStudio.getText(), (String) movieClass.getSelectedItem(),
 						movieDate.getText(), (String) movieGenre.getSelectedItem(), rent_stock, sale_stock,coverBinario,precioVenta,precioRenta);
+				
 				MoviesController mc = new MoviesController();
 				
 				if(mc.addMovie(pelicula)) {
@@ -714,8 +748,8 @@ public class MoviesView {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				frame.dispose();
-				MoviesController hc = new MoviesController();
-				hc.movies();
+				MoviesController mc = new MoviesController();
+				mc.movies();
 			}
 
 		});
@@ -767,6 +801,22 @@ public class MoviesView {
 		movieDate.setFont(fieldtxt);
 		dataPanel.add(movieDate);
 		
+		CustomJCheckBox renta = new CustomJCheckBox();
+		renta.setBounds(290, 170, 60, 27);
+		renta.setEnabled(false);
+		renta.setSelected(movie.getRent_stock()>0);
+		renta.setText("Renta");
+		renta.setFont(txt);
+		dataPanel.add(renta);
+		
+		CustomJCheckBox venta = new CustomJCheckBox();
+		venta.setBounds(380, 170, 60, 27);
+		venta.setEnabled(false);
+		venta.setSelected(movie.getSale_stock()>0);
+		venta.setText("Venta");
+		venta.setFont(txt);
+		dataPanel.add(venta);
+		
 		JLabel rentStockLabel = new JLabel("Stock de renta:");
 		rentStockLabel.setBounds(237, 215, 250, 15);
 		rentStockLabel.setFont(txt);
@@ -796,18 +846,6 @@ public class MoviesView {
 		dispLabel.setBounds(237, 150, 250, 15);
 		dispLabel.setFont(txt);
 		dataPanel.add(dispLabel);
-		
-		CustomJCheckBox renta = new CustomJCheckBox();
-		renta.setBounds(290, 170, 60, 27);
-		renta.setText("Renta");
-		renta.setFont(txt);
-		dataPanel.add(renta);
-		
-		CustomJCheckBox venta = new CustomJCheckBox();
-		venta.setBounds(380, 170, 60, 27);
-		venta.setText("Venta");
-		venta.setFont(txt);
-		dataPanel.add(venta);
 		
 		JLabel studioLabel = new JLabel("Estudio:");
 		studioLabel.setBounds(520, 20, 250, 15);
@@ -869,6 +907,26 @@ public class MoviesView {
 		movieSale.setFont(fieldtxt);
 		dataPanel.add(movieSale);
 		
+		
+		renta.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				boolean check = (e.getStateChange() == ItemEvent.SELECTED);
+				movieRentStock.setFocusable(check);
+				movieRent.setFocusable(check);
+			}
+			
+		});
+		
+		venta.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				boolean check = (e.getStateChange() == ItemEvent.SELECTED);
+				movieSaleStock.setFocusable(check);
+				movieSale.setFocusable(check);
+			}
+			
+		});
+		
+		
 		RoundedButton descargar = new RoundedButton("Descargar ficha"); 
 		descargar.setIcon(new ImageIcon(((ImageIcon) descarga).getImage().getScaledInstance(15, 17, Image.SCALE_SMOOTH)));
 		descargar.setHorizontalTextPosition(SwingConstants.RIGHT);
@@ -926,6 +984,14 @@ public class MoviesView {
 		cancelar.setRadius(20);
 		dataPanel.add(cancelar);
 		cancelar.setVisible(false);
+		cancelar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				MoviesController mc = new MoviesController();
+				frame.dispose();
+				mc.movies();
+			}
+			
+		});
 		
 		RoundedButton guardar = new RoundedButton("Guardar cambios");
 		guardar.setBounds(350, 354, 135, 30);
@@ -939,15 +1005,19 @@ public class MoviesView {
 				try {
 					String title = movieTitle.getText();
 					String releaseDate = movieDate.getText();
-					int rentStock = Integer.parseInt(movieRentStock.getText());
+					/*int rentStock = Integer.parseInt(movieRentStock.getText());
 					double rentPrice = Double.parseDouble(movieRent.getText().replace("$", ""));
 					int saleStock = Integer.parseInt(movieSaleStock.getText());
-					double salePrice = Double.parseDouble(movieSale.getText().replace("$", ""));
+					double salePrice = Double.parseDouble(movieSale.getText().replace("$", ""));*/
+					int rentStock = renta.isSelected() ? Integer.parseInt(movieRentStock.getText()) : 0;
+					double rentPrice = renta.isSelected() ? Double.parseDouble(movieRent.getText().replace("$", "")) : 0.0;
+					int saleStock = venta.isSelected() ? Integer.parseInt(movieSaleStock.getText()) : 0;
+					double salePrice = venta.isSelected() ? Double.parseDouble(movieSale.getText().replace("$", "")) : 0.0;
 					String studio = movieStudio.getText();
 					String classification = movieClass.getSelectedItem().toString();
 					String genre = movieGenre.getSelectedItem().toString();
-					boolean isRentAvailable = renta.isSelected();
-					boolean isSaleAvailable = venta.isSelected();
+					/*boolean isRentAvailable = renta.isSelected();
+					boolean isSaleAvailable = venta.isSelected();*/
 
 					Movie updatedMovie = new Movie();
 					updatedMovie.product_id = movie.product_id;
@@ -999,16 +1069,18 @@ public class MoviesView {
 			public void actionPerformed(ActionEvent e) {
 				movieTitle.setFocusable(true);
 				movieDate.setFocusable(true);
-				movieRentStock.setFocusable(true);
-				movieRent.setFocusable(true);
 				movieStudio.setFocusable(true);
 				movieClass.setEnabled(true);
 				movieGenre.setEnabled(true);
-				movieSaleStock.setFocusable(true);
-				movieSale.setFocusable(true);
 				descargar.setEnabled(false);
 				cancelar.setVisible(true);
 				guardar.setVisible(true);
+				renta.setEnabled(true);
+				venta.setEnabled(true);
+				movieRentStock.setFocusable(renta.isSelected());
+				movieRent.setFocusable(renta.isSelected());
+				movieSaleStock.setFocusable(venta.isSelected());
+				movieSale.setFocusable(venta.isSelected());
 			}
 		});
 	}
