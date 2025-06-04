@@ -9,24 +9,41 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableRowSorter;
 
 import controllers.GamesController;
 import controllers.HomeController;
+import customClasses.CoverTitleCellRenderer;
+import customClasses.CoverTitleCellRendererGame;
 import customClasses.CustomJCheckBox;
 import customClasses.CustomJComboBox;
+import customClasses.CustomScrollBar;
+import customClasses.CustomScrollPane;
 import customClasses.Fuentes;
+import customClasses.IconCellRenderer;
 import customClasses.RoundedButton;
 import customClasses.RoundedJTextField;
 import customClasses.RoundedPanel;
 import customClasses.SideBar;
 import customClasses.Validaciones;
+import models.Game;
+import models.GamesModel;
+
 
 public class GamesView {
 
@@ -223,6 +240,77 @@ public class GamesView {
 		tablePanel.setLayout(new BorderLayout(0, 0));
 		tablePanel.setBackground(Color.white);
 		centro.add(tablePanel);
+		
+		// Obtener datos de la BD
+		GamesModel model = new GamesModel();
+		ArrayList<Game> games = model.get();
+		
+		String[] columnNames = {"", "", "", "", "", "", "", ""};
+		DefaultTableModel model1 = new DefaultTableModel(columnNames, 0){
+		    @Override
+		    public boolean isCellEditable(int row, int column) {
+		        return false;
+		    }
+		};
+
+		for (Game game : games) {
+		    model1.addRow(new Object[] {
+		    	game.getTitle(),
+		        game.getPlatform(),
+		        game.getClassification(),
+		        game.getRelease_date(),
+		        game.getGenre(),
+		        game.getRent_stock(),
+		        game.getSale_stock(),
+		        game
+		    });
+		}
+		
+		JTable table = new JTable(model1);
+		table.setRowHeight(80);
+		table.setShowVerticalLines(false);
+		table.setTableHeader(null);
+		table.setFont(fieldtxt);
+		
+		table.getColumnModel().getColumn(0).setCellRenderer(new CoverTitleCellRendererGame());
+		
+		table.getColumnModel().getColumn(5).setCellRenderer(new IconCellRenderer());
+		
+		table.getColumnModel().getColumn(6).setCellRenderer(new IconCellRenderer());
+		
+		TableColumnModel cm = table.getColumnModel();
+		cm.removeColumn(cm.getColumn(7));
+		
+		table.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				int fila = table.rowAtPoint(e.getPoint());
+		        int col = table.columnAtPoint(e.getPoint());
+
+		        if (col == 0 && fila != -1) {
+		        	int modeloFila = table.convertRowIndexToModel(fila);
+		            Game game = (Game) table.getModel().getValueAt(modeloFila, 7);
+		            
+		            frame.dispose();
+		            viewGame(game);
+		        }
+			}
+		});
+
+		
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+		//toda la tabla centrada
+		table.setDefaultRenderer(Object.class, centerRenderer);
+
+		CustomScrollPane scrollPane = new CustomScrollPane();
+		scrollPane.setBorder(BorderFactory.createEmptyBorder());
+		scrollPane.setViewportView(table);		
+
+		scrollPane.getVerticalScrollBar().setUI(new CustomScrollBar());
+		tablePanel.add(scrollPane);
+
+		//buscador = new TableRowSorter<>(model1);
+		//table.setRowSorter(buscador);
 	}
 
 	public void newGame() {
@@ -504,7 +592,7 @@ public class GamesView {
 			
 	}
 
-	public void viewGame() {
+	public void viewGame(Game game) {
 		//VENTANA
 		JFrame frame = new JFrame();
 		frame.setBounds(100, 20, 823, 643);

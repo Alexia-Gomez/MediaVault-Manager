@@ -347,38 +347,6 @@ public class MoviesView {
 
 		});
 		barra.add(filtrar);
-
-		// Mostrar datos
-		/*for (Movie movie : movies) {
-		    JLabel title = new JLabel(movie.getTitle(), SwingConstants.CENTER);
-		    title.setFont(txt);
-		    tablePanel.add(title);
-
-		    JLabel studio = new JLabel(movie.getStudio(), SwingConstants.CENTER);
-		    studio.setFont(txt);
-		    tablePanel.add(studio);
-
-		    JLabel classification = new JLabel(movie.getClassification(), SwingConstants.CENTER);
-		    classification.setFont(txt);
-		    tablePanel.add(classification);
-
-		    JLabel releaseDate = new JLabel(movie.getRelease_date(), SwingConstants.CENTER);
-		    releaseDate.setFont(txt);
-		    tablePanel.add(releaseDate);
-
-		    JLabel genre = new JLabel(movie.getGenre(), SwingConstants.CENTER);
-		    genre.setFont(txt);
-		    tablePanel.add(genre);
-
-		    JLabel rent = new JLabel(String.valueOf(movie.getRent_stock()), SwingConstants.CENTER);
-		    rent.setFont(txt);
-		    tablePanel.add(rent);
-
-		    JLabel sale = new JLabel(String.valueOf(movie.getRent_stock()), SwingConstants.CENTER);
-		    sale.setFont(txt);
-		    tablePanel.add(sale);
-		}*/
-
 	}
 
 	public void newMovie() {
