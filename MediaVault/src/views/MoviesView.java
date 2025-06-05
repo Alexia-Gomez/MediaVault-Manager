@@ -33,6 +33,7 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.RowFilter;
 import javax.swing.SwingConstants;
+import javax.swing.border.Border;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -464,7 +465,7 @@ public class MoviesView {
 			}
 		});
 
-		RoundedButton movieId = new RoundedButton("ID: #12345");
+		RoundedButton movieId = new RoundedButton("ID: #");
 		movieId.setBounds(70, 250 ,100, 30);
 		movieId.setBackground(gray);
 		movieId.setForeground(Color.black);
@@ -480,6 +481,7 @@ public class MoviesView {
 		
 		RoundedJTextField movieTitle = new RoundedJTextField(20);
 		movieTitle.setBounds(237, 40, 250, 30);
+		movieTitle.addKeyListener(Validaciones.limite(30));
 		movieTitle.setFont(fieldtxt);
 		dataPanel.add(movieTitle);
 		
@@ -490,6 +492,8 @@ public class MoviesView {
 		
 		RoundedJTextField movieDate = new RoundedJTextField(20);
 		movieDate.setBounds(237, 105, 250, 27);
+		movieDate.addKeyListener(Validaciones.fechas());
+		movieDate.addKeyListener(Validaciones.limite(10));
 		movieDate.setFont(fieldtxt);
 		dataPanel.add(movieDate);
 		
@@ -501,6 +505,7 @@ public class MoviesView {
 		RoundedJTextField movieRentStock = new RoundedJTextField(20);
 		movieRentStock.setBounds(237, 235, 250, 27);
 		movieRentStock.addKeyListener(Validaciones.enteros());
+		movieRentStock.addKeyListener(Validaciones.limite(3));
 		movieRentStock.setFont(fieldtxt);
 		movieRentStock.setEnabled(false);
 		dataPanel.add(movieRentStock);
@@ -513,6 +518,7 @@ public class MoviesView {
 		RoundedJTextField movieRent = new RoundedJTextField(20);
 		movieRent.setBounds(237, 300, 250, 27);
 		movieRent.addKeyListener(Validaciones.conDecimal());
+		movieRent.addKeyListener(Validaciones.limite(10));
 		movieRent.setFont(fieldtxt);
 		movieRent.setEnabled(false);
 		dataPanel.add(movieRent);
@@ -530,6 +536,7 @@ public class MoviesView {
 		
 		RoundedJTextField movieStudio = new RoundedJTextField(20);
 		movieStudio.setBounds(520, 40, 250, 27);
+		movieStudio.addKeyListener(Validaciones.limite(30));
 		movieStudio.setFont(fieldtxt);
 		dataPanel.add(movieStudio);
 		
@@ -539,7 +546,7 @@ public class MoviesView {
 		dataPanel.add(classLabel);
 		
 		CustomJComboBox movieClass = new CustomJComboBox();
-		movieClass.setModel( new DefaultComboBoxModel( new String[] { "A", "B", "B-15", "C" }));
+		movieClass.setModel( new DefaultComboBoxModel( new String[] { "Selecciona","A", "B", "B-15", "C" }));
 		movieClass.setBounds(520, 105, 250, 27);
 		movieClass.setFont(fieldtxt);
 		dataPanel.add(movieClass);
@@ -550,7 +557,7 @@ public class MoviesView {
 		dataPanel.add(genreLabel);
 		
 		CustomJComboBox movieGenre = new CustomJComboBox();
-		movieGenre.setModel( new DefaultComboBoxModel( new String[] { "Sci-fi", "Aventura", "Horror", "Comedia", "Acción" }));
+		movieGenre.setModel( new DefaultComboBoxModel( new String[] { "Selecciona", "Sci-fi", "Aventura", "Horror", "Comedia", "Acción" }));
 		movieGenre.setBounds(520, 170, 250, 27);
 		movieGenre.setFont(fieldtxt);
 		dataPanel.add(movieGenre);
@@ -563,6 +570,7 @@ public class MoviesView {
 		RoundedJTextField movieSaleStock = new RoundedJTextField(20);
 		movieSaleStock.setBounds(520, 235, 250, 27);
 		movieSaleStock.addKeyListener(Validaciones.enteros());
+		movieSaleStock.addKeyListener(Validaciones.limite(3));
 		movieSaleStock.setFont(fieldtxt);
 		movieSaleStock.setEnabled(false);
 		dataPanel.add(movieSaleStock);
@@ -575,6 +583,7 @@ public class MoviesView {
 		RoundedJTextField movieSale = new RoundedJTextField(20);
 		movieSale.setBounds(520, 300, 250, 27);
 		movieSale.addKeyListener(Validaciones.conDecimal());
+		movieSale.addKeyListener(Validaciones.limite(10));
 		movieSale.setFont(fieldtxt);
 		movieSale.setEnabled(false);
 		dataPanel.add(movieSale);
@@ -612,9 +621,9 @@ public class MoviesView {
 					movieRent.setText("");
 				}
 			}
-			
+
 		});
-		
+
 		RoundedButton guardar = new RoundedButton("Guardar película");
 		guardar.setBounds(620, 355, 150, 30);
 		guardar.setBackground(blue);
@@ -623,27 +632,47 @@ public class MoviesView {
 		dataPanel.add(guardar);
 		guardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				/*int rent_stock =  Integer.parseInt(movieRentStock.getText());
-				int sale_stock =  Integer.parseInt(movieSaleStock.getText());
-				
-				double precioVenta = Double.parseDouble(movieSale.getText());
-				double precioRenta = Double.parseDouble(movieRent.getText());*/
-				int rent_stock = renta.isSelected() ? Integer.parseInt(movieRentStock.getText()) : 0;
-	            int sale_stock = venta.isSelected() ? Integer.parseInt(movieSaleStock.getText()) : 0;
-	            
-	            double precioVenta = venta.isSelected() ? Double.parseDouble(movieSale.getText()) : 0.0;
-	            double precioRenta = renta.isSelected() ? Double.parseDouble(movieRent.getText()) : 0.0;
-	            
-				Movie pelicula = new Movie(movieTitle.getText(), movieStudio.getText(), (String) movieClass.getSelectedItem(),
-						movieDate.getText(), (String) movieGenre.getSelectedItem(), rent_stock, sale_stock,coverBinario,precioVenta,precioRenta);
-				
-				MoviesController mc = new MoviesController();
-				
-				if(mc.addMovie(pelicula)) {
-					System.out.println("Se agrego una pelicula nueva");
+
+				boolean camposValidos = true;
+
+				if (!Validaciones.validarCampoVacio(movieTitle)) camposValidos = false;
+				if (!Validaciones.validarCampoVacio(movieStudio)) camposValidos = false;
+				if (!Validaciones.validarCampoVacio(movieDate)) camposValidos = false;
+
+				if (!Validaciones.validarCombo(movieClass)) camposValidos = false;
+				if (!Validaciones.validarCombo(movieGenre)) camposValidos = false;
+
+				if (renta.isSelected()) {
+					if (!Validaciones.validarCampoVacio(movieRentStock)) camposValidos = false;
+					if (!Validaciones.validarCampoVacio(movieRent)) camposValidos = false;
+				} 
+
+				if (venta.isSelected()) {
+					if (!Validaciones.validarCampoVacio(movieSaleStock)) camposValidos = false;
+					if (!Validaciones.validarCampoVacio(movieSale)) camposValidos = false;
 				}
+
+
+				if(camposValidos) {
+
+					int rent_stock = renta.isSelected() ? Integer.parseInt(movieRentStock.getText()) : 0;
+					int sale_stock = venta.isSelected() ? Integer.parseInt(movieSaleStock.getText()) : 0;
+
+					double precioVenta = venta.isSelected() ? Double.parseDouble(movieSale.getText()) : 0.0;
+					double precioRenta = renta.isSelected() ? Double.parseDouble(movieRent.getText()) : 0.0;
+
+					Movie pelicula = new Movie(movieTitle.getText(), movieStudio.getText(), (String) movieClass.getSelectedItem(),
+							movieDate.getText(), (String) movieGenre.getSelectedItem(), rent_stock, sale_stock,coverBinario,precioVenta,precioRenta);
+
+					MoviesController mc = new MoviesController();
+
+					if(mc.addMovie(pelicula)) {
+						System.out.println("Se agrego una pelicula nueva");
+					}
 					frame.dispose();
 					movies();
+				}
+
 			}
 		});
 
@@ -814,6 +843,7 @@ public class MoviesView {
 		RoundedJTextField movieTitle = new RoundedJTextField(20);
 		movieTitle.setBounds(237, 40, 250, 30);
 		if(movie.getTitle()!=null) movieTitle.setText(movie.getTitle());
+		movieTitle.addKeyListener(Validaciones.limite(30));
 		movieTitle.setFocusable(false);
 		movieTitle.setFont(fieldtxt);
 		dataPanel.add(movieTitle);
@@ -826,6 +856,8 @@ public class MoviesView {
 		RoundedJTextField movieDate = new RoundedJTextField(20);
 		movieDate.setBounds(237, 105, 250, 27);
 		if (movie.getRelease_date()!=null)movieDate.setText(movie.release_date);
+		movieDate.addKeyListener(Validaciones.fechas());
+		movieDate.addKeyListener(Validaciones.limite(10));
 		movieDate.setFocusable(false);
 		movieDate.setFont(fieldtxt);
 		dataPanel.add(movieDate);
@@ -855,6 +887,7 @@ public class MoviesView {
 		movieRentStock.setBounds(237, 235, 250, 27);
 		if(movie.getRent_stock()>0) movieRentStock.setText(String.valueOf(movie.rent_stock));
 		movieRentStock.addKeyListener(Validaciones.enteros());
+		movieRentStock.addKeyListener(Validaciones.limite(3));
 		movieRentStock.setFocusable(false);
 		movieRentStock.setFont(fieldtxt);
 		dataPanel.add(movieRentStock);
@@ -868,6 +901,7 @@ public class MoviesView {
 		movieRent.setBounds(237, 300, 250, 27);
 		if(movie.rent_price>0)   movieRent.setText("$"+String.valueOf(movie.rent_price));
 		movieRent.addKeyListener(Validaciones.conDecimal());
+		movieRent.addKeyListener(Validaciones.limite(10));
 		movieRent.setFocusable(false);
 		movieRent.setFont(fieldtxt);
 		dataPanel.add(movieRent);
@@ -886,6 +920,7 @@ public class MoviesView {
 		RoundedJTextField movieStudio = new RoundedJTextField(20);
 		movieStudio.setBounds(520, 40, 250, 27);
 		if(movie.getStudio()!=null)   movieStudio.setText(movie.studio);
+		movieStudio.addKeyListener(Validaciones.limite(30));
 		movieStudio.setFocusable(false);
 		movieStudio.setFont(fieldtxt);
 		dataPanel.add(movieStudio);
@@ -896,7 +931,7 @@ public class MoviesView {
 		dataPanel.add(classLabel);
 		
 		CustomJComboBox movieClass = new CustomJComboBox();
-		movieClass.setModel( new DefaultComboBoxModel( new String[] { "A", "B", "B-15", "C", "R" }));
+		movieClass.setModel( new DefaultComboBoxModel( new String[] { "Selecciona", "A", "B", "B-15", "C", "R" }));
 		movieClass.setBounds(520, 105, 250, 27);
 		movieClass.setEnabled(false);
 		if(movie.getClassification()!=null)  movieClass.setSelectedItem(movie.classification);
@@ -909,7 +944,7 @@ public class MoviesView {
 		dataPanel.add(genreLabel);
 		
 		CustomJComboBox movieGenre = new CustomJComboBox();
-		movieGenre.setModel( new DefaultComboBoxModel( new String[] { "Sci-fi", "Aventura", "Horror", "Comedia", "Acción", "Crimen" }));
+		movieGenre.setModel( new DefaultComboBoxModel( new String[] { "Selecciona", "Sci-fi", "Aventura", "Horror", "Comedia", "Acción", "Crimen" }));
 		movieGenre.setBounds(520, 170, 250, 27);
 		movieGenre.setFont(fieldtxt);
 		movieGenre.setEnabled(false);
@@ -925,6 +960,7 @@ public class MoviesView {
 		movieSaleStock.setBounds(520, 235, 250, 27);
 		if(movie.getSale_stock()>0)  movieSaleStock.setText(String.valueOf(movie.sale_stock));
 		movieSaleStock.addKeyListener(Validaciones.enteros());
+		movieSaleStock.addKeyListener(Validaciones.limite(3));
 		movieSaleStock.setFocusable(false);
 		movieSaleStock.setFont(fieldtxt);
 		dataPanel.add(movieSaleStock);
@@ -938,6 +974,7 @@ public class MoviesView {
 		movieSale.setBounds(520, 300, 250, 27);
 		if(movie.getSale_price()>0)  movieSale.setText("$"+String.valueOf(movie.sale_price));
 		movieSale.addKeyListener(Validaciones.conDecimal());
+		movieSale.addKeyListener(Validaciones.limite(10));
 		movieSale.setFocusable(false);
 		movieSale.setFont(fieldtxt);
 		dataPanel.add(movieSale);
@@ -1038,57 +1075,76 @@ public class MoviesView {
 		guardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					String title = movieTitle.getText();
-					String releaseDate = movieDate.getText();
-					/*int rentStock = Integer.parseInt(movieRentStock.getText());
-					double rentPrice = Double.parseDouble(movieRent.getText().replace("$", ""));
-					int saleStock = Integer.parseInt(movieSaleStock.getText());
-					double salePrice = Double.parseDouble(movieSale.getText().replace("$", ""));*/
-					int rentStock = renta.isSelected() ? Integer.parseInt(movieRentStock.getText()) : 0;
-					double rentPrice = renta.isSelected() ? Double.parseDouble(movieRent.getText().replace("$", "")) : 0.0;
-					int saleStock = venta.isSelected() ? Integer.parseInt(movieSaleStock.getText()) : 0;
-					double salePrice = venta.isSelected() ? Double.parseDouble(movieSale.getText().replace("$", "")) : 0.0;
-					String studio = movieStudio.getText();
-					String classification = movieClass.getSelectedItem().toString();
-					String genre = movieGenre.getSelectedItem().toString();
-					/*boolean isRentAvailable = renta.isSelected();
-					boolean isSaleAvailable = venta.isSelected();*/
 
-					Movie updatedMovie = new Movie();
-					updatedMovie.product_id = movie.product_id;
-					updatedMovie.setTitle(title);
-					updatedMovie.release_date = releaseDate;
-					updatedMovie.rent_stock = rentStock;
-					updatedMovie.rent_price = rentPrice;
-					updatedMovie.sale_stock = saleStock;
-					updatedMovie.sale_price = salePrice;
-					updatedMovie.studio = studio;
-					updatedMovie.classification = classification;
-					updatedMovie.genre = genre;
-					updatedMovie.setCover(movie.getCover());
+					boolean camposValidos = true;
 
-					MoviesController controller = new MoviesController();
-					boolean success = controller.updateMovie(updatedMovie, updatedMovie.product_id);
+					if (!Validaciones.validarCampoVacio(movieTitle)) camposValidos = false;
+					if (!Validaciones.validarCampoVacio(movieStudio)) camposValidos = false;
+					if (!Validaciones.validarCampoVacio(movieDate)) camposValidos = false;
 
-					if (success) {
-						JOptionPane.showMessageDialog(null, "Película actualizada correctamente.");
-						
-						movieTitle.setFocusable(false);
-						movieDate.setFocusable(false);
-						movieRentStock.setFocusable(false);
-						movieRent.setFocusable(false);
-						movieStudio.setFocusable(false);
-						movieClass.setEnabled(false);
-						movieGenre.setEnabled(false);
-						movieSaleStock.setFocusable(false);
-						movieSale.setFocusable(false);
-						descargar.setEnabled(true);
-						cancelar.setVisible(false);
-						guardar.setVisible(false);
-						foto.setEnabled(false);
-					} else {
-						JOptionPane.showMessageDialog(null, "Error al actualizar la película.", "Error", JOptionPane.ERROR_MESSAGE);
+					if (!Validaciones.validarCombo(movieClass)) camposValidos = false;
+					if (!Validaciones.validarCombo(movieGenre)) camposValidos = false;
+
+					if (renta.isSelected()) {
+						if (!Validaciones.validarCampoVacio(movieRentStock)) camposValidos = false;
+						if (!Validaciones.validarCampoVacio(movieRent)) camposValidos = false;
+					} 
+
+					if (venta.isSelected()) {
+						if (!Validaciones.validarCampoVacio(movieSaleStock)) camposValidos = false;
+						if (!Validaciones.validarCampoVacio(movieSale)) camposValidos = false;
 					}
+
+					if(camposValidos) {
+
+						String title = movieTitle.getText();
+						String releaseDate = movieDate.getText();
+						int rentStock = renta.isSelected() ? Integer.parseInt(movieRentStock.getText()) : 0;
+						double rentPrice = renta.isSelected() ? Double.parseDouble(movieRent.getText().replace("$", "")) : 0.0;
+						int saleStock = venta.isSelected() ? Integer.parseInt(movieSaleStock.getText()) : 0;
+						double salePrice = venta.isSelected() ? Double.parseDouble(movieSale.getText().replace("$", "")) : 0.0;
+						String studio = movieStudio.getText();
+						String classification = movieClass.getSelectedItem().toString();
+						String genre = movieGenre.getSelectedItem().toString();
+
+						Movie updatedMovie = new Movie();
+						updatedMovie.product_id = movie.product_id;
+						updatedMovie.setTitle(title);
+						updatedMovie.release_date = releaseDate;
+						updatedMovie.rent_stock = rentStock;
+						updatedMovie.rent_price = rentPrice;
+						updatedMovie.sale_stock = saleStock;
+						updatedMovie.sale_price = salePrice;
+						updatedMovie.studio = studio;
+						updatedMovie.classification = classification;
+						updatedMovie.genre = genre;
+						updatedMovie.setCover(movie.getCover());
+
+						MoviesController controller = new MoviesController();
+						boolean success = controller.updateMovie(updatedMovie, updatedMovie.product_id);
+
+						if (success) {
+							JOptionPane.showMessageDialog(null, "Película actualizada correctamente.");
+
+							movieTitle.setFocusable(false);
+							movieDate.setFocusable(false);
+							movieRentStock.setFocusable(false);
+							movieRent.setFocusable(false);
+							movieStudio.setFocusable(false);
+							movieClass.setEnabled(false);
+							movieGenre.setEnabled(false);
+							movieSaleStock.setFocusable(false);
+							movieSale.setFocusable(false);
+							descargar.setEnabled(true);
+							cancelar.setVisible(false);
+							guardar.setVisible(false);
+							foto.setEnabled(false);
+							
+						} else {
+							JOptionPane.showMessageDialog(null, "Error al actualizar la película.", "Error", JOptionPane.ERROR_MESSAGE);
+						}
+					}
+
 				} catch (NumberFormatException ex) {
 					JOptionPane.showMessageDialog(null, "Verifica los campos numéricos (precio y stock).", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
 				} catch (Exception ex) {

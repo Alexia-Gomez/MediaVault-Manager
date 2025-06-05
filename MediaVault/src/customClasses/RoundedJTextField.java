@@ -30,6 +30,15 @@ public class RoundedJTextField extends JTextField{
 		repaint();
 	}
 
+	public void setErrorBorder(boolean error) {
+		if(error) {
+			setBorderColor(Color.RED);
+		} else {
+			setBorderColor(borderColor);
+		}
+		repaint();
+	}
+	
 	@Override
 	protected void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g.create();
@@ -50,4 +59,5 @@ public class RoundedJTextField extends JTextField{
 		g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, cornerRadius, cornerRadius);
 		g2.dispose();
 	}
+
 }
