@@ -143,6 +143,7 @@ public class GamesModel {
 	        + "cover = ?, "
 	        + "sale_price = ?, "
 	        + "rent_price = ?, "
+	        + "studio = ? "
 	        + "WHERE product_id = ? AND product_type = 'videogame'";
 	    
 	    Connection connection = ConexionBD.getConexion();
@@ -167,7 +168,7 @@ public class GamesModel {
 	        
 	        stmt.setDouble(9, product.getSale_price());
 	        stmt.setDouble(10, product.getRent_price());
-	        stmt.setString(11, product.getPlatform());
+	        stmt.setString(11, product.getStudio());
 	        stmt.setInt(12, product_id); 
 	        
 	        int rowsAffected = stmt.executeUpdate();

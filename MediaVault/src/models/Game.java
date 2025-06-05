@@ -31,6 +31,7 @@ public class Game {
 		this.product_type = "videogame";
 		this.cover = cover;
 		this.release_date = release_date;
+		this.studio = studio;
 		this.sale_price = sale_price;
 		this.rent_price = rent_price;
 		this.fk_promotion_id=fk_promotion_id;
@@ -47,6 +48,7 @@ public class Game {
 		this.classification = classification;
 		this.product_type = "videogame";
 		this.cover = cover;
+		this.studio = studio;
 		this.release_date = release_date;
 		this.sale_price = sale_price;
 		this.rent_price = rent_price;
@@ -64,6 +66,9 @@ public class Game {
 
 	public int getSale_stock() { return sale_stock; }
 	public void setSale_stock(int sale_stock) { this.sale_stock = sale_stock; }
+	
+	public String getStudio() { return studio;}
+	public void setStudio(String studio) { this.studio = studio;}
 
 	public int get_fk_promotion_id() { return fk_promotion_id; }
 	public void set_fk_promotion_id(int fk_promotion_id) { this.fk_promotion_id = fk_promotion_id; }
