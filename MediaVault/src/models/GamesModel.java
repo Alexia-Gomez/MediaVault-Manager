@@ -79,7 +79,7 @@ public class GamesModel {
 	}
 	
 	public boolean add(Game product) {
-	    String query = "INSERT INTO `Products`(title, platform, genre, classification, release_date, product_type, rent_stock, sale_stock, cover, sale_price, rent_price, fk_promotion_id_product) "
+	    String query = "INSERT INTO `Products`(title, platform, genre, classification, release_date, product_type, rent_stock, sale_stock, cover, sale_price, rent_price, studio, fk_promotion_id_product) "
 	                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	    
 	    Connection connection = ConexionBD.getConexion();
@@ -105,7 +105,7 @@ public class GamesModel {
 
 	        stmt.setDouble(10, product.getSale_price());
 	        stmt.setDouble(11, product.getRent_price());
-	        stmt.setString(12, product.getPlatform());
+	        stmt.setString(12, product.getStudio());
 	        stmt.setNull(13, java.sql.Types.INTEGER);
 
 	        int rowsAffected = stmt.executeUpdate();

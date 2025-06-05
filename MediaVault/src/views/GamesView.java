@@ -90,6 +90,8 @@ public class GamesView {
 	ImageIcon delete = new ImageIcon(MoviesView.class.getResource("/images/eliminarW.png"));
 	ImageIcon upImage = new ImageIcon(MoviesView.class.getResource("/images/upImage.png"));
 	
+	byte[] coverBinario = null;
+
 	public GamesView() {
 
 	}
@@ -398,6 +400,56 @@ public class GamesView {
 		foto.setBackground(gray);
 		foto.setRadius(20);
 		dataPanel.add(foto);
+		
+		foto.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				JFileChooser chooserImagen = new JFileChooser();
+				chooserImagen.setDialogTitle("Selecciona una imagen");
+                chooserImagen.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter(
+                        "JPEG, PNG", "jpg", "jpeg", "png"));
+                int result = chooserImagen.showOpenDialog(null);
+                
+                if(result == JFileChooser.APPROVE_OPTION) {
+                	File archivoSeleccionado = chooserImagen.getSelectedFile();
+                	long tamaño = archivoSeleccionado.length();
+                	
+                	if (tamaño>5242880) {
+                		JOptionPane.showMessageDialog(foto,"Imagen muy grande","Error", JOptionPane.ERROR_MESSAGE);
+                		return;
+                	}
+                	else {
+                		try {
+                			BufferedImage imgOriginal = ImageIO.read(archivoSeleccionado);
+
+                			int nuevoAncho = foto.getWidth();
+                			int nuevoAlto = (imgOriginal.getHeight() * nuevoAncho) / imgOriginal.getWidth();
+
+                			BufferedImage imgEscalada = new BufferedImage(nuevoAncho, nuevoAlto, BufferedImage.TYPE_INT_RGB);
+                			Graphics2D g2 = imgEscalada.createGraphics();
+                			
+                			g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+                			g2.drawImage(imgOriginal, 0, 0, nuevoAncho, nuevoAlto, null);
+                			g2.dispose();
+
+                			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                			ImageIO.write(imgEscalada, "jpg", baos);
+                			baos.flush();
+                			coverBinario = baos.toByteArray();
+                			baos.close();
+                			
+                			ImageIcon imagenReducida = new ImageIcon(imgEscalada);
+                			int width = foto.getWidth();
+                    		int height = foto.getHeight();
+                    		foto.setIcon(imagenReducida);
+                    		
+                    	}catch(Exception x) {
+                    		System.out.println(x.getMessage());
+                    	}
+                	}
+                	
+                }
+			}
+		});
 
 
 		RoundedButton gameId = new RoundedButton("ID: #12345");
@@ -557,6 +609,32 @@ public class GamesView {
 		guardar.setFont(txt);
 		guardar.setRadius(20);
 		dataPanel.add(guardar);
+		guardar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				/*int rent_stock =  Integer.parseInt(movieRentStock.getText());
+				int sale_stock =  Integer.parseInt(movieSaleStock.getText());
+				
+				double precioVenta = Double.parseDouble(movieSale.getText());
+				double precioRenta = Double.parseDouble(movieRent.getText());*/
+				int rent_stock = renta.isSelected() ? Integer.parseInt(gameRentStock.getText()) : 0;
+	            int sale_stock = venta.isSelected() ? Integer.parseInt(gameSaleStock.getText()) : 0;
+	            
+	            double precioVenta = venta.isSelected() ? Double.parseDouble(gameSale.getText()) : 0.0;
+	            double precioRenta = renta.isSelected() ? Double.parseDouble(gameRent.getText()) : 0.0;
+	            
+				Game videojuego = new Game(gameTitle.getText(), gamePlatform.getText(), (String) gameClass.getSelectedItem(),
+						gameDate.getText(), (String) gameGenre.getSelectedItem(), rent_stock, sale_stock,coverBinario,precioVenta,precioRenta);
+				
+				GamesController gc = new GamesController();
+				
+				if(gc.addGame(videojuego)) {
+					System.out.println("Se agrego un videojuego nuevo");
+				}
+					frame.dispose();
+					games();
+			}
+		});
+		
 
 		RoundedButton cancelar = new RoundedButton("Cancelar");
 		cancelar.setBounds(520, 355,80, 30);
@@ -840,7 +918,7 @@ public class GamesView {
 		dataPanel.add(classLabel);
 		
 		CustomJComboBox gameClass = new CustomJComboBox();
-		gameClass.setModel( new DefaultComboBoxModel( new String[] { "E", "E+10", "T", "M", "AO" }));
+		gameClass.setModel( new DefaultComboBoxModel( new String[] { "E", "T", "M", "A" }));
 		gameClass.setBounds(520, 105, 250, 27);
 		gameClass.setEnabled(false);
 		if(game.getClassification()!=null)  gameClass.setSelectedItem(game.classification);
@@ -853,7 +931,7 @@ public class GamesView {
 		dataPanel.add(genreLabel);
 		
 		CustomJComboBox gameGenre = new CustomJComboBox();
-		gameGenre.setModel( new DefaultComboBoxModel( new String[] { "Adventure", "Action", "Shooter", "Platformer", "RPG", "Sports" }));
+		gameGenre.setModel( new DefaultComboBoxModel( new String[] { "Deportes", "Acción", "Carreras", "Aventura", "Disparos", "Terror" }));
 		gameGenre.setBounds(520, 170, 250, 27);
 		gameGenre.setFont(fieldtxt);
 		gameGenre.setEnabled(false);
@@ -1094,7 +1172,7 @@ public class GamesView {
 	                poster = new com.itextpdf.layout.element.Image(imgData);
 	            }
 
-	            document.add(new Paragraph("Ficha de Película").setFontSize(18));
+	            document.add(new Paragraph("Ficha de Videojuego").setFontSize(18));
 	            document.add(new Paragraph("ID: " + game.product_id));
 	            document.add(new Paragraph("Título: " + game.getTitle()));
 	            document.add(new Paragraph("Fecha de estreno: " + game.release_date));
