@@ -20,6 +20,7 @@ import customClasses.RoundedButton;
 import customClasses.RoundedJPasswordField;
 import customClasses.RoundedJTextField;
 import customClasses.RoundedPanel;
+import customClasses.Validaciones;
 
 public class LoginView {
 	
@@ -89,9 +90,11 @@ public class LoginView {
 		roundPane.add(userLabel);
 
 		RoundedJTextField userField = new RoundedJTextField(20);
+		userField.addKeyListener(Validaciones.letras());
+		userField.addKeyListener(Validaciones.limite(10));
 		userField.setBounds(35, 171, 240, 36);
-		userField.setBackground(grayF);
 		userField.setForeground(Color.BLACK);
+		userField.setBackground(grayF);
 		userField.setFont(txt);
 		roundPane.add(userField);
 
@@ -102,10 +105,11 @@ public class LoginView {
 		roundPane.add(passLabel);
 
 		RoundedJPasswordField passField = new RoundedJPasswordField(20);
-		passField.setLocation(35, 237);
-		passField.setBackground(grayF);
+		passField.addKeyListener(Validaciones.enteros());
+		passField.addKeyListener(Validaciones.limite(10));
+		passField.setBounds(35, 237, 240, 36);
 		passField.setForeground(Color.BLACK);
-		passField.setSize(240,36);
+		passField.setBackground(grayF);
 		passField.setFont(txt);
 		roundPane.add(passField);
 
