@@ -101,7 +101,7 @@ public class ClientsModel {
 	}
 	
 	public boolean delete(int client_id) {
-		String query = "DELETE FROM Clients WHERE product_id = ? ";
+		String query = "DELETE FROM Clients WHERE id_client = ? ";
 		Connection connection = ConexionBD.getConexion();
 		PreparedStatement stmt = null;
 
@@ -132,8 +132,8 @@ public class ClientsModel {
 		        + "client_birth_date = ?, "
 		        + "email = ?, "
 		        + "photo = ?, "
-		        + "phone_number = ?, "
-		        + "WHERE product_id = ? ";
+		        + "phone_number = ? "
+		        + "WHERE id_client = ? ";
 		    
 		    Connection connection = ConexionBD.getConexion();
 		    PreparedStatement stmt = null;
