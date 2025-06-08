@@ -38,7 +38,6 @@ public class SearchJDialog extends JDialog {
     public SearchJDialog(Frame owner) {
         super(owner, "Búsqueda de cliente", true);
 
-        // 1) Modelo y tabla
         String[] cols = {"ID", "Nombre", "Correo"};
         model = new DefaultTableModel(cols, 0) {
             @Override public boolean isCellEditable(int r, int c) { return false; }
@@ -48,10 +47,8 @@ public class SearchJDialog extends JDialog {
         sorter = new TableRowSorter<>(model);
         table.setRowSorter(sorter);
 
-        // 2) Carga inicial de todos los clientes
         loadAllClients();
 
-        // 3) Layout
         JPanel north = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
         north.add(new JLabel("Buscar (ID o nombre):"));
         north.add(btnSearch);
@@ -70,10 +67,8 @@ public class SearchJDialog extends JDialog {
         pack();
         setLocationRelativeTo(owner);
 
-        // 4) Listeners
         btnSearch.addActionListener(e -> applyFilter());
 
-        // Seleccionar cliente
         btnSelect.addActionListener(e -> {
             int viewRow = table.getSelectedRow();
             if (viewRow >= 0) {
@@ -83,10 +78,8 @@ public class SearchJDialog extends JDialog {
             }
         });
 
-        // Cancelar
         btnCancel.addActionListener(e -> dispose());
 
-        // Habilitar botón solo con selección
         table.getSelectionModel().addListSelectionListener(e ->
             btnSelect.setEnabled(table.getSelectedRow() >= 0)
         );
@@ -115,17 +108,12 @@ public class SearchJDialog extends JDialog {
             sorter.setRowFilter(null);
         } else {
             String regex = "(?i)" + Pattern.quote(term);
-            // filtrar en columna 0 (ID) y 1 (Nombre)
             RowFilter<DefaultTableModel, Object> rf =
                 RowFilter.regexFilter(regex, 0, 1,2);
             sorter.setRowFilter(rf);
         }
     }
 
-    /**
-     * Muestra el diálogo y devuelve el cliente elegido,
-     * o null si se canceló.
-     */
     public Client showDialog() {
         setVisible(true);
         return selectedClient;

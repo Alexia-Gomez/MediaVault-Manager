@@ -57,27 +57,27 @@ public class OperationsModel {
         	stmt = connection.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
-                // 1) Cliente
+                
                 Client cli = new Client(
                 rs.getInt("id_client"),
                 rs.getString("client_name"),
                 rs.getString("client_lastname"),
-                rs.getString("email"),             // si lo necesitas
-                rs.getString("phone_number"),      // idem
-                rs.getString("client_birth_date"), // idem
+                rs.getString("email"),             
+                rs.getString("phone_number"),      
+                rs.getString("client_birth_date"),
                 rs.getBytes("photo"),
                 rs.getInt("total_rentals"),
                 rs.getInt("total_purchases"),
                 rs.getString("fidelity_level"));
 
-                // 2) Datos de operación
+                
                 int    operation_id     = rs.getInt("operation_id");
                 String operation_type   = rs.getString("operation_type");
                 String operation_date = rs.getString("operation_date");
                 double unitPrice   = rs.getDouble("unit_price");
                 double totalAmount = rs.getDouble("total_amount");
 
-                // 3) Datos de producto
+                
                 int    prodId       = rs.getInt("product_id");
                 String prodTitle    = rs.getString("product_title");
                 String prodType     = rs.getString("product_type");
@@ -93,7 +93,6 @@ public class OperationsModel {
                 double rentPrice    = rs.getDouble("rent_price");
                 int    promotionId  = rs.getInt("promotion_id");
 
-                // 4) Crea Operation usando el constructor adecuado
                 Operation op;
                 if ("movie".equalsIgnoreCase(prodType)) {
                     Movie movie = new Movie(prodId,prodTitle,studio,classification,releaseDate,genre,rentStock,saleStock,cover,salePrice,rentPrice);
