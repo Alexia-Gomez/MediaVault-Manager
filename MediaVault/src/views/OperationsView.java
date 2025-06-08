@@ -7,19 +7,40 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableRowSorter;
 
+import controllers.ClientsController;
 import controllers.OperationsController;
+import customClasses.CoverTitleCellRendererClient;
+import customClasses.CustomScrollBar;
+import customClasses.CustomScrollPane;
 import customClasses.Fuentes;
+import customClasses.ImageUtils;
 import customClasses.RoundedButton;
 import customClasses.RoundedJTextField;
 import customClasses.RoundedPanel;
+import customClasses.SearchJDialog;
 import customClasses.SideBar;
+import customClasses.TableActionCellEditor;
+import customClasses.TableActionCellRender;
+import customClasses.TableActionEvent;
+import models.Client;
+import models.Operation;
 
 public class OperationsView {
 
@@ -43,6 +64,11 @@ public class OperationsView {
 	ImageIcon arrow = new ImageIcon(OperationsView.class.getResource("/images/arrow.png"));
 	ImageIcon iconoFrame = new ImageIcon(LoginView.class.getResource("/images/iconoPrincipal.PNG"));
 	ImageIcon checkW = new ImageIcon(OperationsView.class.getResource("/images/checkW.png"));
+	
+	TableRowSorter<DefaultTableModel> buscador;
+	RoundedJTextField searchBar,txtClient;
+	
+	Client currentClient;
 
 	public OperationsView() {
 
@@ -158,8 +184,7 @@ public class OperationsView {
 			
 		});
 		barra.add(filtrar);
-
-
+		
 		//TABLA (HOLDER)
 		//TITLES
 		JPanel tableTitles = new JPanel();
@@ -203,6 +228,96 @@ public class OperationsView {
 		tablePanel.setLayout(new BorderLayout(0, 0));
 		tablePanel.setBackground(Color.white);
 		centro.add(tablePanel);
+		
+		//Obtener clientes de la BD
+		OperationsController controller = new OperationsController();
+		ArrayList<Operation> operations = controller.get();
+		
+		String[] columnNames = {"", "", "", "", "",""};
+		DefaultTableModel model1 = new DefaultTableModel(columnNames, 0){
+		    @Override
+		    public boolean isCellEditable(int row, int column) {
+		        return column== 4;
+		    }
+		};
+		
+		for (Operation operation : operations) {
+			Client client = operation.getCliente();
+			String celdaCliente = "<html>"
+                    + client.getName() + " " + client.getLast_name() + "<br>"
+                    + "<font color='gray'>ID: " + client.getClient_id() + "</font>"
+                    + "</html>";
+			
+			String type = operation.getOperation_type().equalsIgnoreCase("rent")? "Renta": "Venta";
+			
+			String producto = "<html><font color='green'>" +
+			        operation.getProductTitle() +
+			        "</font></html>";
+	        
+			String fecha = operation.getOperation_date();
+			
+			
+		    model1.addRow(new Object[] {
+		        celdaCliente,
+		        type,
+		        producto,
+		        fecha,
+		        "",
+		        client
+		    });
+		}
+		
+		JTable table = new JTable(model1);
+		table.setRowHeight(80);
+		table.setShowVerticalLines(false);
+		table.setTableHeader(null);
+		table.setFont(fieldtxt);
+		
+		table.getColumnModel().getColumn(0).setCellRenderer(new CoverTitleCellRendererClient());
+		
+		table.getColumnModel().getColumn(4).setCellRenderer(new TableActionCellRender());
+		
+		table.getColumnModel().getColumn(4).setCellEditor(new TableActionCellEditor(new TableActionEvent() {
+			public void onEdit(int row) {
+				/*Client client = (Client) table.getModel().getValueAt(row, 5);
+				frame.dispose();
+				viewClient(client);
+				edit();*/
+			}
+		}));
+		
+		TableColumnModel cm = table.getColumnModel();
+		cm.removeColumn(cm.getColumn(5));
+		
+		table.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				int fila = table.rowAtPoint(e.getPoint());
+		        int col = table.columnAtPoint(e.getPoint());
+
+		        if (col == 0 && fila != -1) {
+		        	/*int modeloFila = table.convertRowIndexToModel(fila);
+		            Client client = (Client) table.getModel().getValueAt(modeloFila, 5);
+		            
+		            frame.dispose();
+		            viewClient(client);*/
+		        }
+			}
+		});
+		
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+		//toda la tabla centrada
+		table.setDefaultRenderer(Object.class, centerRenderer);
+
+		CustomScrollPane scrollPane = new CustomScrollPane();
+		scrollPane.setBorder(BorderFactory.createEmptyBorder());
+		scrollPane.setViewportView(table);		
+
+		scrollPane.getVerticalScrollBar().setUI(new CustomScrollBar());
+		tablePanel.add(scrollPane);
+
+		buscador = new TableRowSorter<>(model1);
+		table.setRowSorter(buscador);
 	}
 
 	public void newOperation() {
@@ -274,18 +389,34 @@ public class OperationsView {
 		lupaIcon.setBounds(65, 40, 30, 30);
 		dataPanel.add(lupaIcon);
 
-		RoundedJTextField searchBar = new RoundedJTextField(20);
+		JLabel lblFoto = new JLabel();
+		lblFoto.setBounds(120, 34, 40, 40);
+		dataPanel.add(lblFoto);
+		
+		searchBar = new RoundedJTextField(20);
 		searchBar.setBounds(115, 40, 520, 30);
 		searchBar.setBackground(field);
 		searchBar.setFont(txt);
+		searchBar.setFocusable(false);
 		dataPanel.add(searchBar);
-
+		
 		RoundedButton buscar = new RoundedButton("Buscar");
 		buscar.setBounds(665, 40, 86, 30);
 		buscar.setBackground(blue);
 		buscar.setFont(btn);
 		buscar.setRadius(20);
 		dataPanel.add(buscar);
+		buscar.addActionListener(e ->{
+			SearchJDialog dlg = new SearchJDialog(frame);
+		    Client sel = dlg.showDialog();
+		    if (sel != null) {
+		        currentClient = sel;
+		        ImageIcon foto = ImageUtils.getCircularIcon(sel.getPhoto(), 30);
+		        lblFoto.setIcon(foto);
+		        searchBar.setText("         #" + sel.getClient_id() + "   "+sel.getName() +"   "+ sel.getEmail() );
+		    }
+		});
+		
 		
 		JLabel operationLabel = new JLabel("Tipo de operación");
 		operationLabel.setBounds(50, 80, 150, 15);
