@@ -19,7 +19,7 @@ public class Client {
 		this.total_rentals=0;
 		this.fidelity="Ninguno";
 	}
-	
+	//Constructor completo para traer de DB
 	public Client(int client_id,String name, String last_name, String email, String phone, String birth_date, byte[] photo, int total_rentals,int total_purchases, String fidelity) {
 		this.client_id=client_id;
 		this.name=name;
