@@ -273,6 +273,8 @@ public class RentSaleView {
 		tablePanel.setBackground(Color.white);
 		centro.add(tablePanel);
 	}
+	
+	
 
 	public void filterPanel(JPanel centro) {
 		filtro = new RoundedPanel(30, new Color(255, 255, 255),3);
