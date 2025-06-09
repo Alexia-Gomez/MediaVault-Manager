@@ -452,7 +452,7 @@ public class GamesView {
 		});
 
 
-		RoundedButton gameId = new RoundedButton("ID: #12345");
+		RoundedButton gameId = new RoundedButton("ID: #");
 		gameId.setBounds(70, 250 ,100, 30);
 		gameId.setBackground(gray);
 		gameId.setForeground(Color.black);
@@ -468,6 +468,7 @@ public class GamesView {
 
 		RoundedJTextField gameTitle = new RoundedJTextField(20);
 		gameTitle.setBounds(237, 40, 250, 30);
+		gameTitle.addKeyListener(Validaciones.limite(30));
 		gameTitle.setFont(fieldtxt);
 		dataPanel.add(gameTitle);
 
@@ -478,6 +479,8 @@ public class GamesView {
 
 		RoundedJTextField gameDate = new RoundedJTextField(20);
 		gameDate.setBounds(237, 105, 250, 27);
+		gameDate.addKeyListener(Validaciones.fechas());
+		gameDate.addKeyListener(Validaciones.limite(10));
 		gameDate.setFont(fieldtxt);
 		dataPanel.add(gameDate);
 
@@ -489,6 +492,7 @@ public class GamesView {
 		RoundedJTextField gameRentStock = new RoundedJTextField(20);
 		gameRentStock.setBounds(237, 235, 250, 27);
 		gameRentStock.addKeyListener(Validaciones.enteros());
+		gameRentStock.addKeyListener(Validaciones.limite(3));
 		gameRentStock.setFont(fieldtxt);
 		gameRentStock.setEnabled(false);
 		dataPanel.add(gameRentStock);
@@ -501,6 +505,7 @@ public class GamesView {
 		RoundedJTextField gameRent = new RoundedJTextField(20);
 		gameRent.setBounds(237, 300, 250, 27);
 		gameRent.addKeyListener(Validaciones.conDecimal());
+		gameRent.addKeyListener(Validaciones.limite(10));
 		gameRent.setFont(fieldtxt);
 		gameRent.setEnabled(false);
 		dataPanel.add(gameRent);
@@ -518,6 +523,7 @@ public class GamesView {
 
 		RoundedJTextField gamePlatform = new RoundedJTextField(20);
 		gamePlatform.setBounds(520, 40, 250, 27);
+		gamePlatform.addKeyListener(Validaciones.limite(20));
 		gamePlatform.setFont(fieldtxt);
 		dataPanel.add(gamePlatform);
 
@@ -551,6 +557,7 @@ public class GamesView {
 		RoundedJTextField gameSaleStock = new RoundedJTextField(20);
 		gameSaleStock.setBounds(520, 235, 250, 27);
 		gameSaleStock.addKeyListener(Validaciones.enteros());
+		gameSaleStock.addKeyListener(Validaciones.limite(3));
 		gameSaleStock.setFont(fieldtxt);
 		gameSaleStock.setEnabled(false);
 		dataPanel.add(gameSaleStock);
@@ -563,6 +570,7 @@ public class GamesView {
 		RoundedJTextField gameSale = new RoundedJTextField(20);
 		gameSale.setBounds(520, 300, 250, 27);
 		gameSale.addKeyListener(Validaciones.conDecimal());
+		gameSale.addKeyListener(Validaciones.limite(10));
 		gameSale.setFont(fieldtxt);
 		gameSale.setEnabled(false);
 		dataPanel.add(gameSale);
@@ -611,30 +619,49 @@ public class GamesView {
 		dataPanel.add(guardar);
 		guardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				/*int rent_stock =  Integer.parseInt(movieRentStock.getText());
-				int sale_stock =  Integer.parseInt(movieSaleStock.getText());
-				
-				double precioVenta = Double.parseDouble(movieSale.getText());
-				double precioRenta = Double.parseDouble(movieRent.getText());*/
-				int rent_stock = renta.isSelected() ? Integer.parseInt(gameRentStock.getText()) : 0;
-	            int sale_stock = venta.isSelected() ? Integer.parseInt(gameSaleStock.getText()) : 0;
-	            
-	            double precioVenta = venta.isSelected() ? Double.parseDouble(gameSale.getText()) : 0.0;
-	            double precioRenta = renta.isSelected() ? Double.parseDouble(gameRent.getText()) : 0.0;
-	            
-				Game videojuego = new Game(gameTitle.getText(), gamePlatform.getText(), (String) gameClass.getSelectedItem(),
-						gameDate.getText(), (String) gameGenre.getSelectedItem(), rent_stock, sale_stock,coverBinario,precioVenta,precioRenta);
-				
-				GamesController gc = new GamesController();
-				
-				if(gc.addGame(videojuego)) {
-					System.out.println("Se agrego un videojuego nuevo");
+
+				boolean camposValidos = true;
+
+				if (!Validaciones.validarCampoVacio(gameTitle)) camposValidos = false;
+				if (!Validaciones.validarCampoVacio(gamePlatform)) camposValidos = false;
+				if (!Validaciones.validarCampoVacio(gameDate)) camposValidos = false;
+
+				if (!Validaciones.validarCombo(gameClass)) camposValidos = false;
+				if (!Validaciones.validarCombo(gameGenre)) camposValidos = false;
+
+				if (renta.isSelected()) {
+					if (!Validaciones.validarCampoVacio(gameRentStock)) camposValidos = false;
+					if (!Validaciones.validarCampoVacio(gameRent)) camposValidos = false;
+				} 
+
+				if (venta.isSelected()) {
+					if (!Validaciones.validarCampoVacio(gameSaleStock)) camposValidos = false;
+					if (!Validaciones.validarCampoVacio(gameSale)) camposValidos = false;
 				}
+
+				if(camposValidos) {	
+
+					int rent_stock = renta.isSelected() ? Integer.parseInt(gameRentStock.getText()) : 0;
+					int sale_stock = venta.isSelected() ? Integer.parseInt(gameSaleStock.getText()) : 0;
+
+					double precioVenta = venta.isSelected() ? Double.parseDouble(gameSale.getText()) : 0.0;
+					double precioRenta = renta.isSelected() ? Double.parseDouble(gameRent.getText()) : 0.0;
+
+					Game videojuego = new Game(gameTitle.getText(), gamePlatform.getText(), (String) gameClass.getSelectedItem(),
+							gameDate.getText(), (String) gameGenre.getSelectedItem(), rent_stock, sale_stock,coverBinario,precioVenta,precioRenta);
+
+					GamesController gc = new GamesController();
+
+					if(gc.addGame(videojuego)) {
+						System.out.println("Se agrego un videojuego nuevo");
+					}
 					frame.dispose();
 					games();
+				}
 			}
+
 		});
-		
+
 
 		RoundedButton cancelar = new RoundedButton("Cancelar");
 		cancelar.setBounds(520, 355,80, 30);
@@ -836,6 +863,7 @@ public class GamesView {
 		RoundedJTextField gameTitle = new RoundedJTextField(20);
 		gameTitle.setBounds(237, 40, 250, 30);
 		if(game.getTitle()!=null) gameTitle.setText(game.getTitle());
+		gameTitle.addKeyListener(Validaciones.limite(30));
 		gameTitle.setFocusable(false);
 		gameTitle.setFont(fieldtxt);
 		dataPanel.add(gameTitle);
@@ -848,6 +876,8 @@ public class GamesView {
 		RoundedJTextField gameDate = new RoundedJTextField(20);
 		gameDate.setBounds(237, 105, 250, 27);
 		if (game.getRelease_date()!=null)gameDate.setText(game.release_date);
+		gameDate.addKeyListener(Validaciones.fechas());
+		gameDate.addKeyListener(Validaciones.limite(10));
 		gameDate.setFocusable(false);
 		gameDate.setFont(fieldtxt);
 		dataPanel.add(gameDate);
@@ -877,6 +907,7 @@ public class GamesView {
 		gameRentStock.setBounds(237, 235, 250, 27);
 		if(game.getRent_stock()>0) gameRentStock.setText(String.valueOf(game.rent_stock));
 		gameRentStock.addKeyListener(Validaciones.enteros());
+		gameRentStock.addKeyListener(Validaciones.limite(3));
 		gameRentStock.setFocusable(false);
 		gameRentStock.setFont(fieldtxt);
 		dataPanel.add(gameRentStock);
@@ -890,6 +921,7 @@ public class GamesView {
 		gameRent.setBounds(237, 300, 250, 27);
 		if(game.rent_price>0)   gameRent.setText("$"+String.valueOf(game.rent_price));
 		gameRent.addKeyListener(Validaciones.conDecimal());
+		gameRent.addKeyListener(Validaciones.limite(10));
 		gameRent.setFocusable(false);
 		gameRent.setFont(fieldtxt);
 		dataPanel.add(gameRent);
@@ -908,6 +940,7 @@ public class GamesView {
 		RoundedJTextField gamePlatform = new RoundedJTextField(20);
 		gamePlatform.setBounds(520, 40, 250, 27);
 		if(game.getPlatform()!=null)   gamePlatform.setText(game.platform);
+		gamePlatform.addKeyListener(Validaciones.limite(20));
 		gamePlatform.setFocusable(false);
 		gamePlatform.setFont(fieldtxt);
 		dataPanel.add(gamePlatform);
@@ -947,6 +980,7 @@ public class GamesView {
 		gameSaleStock.setBounds(520, 235, 250, 27);
 		if(game.getSale_stock()>0)  gameSaleStock.setText(String.valueOf(game.sale_stock));
 		gameSaleStock.addKeyListener(Validaciones.enteros());
+		gameSaleStock.addKeyListener(Validaciones.limite(3));
 		gameSaleStock.setFocusable(false);
 		gameSaleStock.setFont(fieldtxt);
 		dataPanel.add(gameSaleStock);
@@ -960,6 +994,7 @@ public class GamesView {
 		gameSale.setBounds(520, 300, 250, 27);
 		if(game.getSale_price()>0)  gameSale.setText("$"+String.valueOf(game.sale_price));
 		gameSale.addKeyListener(Validaciones.conDecimal());
+		gameSale.addKeyListener(Validaciones.limite(10));
 		gameSale.setFocusable(false);
 		gameSale.setFont(fieldtxt);
 		dataPanel.add(gameSale);
@@ -1060,56 +1095,75 @@ public class GamesView {
 		guardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					String title = gameTitle.getText();
-					String releaseDate = gameDate.getText();
-					/*int rentStock = Integer.parseInt(movieRentStock.getText());
-					double rentPrice = Double.parseDouble(movieRent.getText().replace("$", ""));
-					int saleStock = Integer.parseInt(movieSaleStock.getText());
-					double salePrice = Double.parseDouble(movieSale.getText().replace("$", ""));*/
-					int rentStock = renta.isSelected() ? Integer.parseInt(gameRentStock.getText()) : 0;
-					double rentPrice = renta.isSelected() ? Double.parseDouble(gameRent.getText().replace("$", "")) : 0.0;
-					int saleStock = venta.isSelected() ? Integer.parseInt(gameSaleStock.getText()) : 0;
-					double salePrice = venta.isSelected() ? Double.parseDouble(gameSale.getText().replace("$", "")) : 0.0;
-					String platform = gamePlatform.getText();
-					String classification = gameClass.getSelectedItem().toString();
-					String genre = gameGenre.getSelectedItem().toString();
-					/*boolean isRentAvailable = renta.isSelected();
-					boolean isSaleAvailable = venta.isSelected();*/
 
-					Game updatedGame = new Game();
-					updatedGame.product_id = game.product_id;
-					updatedGame.setTitle(title);
-					updatedGame.release_date = releaseDate;
-					updatedGame.rent_stock = rentStock;
-					updatedGame.rent_price = rentPrice;
-					updatedGame.sale_stock = saleStock;
-					updatedGame.sale_price = salePrice;
-					updatedGame.platform = platform;
-					updatedGame.classification = classification;
-					updatedGame.genre = genre;
-					updatedGame.setCover(game.getCover());
+					boolean camposValidos = true;
+					
+					if (!Validaciones.validarCampoVacio(gameTitle)) camposValidos = false;
+					if (!Validaciones.validarCampoVacio(gamePlatform)) camposValidos = false;
+					if (!Validaciones.validarCampoVacio(gameDate)) camposValidos = false;
 
-					GamesController controller = new GamesController();
-					boolean success = controller.updateGame(updatedGame, updatedGame.product_id);
+					if (!Validaciones.validarCombo(gameClass)) camposValidos = false;
+					if (!Validaciones.validarCombo(gameGenre)) camposValidos = false;
 
-					if (success) {
-						JOptionPane.showMessageDialog(null, "Videojuego actualizado correctamente.");
+					if (renta.isSelected()) {
+						if (!Validaciones.validarCampoVacio(gameRentStock)) camposValidos = false;
+						if (!Validaciones.validarCampoVacio(gameRent)) camposValidos = false;
+					} 
+
+					if (venta.isSelected()) {
+						if (!Validaciones.validarCampoVacio(gameSaleStock)) camposValidos = false;
+						if (!Validaciones.validarCampoVacio(gameSale)) camposValidos = false;
+					}
+
+					if(camposValidos) {
 						
-						gameTitle.setFocusable(false);
-						gameDate.setFocusable(false);
-						gameRentStock.setFocusable(false);
-						gameRent.setFocusable(false);
-						gamePlatform.setFocusable(false);
-						gameClass.setEnabled(false);
-						gameGenre.setEnabled(false);
-						gameSaleStock.setFocusable(false);
-						gameSale.setFocusable(false);
-						descargar.setEnabled(true);
-						cancelar.setVisible(false);
-						guardar.setVisible(false);
-						foto.setEnabled(false);
-					} else {
-						JOptionPane.showMessageDialog(null, "Error al actualizar el videojuego.", "Error", JOptionPane.ERROR_MESSAGE);
+						String title = gameTitle.getText();
+						String releaseDate = gameDate.getText();
+						
+						int rentStock = renta.isSelected() ? Integer.parseInt(gameRentStock.getText()) : 0;
+						double rentPrice = renta.isSelected() ? Double.parseDouble(gameRent.getText().replace("$", "")) : 0.0;
+						int saleStock = venta.isSelected() ? Integer.parseInt(gameSaleStock.getText()) : 0;
+						double salePrice = venta.isSelected() ? Double.parseDouble(gameSale.getText().replace("$", "")) : 0.0;
+						
+						String platform = gamePlatform.getText();
+						String classification = gameClass.getSelectedItem().toString();
+						String genre = gameGenre.getSelectedItem().toString();
+						
+						Game updatedGame = new Game();
+						updatedGame.product_id = game.product_id;
+						updatedGame.setTitle(title);
+						updatedGame.release_date = releaseDate;
+						updatedGame.rent_stock = rentStock;
+						updatedGame.rent_price = rentPrice;
+						updatedGame.sale_stock = saleStock;
+						updatedGame.sale_price = salePrice;
+						updatedGame.platform = platform;
+						updatedGame.classification = classification;
+						updatedGame.genre = genre;
+						updatedGame.setCover(game.getCover());
+
+						GamesController controller = new GamesController();
+						boolean success = controller.updateGame(updatedGame, updatedGame.product_id);
+
+						if (success) {
+							JOptionPane.showMessageDialog(null, "Videojuego actualizado correctamente.");
+
+							gameTitle.setFocusable(false);
+							gameDate.setFocusable(false);
+							gameRentStock.setFocusable(false);
+							gameRent.setFocusable(false);
+							gamePlatform.setFocusable(false);
+							gameClass.setEnabled(false);
+							gameGenre.setEnabled(false);
+							gameSaleStock.setFocusable(false);
+							gameSale.setFocusable(false);
+							descargar.setEnabled(true);
+							cancelar.setVisible(false);
+							guardar.setVisible(false);
+							foto.setEnabled(false);
+						} else {
+							JOptionPane.showMessageDialog(null, "Error al actualizar el videojuego.", "Error", JOptionPane.ERROR_MESSAGE);
+						}
 					}
 				} catch (NumberFormatException ex) {
 					JOptionPane.showMessageDialog(null, "Verifica los campos numéricos (precio y stock).", "Entrada inválida", JOptionPane.WARNING_MESSAGE);
