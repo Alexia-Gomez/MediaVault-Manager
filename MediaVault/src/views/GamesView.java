@@ -17,9 +17,12 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -28,6 +31,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.RowFilter;
 import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -49,6 +53,7 @@ import customClasses.CoverTitleCellRenderer;
 import customClasses.CoverTitleCellRendererGame;
 import customClasses.CustomJCheckBox;
 import customClasses.CustomJComboBox;
+import customClasses.CustomJRadioButton;
 import customClasses.CustomScrollBar;
 import customClasses.CustomScrollPane;
 import customClasses.Fuentes;
@@ -60,26 +65,25 @@ import customClasses.SideBar;
 import customClasses.Validaciones;
 import models.Game;
 import models.GamesModel;
-import models.Movie;
 
 
 public class GamesView {
 
 	RoundedPanel filtro;
 	JPanel centro;
-	
+
 	Color blue = new Color(24, 130, 234);
 	Color border = new Color(186, 186, 186);
 	Color lightGray = new Color(117, 117, 117);
 	Color gray = new Color(242, 242, 242);
 	Color field = new Color(250, 250, 250);
-	
+
 	Fuentes tipoFuentes = new Fuentes();
 	Font titles = tipoFuentes.fuente("/fonts/GolosText-SemiBold.ttf", 17f);
 	Font btn = tipoFuentes.fuente("/fonts/GolosText-Regular.ttf", 14f);
 	Font txt = tipoFuentes.fuente("/fonts/GolosText-Regular.ttf", 12f);
 	Font fieldtxt = tipoFuentes.fuente("/fonts/GolosText-Regular.ttf", 11f);
-	
+
 	ImageIcon lupa = new ImageIcon(GamesView.class.getResource("/images/lupa.png"));
 	ImageIcon mas = new ImageIcon(GamesView.class.getResource("/images/mas.png"));
 	ImageIcon filter = new ImageIcon(GamesView.class.getResource("/images/filter.png"));
@@ -89,8 +93,13 @@ public class GamesView {
 	ImageIcon descarga = new ImageIcon(MoviesView.class.getResource("/images/descarga.png"));
 	ImageIcon delete = new ImageIcon(MoviesView.class.getResource("/images/eliminarW.png"));
 	ImageIcon upImage = new ImageIcon(MoviesView.class.getResource("/images/upImage.png"));
-	
+
 	byte[] coverBinario = null;
+
+	TableRowSorter<DefaultTableModel> buscador;
+	RoundedJTextField searchBar;
+	CustomJRadioButton xbox, Switch, ps4, allPlatforms;
+	CustomJRadioButton sports, adventure, racing, shooter, action, allGen;
 
 	public GamesView() {
 
@@ -114,14 +123,14 @@ public class GamesView {
 		sidepanel.setSize(128, 606);
 		sidepanel.setLayout(new GridLayout(0, 1, 0, 0));
 		frame.getContentPane().add(sidepanel);
-		
+
 		sidepanel.add(SideBar.inicio(frame));
 		sidepanel.add(SideBar.clientes(frame));
 		sidepanel.add(SideBar.nuevaOperacion(frame));
 		sidepanel.add(SideBar.rentaCompra(frame));
 		sidepanel.add(SideBar.juegos(frame));
 		sidepanel.add(SideBar.peliculas(frame));
-		
+
 
 		//PANEL CENTRO
 		centro = new JPanel();
@@ -138,7 +147,7 @@ public class GamesView {
 		titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		titleLabel.setFont(titles);
 		titlePanel.add(titleLabel);
-		
+
 		RoundedButton newGame = new RoundedButton("Nuevo videojuego");
 		newGame.setIcon(new ImageIcon(((ImageIcon) mas).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
 		newGame.setBounds(760, 11, 185, 43);
@@ -154,7 +163,7 @@ public class GamesView {
 				frame.dispose();
 				newGame();
 			}
-			
+
 		});
 		centro.add(newGame);
 
@@ -170,7 +179,7 @@ public class GamesView {
 		lupaIcon.setBounds(20, 20, 30, 30);
 		barra.add(lupaIcon);
 
-		RoundedJTextField searchBar = new RoundedJTextField(20);
+		searchBar = new RoundedJTextField(20);
 		searchBar.setBounds(65, 20, 520, 30);
 		searchBar.setBackground(field);
 		searchBar.setFont(txt);
@@ -182,9 +191,16 @@ public class GamesView {
 		buscar.setFont(btn);
 		buscar.setRadius(20);
 		barra.add(buscar);
+		buscar.addActionListener(new ActionListener() {
 
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				filtrar();
+			}
+
+		});
 		filterPanel(centro);
-		
+
 		RoundedButton filtrar = new RoundedButton("Filtrar");
 		filtrar.setIcon(new ImageIcon(((ImageIcon) filter).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
 		filtrar.setHorizontalTextPosition(SwingConstants.LEFT);
@@ -203,7 +219,7 @@ public class GamesView {
 				// TODO Auto-generated method stub
 				filtro.setVisible(true);
 			}
-			
+
 		});
 		barra.add(filtrar);
 
@@ -263,63 +279,63 @@ public class GamesView {
 		tablePanel.setLayout(new BorderLayout(0, 0));
 		tablePanel.setBackground(Color.white);
 		centro.add(tablePanel);
-		
+
 		// Obtener datos de la BD
 		GamesModel model = new GamesModel();
 		ArrayList<Game> games = model.get();
-		
+
 		String[] columnNames = {"", "", "", "", "", "", "", ""};
 		DefaultTableModel model1 = new DefaultTableModel(columnNames, 0){
-		    @Override
-		    public boolean isCellEditable(int row, int column) {
-		        return false;
-		    }
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
 		};
 
 		for (Game game : games) {
-		    model1.addRow(new Object[] {
-		    	game.getTitle(),
-		        game.getPlatform(),
-		        game.getClassification(),
-		        game.getRelease_date(),
-		        game.getGenre(),
-		        game.getRent_stock(),
-		        game.getSale_stock(),
-		        game
-		    });
+			model1.addRow(new Object[] {
+					game.getTitle(),
+					game.getPlatform(),
+					game.getClassification(),
+					game.getRelease_date(),
+					game.getGenre(),
+					game.getRent_stock(),
+					game.getSale_stock(),
+					game
+			});
 		}
-		
+
 		JTable table = new JTable(model1);
 		table.setRowHeight(80);
 		table.setShowVerticalLines(false);
 		table.setTableHeader(null);
 		table.setFont(fieldtxt);
-		
+
 		table.getColumnModel().getColumn(0).setCellRenderer(new CoverTitleCellRendererGame());
-		
+
 		table.getColumnModel().getColumn(5).setCellRenderer(new IconCellRenderer());
-		
+
 		table.getColumnModel().getColumn(6).setCellRenderer(new IconCellRenderer());
-		
+
 		TableColumnModel cm = table.getColumnModel();
 		cm.removeColumn(cm.getColumn(7));
-		
+
 		table.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				int fila = table.rowAtPoint(e.getPoint());
-		        int col = table.columnAtPoint(e.getPoint());
+				int col = table.columnAtPoint(e.getPoint());
 
-		        if (col == 0 && fila != -1) {
-		        	int modeloFila = table.convertRowIndexToModel(fila);
-		            Game game = (Game) table.getModel().getValueAt(modeloFila, 7);
-		            
-		            frame.dispose();
-		            viewGame(game);
-		        }
+				if (col == 0 && fila != -1) {
+					int modeloFila = table.convertRowIndexToModel(fila);
+					Game game = (Game) table.getModel().getValueAt(modeloFila, 7);
+
+					frame.dispose();
+					viewGame(game);
+				}
 			}
 		});
 
-		
+
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
 		//toda la tabla centrada
@@ -332,8 +348,8 @@ public class GamesView {
 		scrollPane.getVerticalScrollBar().setUI(new CustomScrollBar());
 		tablePanel.add(scrollPane);
 
-		//buscador = new TableRowSorter<>(model1);
-		//table.setRowSorter(buscador);
+		buscador = new TableRowSorter<>(model1);
+		table.setRowSorter(buscador);
 	}
 
 	public void newGame() {
@@ -682,40 +698,6 @@ public class GamesView {
 			
 		});
 
-	}
-
-	public void filterPanel(JPanel centro) {
-		filtro = new RoundedPanel(30, new Color(255, 255, 255),3);
-		filtro.setBounds(700, 115, 265, 200);
-		filtro.setLayout(null);
-		filtro.setVisible(false);
-		
-		RoundedButton aplicar = new RoundedButton("Aplicar");
-		aplicar.setBounds(150, 150, 85, 30);
-		aplicar.setRadius(20);
-		aplicar.setBackground(blue);
-		filtro.add(aplicar);
-		
-		RoundedButton cerrar = new RoundedButton("Cerrar");
-		cerrar.setBounds(45, 150, 85, 30);
-		cerrar.setRadius(20);
-		cerrar.setBackground(field);
-		cerrar.setForeground(Color.black);
-		cerrar.setBorderColor(border);
-		cerrar.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				filtro.setVisible(false);
-			}
-			
-		});
-		filtro.add(cerrar);
-		
-		centro.add(filtro);
-		centro.setComponentZOrder(filtro, 0);
-			
 	}
 
 	public void viewGame(Game game) {
@@ -1197,6 +1179,189 @@ public class GamesView {
 				
 			}
 		});
+	}
+
+	public void filterPanel(JPanel centro) {
+		filtro = new RoundedPanel(30, new Color(255, 255, 255),3);
+		filtro.setBounds(625, 115, 340, 300);
+		filtro.setLayout(null);
+		filtro.setVisible(false);
+		
+		JLabel platform = new JLabel("Clasificación");
+		platform.setBounds(40, 30, 100, 15);
+		platform.setFont(txt);
+		filtro.add(platform);
+		
+		xbox = new CustomJRadioButton();
+		xbox.setBounds(35, 55, 70, 30);
+		xbox.setFont(fieldtxt);
+		xbox.setText("Xbox");
+		filtro.add(xbox);
+		
+		Switch = new CustomJRadioButton();
+		Switch.setBounds(140, 55, 70, 30);
+		Switch.setFont(fieldtxt);
+		Switch.setText("Switch");
+		filtro.add(Switch);
+		
+		ps4 = new CustomJRadioButton();
+		ps4.setBounds(240, 55, 70, 30);
+		ps4.setFont(fieldtxt);
+		ps4.setText("PS4");
+		filtro.add(ps4);
+		
+		allPlatforms = new CustomJRadioButton();
+		allPlatforms.setBounds(240, 100, 100, 30);
+		allPlatforms.setFont(fieldtxt);
+		allPlatforms.setText("Todos");
+		filtro.add(allPlatforms);
+		
+		ButtonGroup grupoPlatform = new ButtonGroup();
+		grupoPlatform.add(xbox);
+		grupoPlatform.add(Switch);
+		grupoPlatform.add(ps4);
+		grupoPlatform.add(allPlatforms);
+		
+		JLabel gen = new JLabel("Género");
+		gen.setBounds(40, 125, 100, 15);
+		gen.setFont(txt);
+		filtro.add(gen);
+		
+		sports = new CustomJRadioButton();
+		sports.setBounds(35, 150, 100, 30);
+		sports.setFont(fieldtxt);
+		sports.setText("Deportes");
+		filtro.add(sports);
+		
+		adventure = new CustomJRadioButton();
+		adventure.setBounds(140, 150, 100, 30);
+		adventure.setFont(fieldtxt);
+		adventure.setText("Aventura");
+		filtro.add(adventure);
+		
+		racing = new CustomJRadioButton();
+		racing.setBounds(240, 150, 100, 30);
+		racing.setFont(fieldtxt);
+		racing.setText("Carreras");
+		filtro.add(racing);
+		
+		shooter = new CustomJRadioButton();
+		shooter.setBounds(35, 195, 100, 30);
+		shooter.setFont(fieldtxt);
+		shooter.setText("Disparos");
+		filtro.add(shooter);
+		
+		action = new CustomJRadioButton();
+		action.setBounds(140, 195, 100, 30);
+		action.setFont(fieldtxt);
+		action.setText("Acción");
+		filtro.add(action);
+		
+		allGen = new CustomJRadioButton();
+		allGen.setBounds(240, 195, 100, 30);
+		allGen.setFont(fieldtxt);
+		allGen.setText("Todos");
+		filtro.add(allGen);
+		
+		ButtonGroup grupoGenero = new ButtonGroup();
+		grupoGenero.add(sports);
+		grupoGenero.add(adventure);
+		grupoGenero.add(racing);
+		grupoGenero.add(shooter);
+		grupoGenero.add(action);
+		grupoGenero.add(allGen);
+		
+		
+		RoundedButton aplicar = new RoundedButton("Aplicar");
+		aplicar.setBounds(200, 240, 85, 30);
+		aplicar.setRadius(20);
+		aplicar.setBackground(blue);
+		filtro.add(aplicar);
+		aplicar.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		    	 filtrar();
+		    	 filtro.setVisible(false);		    }
+		});
+		
+		RoundedButton cerrar = new RoundedButton("Cerrar");
+		cerrar.setBounds(60, 240, 85, 30);
+		cerrar.setRadius(20);
+		cerrar.setBackground(field);
+		cerrar.setForeground(Color.black);
+		cerrar.setBorderColor(border);
+		cerrar.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				filtro.setVisible(false);
+			}
+			
+		});
+		filtro.add(cerrar);
+		
+		centro.add(filtro);
+		centro.setComponentZOrder(filtro, 0);
+			
+	}
+
+	public void filtrar() {
+		String textoBarra = searchBar.getText();
+		RowFilter<DefaultTableModel, Object> filtroTexto;
+		if(textoBarra.isEmpty()) {
+			filtroTexto = RowFilter.regexFilter(".*", 0);
+		} else {
+			filtroTexto = RowFilter.regexFilter("(?i)" + Pattern.quote(textoBarra), 0);
+		}
+		
+		String PlatfoSelec=null;
+		RowFilter<DefaultTableModel, Object> filtroPlatform;
+	    if (xbox.isSelected())        
+	    	PlatfoSelec = "Xbox";
+	    else if (Switch.isSelected())   
+	    	PlatfoSelec = "Switch";
+	    else if (ps4.isSelected()) 
+	    	PlatfoSelec = "PS4";
+	    else if (allPlatforms.isSelected())                            
+	    	PlatfoSelec = "Todos"; 
+	    
+	    if (PlatfoSelec == null || PlatfoSelec.equals("Todos")  ) {
+	    	filtroPlatform = RowFilter.regexFilter(".*", 2);
+	    }
+	    else {
+	    	filtroPlatform = RowFilter.regexFilter("^" + Pattern.quote(PlatfoSelec) + "$", 2);
+	    }
+		
+		
+	    String generoSelec =null;
+	    RowFilter<DefaultTableModel, Object> filtroGenero;
+	    if (sports.isSelected())         
+	    	generoSelec = "Deportes";
+	    else if (adventure.isSelected()) 
+	    	generoSelec = "Aventura";
+	    else if (racing.isSelected())    
+	    	generoSelec = "Carreras";
+	    else if (shooter.isSelected())    
+	    	generoSelec = "Disparos";
+	    else if (action.isSelected())    
+	    	generoSelec = "Acción";
+	    else if (allGen.isSelected())                             
+	    	generoSelec = "Todos";
+	    
+	    if (generoSelec == null || generoSelec.equals("Todos")) {
+	    	filtroGenero = RowFilter.regexFilter(".*", 4);
+	    } else {
+	    	filtroGenero = RowFilter.regexFilter("^" + Pattern.quote(generoSelec) + "$", 4);
+	    }
+	    
+	    List<RowFilter<DefaultTableModel, Object>> listaFiltros = new ArrayList<>();
+	    listaFiltros.add(filtroTexto);
+	    listaFiltros.add(filtroPlatform);
+	    listaFiltros.add(filtroGenero);
+	    RowFilter<DefaultTableModel, Object> filtroCombinado = RowFilter.andFilter(listaFiltros);
+		buscador.setRowFilter(filtroCombinado);
+		
 	}
 	
 	public void generarPDF(Game game) {
