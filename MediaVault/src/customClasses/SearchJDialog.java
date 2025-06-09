@@ -2,6 +2,7 @@ package customClasses;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Frame;
@@ -22,7 +23,10 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowFilter;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 import javax.swing.table.TableRowSorter;
 
 import controllers.ClientsController;
@@ -55,33 +59,34 @@ public class SearchJDialog extends JDialog {
     public SearchJDialog(Frame owner) {
         super(owner, "Búsqueda de cliente", true);
         setUndecorated(true);
-        setSize(500,480);
+        setSize(500,430);
         setLocationRelativeTo(owner);
         
-        RoundedPanel prin = new RoundedPanel(20);
+        RoundedPanel prin = new RoundedPanel(20, Color.white, 2);
         prin.setLayout(null);
-        prin.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         setContentPane(prin);
         
-        JPanel header = new JPanel();
-        header.setLayout(null);
-        header.setOpaque(false);
         JLabel title = new JLabel("Búsqueda de Cliente");
-        title.setBounds(100, 30, 100, 50);
+        title.setBounds(170, 30, 200, 50);
         title.setFont(titles);
-        title.setForeground(Color.black);
-        header.add(title);
-        prin.add(header);
+        prin.add(title);
         
-        barraBus.setBounds(30, 100, 200, 30);
-        barraBus.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+        JLabel label = new JLabel("Ingrese nombre o ID del cliente:");
+        label.setBounds(55, 85, 280, 20);
+        label.setFont(txt);
+        prin.add(label);
+        
+        barraBus.setBounds(55, 110, 280, 30);
         prin.add(barraBus);
         
         RoundedButton buscar = new RoundedButton("Buscar");
-        buscar.setBounds(245, 100, 80, 30);
+        buscar.setBounds(365, 110, 80, 30);
+        buscar.setBackground(blue);
+        buscar.setForeground(Color.white);
+        buscar.setRadius(20);
         prin.add(buscar);
         
-        btnSelect.setBounds(300, 400, 100, 30);
+        btnSelect.setBounds(280, 370, 110, 30);
         btnSelect.setFont(btn);
         btnSelect.setRadius(15);
         btnSelect.setEnabled(false);
@@ -89,9 +94,10 @@ public class SearchJDialog extends JDialog {
         btnSelect.setForeground(Color.white);
         prin.add(btnSelect);
         
-        btnCancel.setBounds(180, 400, 100, 30);
+        btnCancel.setBounds(140, 370, 100, 30);
         btnCancel.setFont(btn);
         btnCancel.setRadius(15);
+        btnCancel.setBorderColor(border);
         btnCancel.setBackground(Color.white);
         btnCancel.setForeground(Color.black);
         prin.add(btnCancel);
@@ -99,19 +105,43 @@ public class SearchJDialog extends JDialog {
         
         String[] cols = {"ID", "Nombre", "Correo"};
         model = new DefaultTableModel(cols, 0) {
-            @Override public boolean isCellEditable(int r, int c) { return false; }
+            @Override public boolean isCellEditable(int r, int c) { 
+            	return false; 
+            	}
         };
+        
+        
+        
         table = new JTable(model);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         sorter = new TableRowSorter<>(model);
+        table.setFont(fieldtxt);
         table.setRowSorter(sorter);
+        table.setShowVerticalLines(false);
+        table.getTableHeader().setReorderingAllowed(false);
+        table.getColumnModel().getColumn(2).setPreferredWidth(160);
+        table.setRowHeight(30);
+        
+        JTableHeader header = table.getTableHeader();
+        header.setBackground(Color.WHITE); 
+        header.setForeground(Color.BLACK);
+        header.setPreferredSize(new Dimension(header.getWidth(), 30));
+        header.setFont(fieldtxt); 
+        
         
         CustomScrollPane scroll = new CustomScrollPane();
-        scroll.setBorder(null);
+        scroll.setBorder(BorderFactory.createEmptyBorder());
+        //scroll.getVerticalScrollBar().setUI(new CustomScrollBar());
         scroll.setViewportView(table);
         
-        RoundedPanel tableWrapper = new RoundedPanel(15);
-        tableWrapper.setBounds(50, 160, 400, 200);
+        
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+		table.setDefaultRenderer(Object.class, centerRenderer);
+        
+        
+        RoundedPanel tableWrapper = new RoundedPanel(15, Color.white, 2);
+        tableWrapper.setBounds(50, 160, 400, 185);
         tableWrapper.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
         tableWrapper.setLayout(new BorderLayout());
         tableWrapper.add(scroll, BorderLayout.CENTER);

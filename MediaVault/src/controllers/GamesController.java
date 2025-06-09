@@ -1,5 +1,7 @@
 package controllers;
 
+import java.util.ArrayList;
+
 import models.Game;
 import models.GamesModel;
 import models.MoviesModel;
@@ -36,5 +38,9 @@ public class GamesController {
 		
 		return model.delete(product_id);
 		
+	}
+	
+	public ArrayList<Game> get(){
+		return model.get();
 	}
 }

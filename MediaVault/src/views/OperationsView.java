@@ -30,7 +30,9 @@ import customClasses.CoverTitleCellRendererClient;
 import customClasses.CustomScrollBar;
 import customClasses.CustomScrollPane;
 import customClasses.Fuentes;
+import customClasses.GameJDialog;
 import customClasses.ImageUtils;
+import customClasses.MovieJDialog;
 import customClasses.RoundedButton;
 import customClasses.RoundedJTextField;
 import customClasses.RoundedPanel;
@@ -39,7 +41,10 @@ import customClasses.SideBar;
 import customClasses.TableActionCellEditor;
 import customClasses.TableActionCellRender;
 import customClasses.TableActionEvent;
+import customClasses.Validaciones;
 import models.Client;
+import models.Game;
+import models.Movie;
 import models.Operation;
 
 public class OperationsView {
@@ -51,7 +56,8 @@ public class OperationsView {
 	Color border = new Color(186, 186, 186);
 	Color lightGray = new Color(117, 117, 117);
 	Color field = new Color(250, 250, 250);
-
+	Color select = new Color(221, 236, 252);
+	
 	Fuentes tipoFuentes = new Fuentes();
 	Font titles = tipoFuentes.fuente("/fonts/GolosText-SemiBold.ttf", 17f);
 	Font btn = tipoFuentes.fuente("/fonts/GolosText-Regular.ttf", 14f);
@@ -65,10 +71,15 @@ public class OperationsView {
 	ImageIcon iconoFrame = new ImageIcon(LoginView.class.getResource("/images/iconoPrincipal.PNG"));
 	ImageIcon checkW = new ImageIcon(OperationsView.class.getResource("/images/checkW.png"));
 	
+	private RoundedButton selectedOperation = null;
+	private RoundedButton selectedProduct = null;
+	
 	TableRowSorter<DefaultTableModel> buscador;
-	RoundedJTextField searchBar,txtClient;
+	RoundedJTextField searchBar, searchBar2, txtClient;
 	
 	Client currentClient;
+	Movie currentMovie;
+	Game currentGame;
 
 	public OperationsView() {
 
@@ -440,6 +451,21 @@ public class OperationsView {
 		compra.setFont(txt);
 		compra.setRadius(20);
 		dataPanel.add(compra);
+
+		ActionListener operationListener = e -> { 
+			RoundedButton clicked = (RoundedButton) e.getSource();
+
+			if (selectedOperation != null) {
+				selectedOperation.setBackground(Color.white);
+				selectedOperation.setForeground(Color.black);
+			}
+
+			clicked.setBackground(select);
+			selectedOperation = clicked;
+		};
+
+		renta.addActionListener(operationListener);
+		compra.addActionListener(operationListener);
 		
 		JLabel productLabel = new JLabel("Tipo de producto");
 		productLabel.setBounds(50, 150, 150, 15);
@@ -463,22 +489,42 @@ public class OperationsView {
 		movie.setFont(txt);
 		movie.setRadius(20);
 		dataPanel.add(movie);
+
+		ActionListener productListener = e -> { 
+			RoundedButton clicked = (RoundedButton) e.getSource();
+
+			if (selectedProduct != null) {
+				selectedProduct.setBackground(Color.white);
+				selectedProduct.setForeground(Color.black);
+			}
+
+			clicked.setBackground(select);
+			selectedProduct = clicked;
+		};
 		
+		game.addActionListener(productListener);
+		movie.addActionListener(productListener);
+
 		JLabel titleLabel = new JLabel("Seleccionar título");
 		titleLabel.setBounds(50, 215, 150, 15);
 		titleLabel.setFont(txt);
 		dataPanel.add(titleLabel);
-		
+
 		JLabel lupaIcon2 = new JLabel("");
 		lupaIcon2.setIcon(new ImageIcon(((ImageIcon) lupa).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
 		lupaIcon2.setHorizontalAlignment(SwingConstants.CENTER);
 		lupaIcon2.setBounds(65, 235, 30, 30);
 		dataPanel.add(lupaIcon2);
-
-		RoundedJTextField searchBar2 = new RoundedJTextField(20);
+		
+		JLabel lblFoto2 = new JLabel();
+		lblFoto2.setBounds(120, 229, 40, 40);
+		dataPanel.add(lblFoto2);
+		
+		searchBar2 = new RoundedJTextField(20);
 		searchBar2.setBounds(115, 235, 520, 30);
 		searchBar2.setBackground(field);
 		searchBar2.setFont(txt);
+		searchBar2.setFocusable(false);
 		dataPanel.add(searchBar2);
 
 		RoundedButton buscar2 = new RoundedButton("Buscar");
@@ -487,6 +533,31 @@ public class OperationsView {
 		buscar2.setFont(btn);
 		buscar2.setRadius(20);
 		dataPanel.add(buscar2);
+		buscar2.addActionListener(e ->{
+
+			if (selectedProduct == movie) {
+
+				MovieJDialog mdlg = new MovieJDialog(frame);
+				Movie sel = mdlg.showDialog();
+				if (sel != null) {
+					currentMovie = sel;
+					ImageIcon foto = ImageUtils.getCircularIcon(sel.getCover(), 30);
+					lblFoto2.setIcon(foto);
+					searchBar2.setText("         #" + sel.getProduct_id() + "   "+sel.getTitle() +"   "+ sel.getStudio() );
+				}
+			}else if (selectedProduct == game) {
+				
+				GameJDialog gdlg = new GameJDialog(frame);
+				Game sel2 = gdlg.showDialog();
+				if (sel2 != null) {
+					currentGame = sel2;
+					ImageIcon foto = ImageUtils.getCircularIcon(sel2.getCover(), 30);
+					lblFoto2.setIcon(foto);
+					searchBar2.setText("         #" + sel2.getProduct_id() + "   "+sel2.getTitle() +"   "+ sel2.getPlatform() );
+				}
+			}
+
+		});
 		
 		JLabel saleLabel = new JLabel("Fecha de compra");
 		saleLabel.setBounds(50, 275, 150, 15);
@@ -495,6 +566,8 @@ public class OperationsView {
 		
 		RoundedJTextField saleDate = new RoundedJTextField(20);
 		saleDate.setBounds(45, 295, 310, 27);
+		saleDate.addKeyListener(Validaciones.fechas());
+		saleDate.addKeyListener(Validaciones.limite(10));
 		saleDate.setFont(fieldtxt);
 		dataPanel.add(saleDate);
 		

@@ -1,5 +1,7 @@
 package controllers;
 
+import java.util.ArrayList;
+
 import models.Movie;
 import models.MoviesModel;
 import views.MoviesView;
@@ -35,4 +37,10 @@ public class MoviesController {
 		return model.delete(product_id);
 		
 	}
+	
+	public ArrayList<Movie> get(){
+		return model.get();
+		
+	}
+	
 }
