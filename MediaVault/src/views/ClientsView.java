@@ -1166,18 +1166,13 @@ public class ClientsView {
 	                    .add(new Text("\nApellidos: "+client.getLast_name()))
 	                    .add(new Text("\nFecha de nacimiento: "+client.getBirth_date()))
 	                    .add(new Text("\nNivel de fidelidad:"+client.getFidelity()))
-	                    .add(new Text("\n\nContacto"));
-	            
-	            Paragraph contacto = new Paragraph()
+	                    .add(new Text("\n\nContacto"))
 	                    .add(new Text("\nTeléfono: "+client.getPhone()))
 	                    .add(new Text("\nCorreo electrónico: "+client.getEmail()));
-	            
-	            
-	            Paragraph sub1 = new Paragraph();
+
 	            Cell celdaDatos = new Cell()
-	            		
-	            		.add(datos.setTextAlignment(TextAlignment.LEFT))
-	            		
+	            		.add(datos)
+	            		.setTextAlignment(TextAlignment.LEFT)
 	                    .setVerticalAlignment(VerticalAlignment.MIDDLE)
 	                    .setFontSize(13)
 	                    .setBorder(null);
