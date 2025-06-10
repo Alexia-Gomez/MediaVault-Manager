@@ -45,7 +45,14 @@ import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.element.Text;
+import com.itextpdf.layout.properties.HorizontalAlignment;
+import com.itextpdf.layout.properties.TextAlignment;
+import com.itextpdf.layout.properties.UnitValue;
+import com.itextpdf.layout.properties.VerticalAlignment;
 
 import controllers.MoviesController;
 import customClasses.CoverTitleCellRenderer;
@@ -1389,29 +1396,119 @@ public class MoviesView {
 	            PdfWriter writer = new PdfWriter(filePath);
 	            PdfDocument pdfDoc = new PdfDocument(writer);
 	            Document document = new Document(pdfDoc);
+	            
+	            Paragraph espacio = new Paragraph()
+	            		.setMarginTop(40);
+	            document.add(espacio);
+	            
+	            Paragraph pt = new Paragraph("Ficha de película")
+	            		.setFontSize(20)
+	            		.setTextAlignment(TextAlignment.CENTER);
+	            document.add(pt);
 
+	            
+	            document.add(espacio);
+	            
 	            byte[] imagenBytes = movie.getCover();
 	            com.itextpdf.layout.element.Image poster = null;
 	            if (imagenBytes != null && imagenBytes.length > 0) {
 	                ImageData imgData = ImageDataFactory.create(imagenBytes);
 	                poster = new com.itextpdf.layout.element.Image(imgData);
 	            }
-
-	            document.add(new Paragraph("Ficha de Película").setFontSize(18));
-	            document.add(new Paragraph("ID: " + movie.product_id));
-	            document.add(new Paragraph("Título: " + movie.getTitle()));
-	            document.add(new Paragraph("Fecha de estreno: " + movie.release_date));
-	            document.add(new Paragraph("Precio renta: $" + movie.rent_price));
-	            document.add(new Paragraph("Stock renta: " + movie.rent_stock));
-	            document.add(new Paragraph("Precio venta: $" + movie.sale_price));
-	            document.add(new Paragraph("Stock venta: " + movie.sale_stock));
-	            document.add(new Paragraph("Estudio: " + movie.studio));
-	            document.add(new Paragraph("Clasificación: " + movie.classification));
-	            document.add(new Paragraph("Género: " + movie.genre));
-	            document.add(new Paragraph("Portada"));
+	           
+	            //Tabla
+	            Table tabla = new Table(UnitValue.createPercentArray(new float[]{10, 30, 10, 50}))
+	                    .setWidth(UnitValue.createPercentValue(100));
+	            
+	            
+	            Cell celdaEspacio = new Cell()
+	            		.setBorder(null);
+	            tabla.addCell(celdaEspacio);
+	            
+	            // Celda  con portada
 	            if (poster != null) {
-	                document.add(poster);
+	                Cell celdaImagen = new Cell()
+	                		.setHorizontalAlignment(HorizontalAlignment.CENTER)
+	                		.setTextAlignment(TextAlignment.LEFT)
+	                		.setBorder(null)
+	                		.add(poster);
+	                tabla.addCell(celdaImagen);
+	            } else {
+	                tabla.addCell(new Cell());
 	            }
+	            
+	            tabla.addCell(celdaEspacio);
+	            
+	            // Celda con datos
+	            Paragraph datos = new Paragraph()
+	                    .add(new Text("ID: "+movie.product_id + "\n"))
+	                    .add(new Text("\nTítulo: "+movie.getTitle()+ "\n"))
+	                    .add(new Text("\nEstudio: "+movie.getStudio()+ "\n"))
+	                    .add(new Text("\nGénero: "+movie.getGenre()+ "\n"))
+	                    .add(new Text("\nClasificación: "+movie.getClassification()+ "\n"))
+	                    .add(new Text("\nFecha de estreno: "+movie.getRelease_date()+ "\n"));
+
+	            Cell celdaDatos = new Cell().add(datos)
+	                    .setTextAlignment(TextAlignment.LEFT)
+	                    .setVerticalAlignment(VerticalAlignment.MIDDLE)
+	                    .setFontSize(13)
+	                    .setBorder(null);
+
+	            tabla.addCell(celdaDatos);
+	            
+	            document.add(tabla);
+	            
+	            document.add(espacio);
+	            
+	            Table tabla2 = new Table(UnitValue.createPercentArray(new float[]{10,40, 40, 10}))
+	                    .setWidth(UnitValue.createPercentValue(100));
+	            
+	            tabla2.addCell(celdaEspacio);
+	            
+	            tabla2.addCell(new Cell()
+	            		.add(new Paragraph("Venta")
+	            			.setTextAlignment(TextAlignment.CENTER)
+	            			.setFontSize(14))
+	            		.setBorder(null));
+	            
+	            tabla2.addCell(new Cell()
+	            		.add(new Paragraph("Renta")
+	            			.setTextAlignment(TextAlignment.CENTER)
+	            			.setFontSize(14))
+	            		.setBorder(null));
+	            
+	            tabla2.addCell(celdaEspacio);
+
+	            // Segunda fila
+	            
+	            tabla2.addCell(celdaEspacio);
+	            
+	            tabla2.addCell(new Cell()
+	            		.add(new Paragraph("Stock: "+movie.getSale_stock()))
+	            	.setBorder(null));
+	            
+	            tabla2.addCell(new Cell()
+	            		.add(new Paragraph("Stock: "+movie.getRent_stock()))
+	            	.setBorder(null));
+
+	            tabla2.addCell(celdaEspacio);
+
+	            // Tercera fila        
+
+	            tabla2.addCell(celdaEspacio);	            
+	            
+	            tabla2.addCell(new Cell()
+	            		.add(new Paragraph("Precio: $"+movie.getSale_price()))
+	            	.setBorder(null));
+	            tabla2.addCell(new Cell()
+	            		.add(new Paragraph("Precio: $"+movie.getRent_price()))
+	            	.setBorder(null));
+	            
+	            tabla2.addCell(celdaEspacio);
+	            
+	            document.add(tabla2);
+
+	            
 	            document.close();
 
 		        JOptionPane.showMessageDialog(null, "PDF generado correctamente.");
