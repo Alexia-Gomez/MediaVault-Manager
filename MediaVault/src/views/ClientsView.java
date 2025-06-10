@@ -553,6 +553,7 @@ public class ClientsView {
 		});
 		
 		//Tablas
+		/*
 		JPanel tableTitles = new JPanel();
 		tableTitles.setBounds(151, 321, 810, 50);
 		tableTitles.setLayout(new GridLayout(0, 5, 0, 0));
@@ -573,6 +574,7 @@ public class ClientsView {
 		purchaseHistory.setHorizontalAlignment(SwingConstants.CENTER);
 		purchaseHistory.setFont(txt);
 		tableTitles.add(purchaseHistory);
+		*/
 
 	}
 	
@@ -869,6 +871,27 @@ public class ClientsView {
 				}
 			}
 		});
+		
+		JPanel tableTitles = new JPanel();
+		tableTitles.setBounds(151, 321, 810, 50);
+		tableTitles.setLayout(new GridLayout(0, 5, 0, 0));
+		tableTitles.setBackground(Color.white);
+		centro.add(tableTitles);
+		
+		JLabel activeRents = new JLabel("Rentas activas");
+		activeRents.setHorizontalAlignment(SwingConstants.CENTER);
+		activeRents.setFont(txt);
+		tableTitles.add(activeRents);
+		
+		JLabel rentsHistory = new JLabel("Historial de rentas");
+		rentsHistory.setHorizontalAlignment(SwingConstants.CENTER);
+		rentsHistory.setFont(txt);
+		tableTitles.add(rentsHistory);
+		
+		JLabel purchaseHistory = new JLabel("Historial de compras");
+		purchaseHistory.setHorizontalAlignment(SwingConstants.CENTER);
+		purchaseHistory.setFont(txt);
+		tableTitles.add(purchaseHistory);
 		
 		
 	}
