@@ -10,22 +10,39 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
+
+import com.itextpdf.io.image.ImageData;
+import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.element.Text;
+import com.itextpdf.layout.properties.HorizontalAlignment;
+import com.itextpdf.layout.properties.TextAlignment;
+import com.itextpdf.layout.properties.UnitValue;
+import com.itextpdf.layout.properties.VerticalAlignment;
 
 import controllers.ClientsController;
 import controllers.MoviesController;
@@ -85,7 +102,7 @@ public class ClientsView {
 	CustomJRadioButton compra,renta;
     CustomJRadioButton videojuego,pelicula;
     
-    RoundedButton foto,clientId,clientFidelity,guardar,cancelar;
+    RoundedButton foto,clientId,clientFidelity,guardar,cancelar, infoPDF;
     RoundedJTextField namefield,clientBirth,clientEmail,clientSurname,clientPhone;
     boolean editable=false;
 
@@ -611,9 +628,9 @@ public class ClientsView {
 		frame.getContentPane().add(centro);
 		centro.setLayout(null);
 		
-		RoundedButton titleButton = new RoundedButton("Detalles de cliente");
+		RoundedButton titleButton = new RoundedButton("Información del cliente");
 		titleButton.setIcon(new ImageIcon(((ImageIcon) arrow).getImage().getScaledInstance(15, 20, Image.SCALE_SMOOTH)));
-		titleButton.setBounds(151, 11, 200, 43);
+		titleButton.setBounds(151, 11, 240, 43);
 		titleButton.setBackground(Color.white);
 		titleButton.setForeground(Color.black);
 		titleButton.setFont(titles);
@@ -748,6 +765,24 @@ public class ClientsView {
 		clientFidelity.setRadius(20);
 		dataPanel.add(clientFidelity);
 		
+		infoPDF = new RoundedButton("Decargar información");
+		infoPDF.setIcon(new ImageIcon(((ImageIcon) descarga).getImage().getScaledInstance(16, 19, Image.SCALE_SMOOTH)));
+		infoPDF.setHorizontalTextPosition(SwingConstants.RIGHT);
+		infoPDF.setIconTextGap(10);
+		infoPDF.setBounds(520, 200, 180, 30);
+		infoPDF.setBackground(blue);
+		infoPDF.setFont(txt);
+		infoPDF.setRadius(20);
+		dataPanel.add(infoPDF);
+		infoPDF.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				generarPDF(client);
+				
+			}
+			
+		});
+
+		
 		RoundedButton eliminar = new RoundedButton("Eliminar usuario");
 		eliminar.setIcon(new ImageIcon(((ImageIcon) delete).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
 		eliminar.setHorizontalTextPosition(SwingConstants.RIGHT);
@@ -844,6 +879,7 @@ public class ClientsView {
 							foto.setEnabled(false);
 							guardar.setVisible(false);
 							cancelar.setVisible(false);
+							infoPDF.setVisible(true);
 							editable=false;
 							dataPanel.repaint();
 							
@@ -959,13 +995,13 @@ public class ClientsView {
 		JPanel panelRentas = new JPanel();
 		panelRentas.setBounds(151, 400, 810, 150);
 		panelRentas.setLayout(new BorderLayout(0, 0));
-		panelRentas.setBackground(Color.blue);
+		panelRentas.setBackground(Color.white);
 		centro.add(panelRentas);
 		
 		JPanel panelCompras = new JPanel();
 		panelCompras.setBounds(151, 400, 810, 150);
 		panelCompras.setLayout(new BorderLayout(0, 0));
-		panelCompras.setBackground(Color.red);
+		panelCompras.setBackground(Color.white);
 		centro.add(panelCompras);
 		
 		tablePanelContainer.add(panelActivas, "RENTAS_ACTIVAS");
@@ -1056,8 +1092,132 @@ public class ClientsView {
 		foto.setEnabled(true);
 		guardar.setVisible(true);
 		cancelar.setVisible(true);
+		infoPDF.setVisible(false);
 		editable=true;
 		
+	}
+	
+	public void generarPDF(Client client) {
+		JFileChooser fileChooser = new JFileChooser();
+	    fileChooser.setDialogTitle("Guardar ficha de película como...");
+	    fileChooser.setFileFilter(new FileNameExtensionFilter("Archivos PDF (*.pdf)", "pdf"));
+
+	    int userSelection = fileChooser.showSaveDialog(null);
+
+	    if (userSelection == JFileChooser.APPROVE_OPTION) {
+	        File fileToSave = fileChooser.getSelectedFile();
+	        String filePath = fileToSave.getAbsolutePath();
+
+	        if (!filePath.toLowerCase().endsWith(".pdf")) {
+	            filePath += ".pdf";
+	        }
+
+	        try {
+	            PdfWriter writer = new PdfWriter(filePath);
+	            PdfDocument pdfDoc = new PdfDocument(writer);
+	            Document document = new Document(pdfDoc);
+	            
+	            Paragraph espacio = new Paragraph()
+	            		.setMarginTop(40);
+	            document.add(espacio);
+	            
+	            Paragraph pt = new Paragraph("Información de cliente")
+	            		.setFontSize(20)
+	            		.setTextAlignment(TextAlignment.CENTER);
+	            document.add(pt);
+
+	            
+	            document.add(espacio);
+	            
+	            byte[] imagenBytes = client.getPhoto();
+	            com.itextpdf.layout.element.Image poster = null;
+	            if (imagenBytes != null && imagenBytes.length > 0) {
+	                ImageData imgData = ImageDataFactory.create(imagenBytes);
+	                poster = new com.itextpdf.layout.element.Image(imgData);
+	            }
+	           
+	            //Tabla
+	            Table tabla = new Table(UnitValue.createPercentArray(new float[]{10, 30, 10, 50}))
+	                    .setWidth(UnitValue.createPercentValue(100));
+	            
+	            
+	            Cell celdaEspacio = new Cell()
+	            		.setBorder(null);
+	            tabla.addCell(celdaEspacio);
+	            
+	            // Celda  con portada
+	            if (poster != null) {
+	                Cell celdaImagen = new Cell()
+	                		.setHorizontalAlignment(HorizontalAlignment.CENTER)
+	                		.setTextAlignment(TextAlignment.LEFT)
+	                		.setBorder(null)
+	                		.add(poster);
+	                tabla.addCell(celdaImagen);
+	            } else {
+	                tabla.addCell(new Cell());
+	            }
+	            
+	            tabla.addCell(celdaEspacio);
+	            
+	            // Celda con datos
+	            Paragraph datos = new Paragraph()
+	                    .add(new Text("Datos personales"))
+	                    .add(new Text("\nNombre: "+client.getName()))
+	                    .add(new Text("\nApellidos: "+client.getLast_name()))
+	                    .add(new Text("\nFecha de nacimiento: "+client.getBirth_date()))
+	                    .add(new Text("\nNivel de fidelidad:"+client.getFidelity()))
+	                    .add(new Text("\n\nContacto"));
+	            
+	            Paragraph contacto = new Paragraph()
+	                    .add(new Text("\nTeléfono: "+client.getPhone()))
+	                    .add(new Text("\nCorreo electrónico: "+client.getEmail()));
+	            
+	            
+	            Paragraph sub1 = new Paragraph();
+	            Cell celdaDatos = new Cell()
+	            		
+	            		.add(datos.setTextAlignment(TextAlignment.LEFT))
+	            		
+	                    .setVerticalAlignment(VerticalAlignment.MIDDLE)
+	                    .setFontSize(13)
+	                    .setBorder(null);
+
+	            tabla.addCell(celdaDatos);
+	            
+	            document.add(tabla);
+	            
+	            document.add(espacio);
+	            
+	            Table tabla2 = new Table(UnitValue.createPercentArray(new float[]{10,40, 40, 10}))
+	                    .setWidth(UnitValue.createPercentValue(100));
+	            
+	            tabla2.addCell(celdaEspacio);
+	            
+	            tabla2.addCell(new Cell()
+	            		.add(new Paragraph("Venta")
+	            			.setTextAlignment(TextAlignment.CENTER)
+	            			.setFontSize(14))
+	            		.setBorder(null));
+	            
+	            tabla2.addCell(new Cell()
+	            		.add(new Paragraph("Renta")
+	            			.setTextAlignment(TextAlignment.CENTER)
+	            			.setFontSize(14))
+	            		.setBorder(null));
+	            
+	            tabla2.addCell(celdaEspacio);
+
+	            
+	            document.close();
+
+		        JOptionPane.showMessageDialog(null, "PDF generado correctamente.");
+
+
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	    
+	}
 	}
 
 }
