@@ -18,7 +18,6 @@ import controllers.GamesController;
 import controllers.HomeController;
 import controllers.MoviesController;
 import controllers.OperationsController;
-import controllers.RentSaleController;
 import views.HomeView;
 
 public class SideBar extends JButton {
@@ -107,7 +106,7 @@ public class SideBar extends JButton {
 		return btn_nuevaOp;
 	}
 	
-	public static SideBar rentaCompra(JFrame frame) {
+	/*public static SideBar rentaCompra(JFrame frame) {
 		SideBar btn_rentaCompra = new SideBar("Rentas\ny compras", rentIcon);
 		btn_rentaCompra.addActionListener(new ActionListener() {
 			@Override
@@ -120,7 +119,7 @@ public class SideBar extends JButton {
 		});
 		
 		return btn_rentaCompra;
-	}
+	}*/
 	
 	public static SideBar juegos(JFrame frame) {
 		SideBar btn_juegos = new SideBar("Videojuegos", gamesIcon);

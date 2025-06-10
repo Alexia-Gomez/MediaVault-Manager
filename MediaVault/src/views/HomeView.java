@@ -19,7 +19,6 @@ import controllers.ClientsController;
 import controllers.GamesController;
 import controllers.LoginController;
 import controllers.MoviesController;
-import controllers.RentSaleController;
 import customClasses.Fuentes;
 import customClasses.RoundedButton;
 import customClasses.RoundedPanel;
@@ -46,7 +45,6 @@ public class HomeView {
 
 	GamesController gc = new GamesController();
 	MoviesController mc = new MoviesController();
-	RentSaleController rc = new RentSaleController();
 	ClientsController cc = new ClientsController();
 
 	public HomeView() {
@@ -76,7 +74,7 @@ public class HomeView {
 		sidepanel.add(SideBar.inicio(frame));
 		sidepanel.add(SideBar.clientes(frame));
 		sidepanel.add(SideBar.nuevaOperacion(frame));
-		sidepanel.add(SideBar.rentaCompra(frame));
+		//sidepanel.add(SideBar.rentaCompra(frame));
 		sidepanel.add(SideBar.juegos(frame));
 		sidepanel.add(SideBar.peliculas(frame));
 
@@ -154,16 +152,6 @@ public class HomeView {
 		w1btn.setBackground(blue);
 		w1btn.setFont(btntxt);
 		w1btn.setRadius(20);
-		w1btn.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				frame.dispose();
-				rc.rentSale();
-			}
-			
-		});
 		widget1.add(w1btn);
 		
 		
@@ -201,16 +189,6 @@ public class HomeView {
 		w2btn.setBackground(blue);
 		w2btn.setFont(btntxt);
 		w2btn.setRadius(20);
-		w2btn.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				frame.dispose();
-				rc.rentSale();
-			}
-			
-		});
 		widget2.add(w2btn);
 		
 		JLabel w2num = new JLabel("249");

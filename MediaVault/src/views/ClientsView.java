@@ -113,7 +113,7 @@ public class ClientsView {
 		sidepanel.add(SideBar.inicio(frame));
 		sidepanel.add(SideBar.clientes(frame));
 		sidepanel.add(SideBar.nuevaOperacion(frame));
-		sidepanel.add(SideBar.rentaCompra(frame));
+		//sidepanel.add(SideBar.rentaCompra(frame));
 		sidepanel.add(SideBar.juegos(frame));
 		sidepanel.add(SideBar.peliculas(frame));
 
@@ -380,7 +380,7 @@ public class ClientsView {
 		sidepanel.add(SideBar.inicio(frame));
 		sidepanel.add(SideBar.clientes(frame));
 		sidepanel.add(SideBar.nuevaOperacion(frame));
-		sidepanel.add(SideBar.rentaCompra(frame));
+		//sidepanel.add(SideBar.rentaCompra(frame));
 		sidepanel.add(SideBar.juegos(frame));
 		sidepanel.add(SideBar.peliculas(frame));
 		
@@ -597,7 +597,7 @@ public class ClientsView {
 		sidepanel.add(SideBar.inicio(frame));
 		sidepanel.add(SideBar.clientes(frame));
 		sidepanel.add(SideBar.nuevaOperacion(frame));
-		sidepanel.add(SideBar.rentaCompra(frame));
+		//sidepanel.add(SideBar.rentaCompra(frame));
 		sidepanel.add(SideBar.juegos(frame));
 		sidepanel.add(SideBar.peliculas(frame));
 		
