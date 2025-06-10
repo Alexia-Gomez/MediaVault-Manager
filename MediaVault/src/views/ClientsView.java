@@ -1,7 +1,7 @@
 package views;
 
 import java.awt.BorderLayout;
-
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -751,7 +752,7 @@ public class ClientsView {
 		eliminar.setIcon(new ImageIcon(((ImageIcon) delete).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
 		eliminar.setHorizontalTextPosition(SwingConstants.RIGHT);
 		eliminar.setIconTextGap(10);
-		eliminar.setBounds(150, 570, 160, 30);
+		eliminar.setBounds(150, 565, 160, 30);
 		eliminar.setBackground(Color.red);
 		eliminar.setFont(txt);
 		eliminar.setRadius(20);
@@ -872,28 +873,110 @@ public class ClientsView {
 			}
 		});
 		
+		
+		JPanel pestañas = new JPanel();
+		pestañas.setBounds(151, 321, 810, 50);
+		pestañas.setLayout(new GridLayout(0, 5, 0, 0));
+		pestañas.setBackground(Color.white);
+		centro.add(pestañas);
+		
+		JButton activeRents = new JButton("Rentas activas");
+		activeRents.setHorizontalAlignment(SwingConstants.CENTER);
+		activeRents.setBorder(null);
+		activeRents.setBackground(Color.white);
+		activeRents.setFont(txt);
+		pestañas.add(activeRents);
+		
+		JButton rentsHistory = new JButton("Historial de rentas");
+		rentsHistory.setHorizontalAlignment(SwingConstants.CENTER);
+		rentsHistory.setBorder(null);
+		rentsHistory.setBackground(Color.white);
+		rentsHistory.setFont(txt);
+		pestañas.add(rentsHistory);
+		
+		JButton purchaseHistory = new JButton("Historial de compras");
+		purchaseHistory.setHorizontalAlignment(SwingConstants.CENTER);
+		purchaseHistory.setBorder(null);
+		purchaseHistory.setBackground(Color.white);
+		purchaseHistory.setFont(txt);
+		pestañas.add(purchaseHistory);
+		
+		
+		//Titulos tabla
 		JPanel tableTitles = new JPanel();
-		tableTitles.setBounds(151, 321, 810, 50);
-		tableTitles.setLayout(new GridLayout(0, 5, 0, 0));
-		tableTitles.setBackground(Color.white);
+		tableTitles.setBounds(151, 370, 810, 30);
+		tableTitles.setLayout(new GridLayout(0, 6, 0, 0));
 		centro.add(tableTitles);
 		
-		JLabel activeRents = new JLabel("Rentas activas");
-		activeRents.setHorizontalAlignment(SwingConstants.CENTER);
-		activeRents.setFont(txt);
-		tableTitles.add(activeRents);
+		JLabel title = new JLabel("Título");
+		title.setHorizontalAlignment(SwingConstants.CENTER);
+		title.setForeground(lightGray);
+		title.setFont(txt);
+		tableTitles.add(title);
 		
-		JLabel rentsHistory = new JLabel("Historial de rentas");
-		rentsHistory.setHorizontalAlignment(SwingConstants.CENTER);
-		rentsHistory.setFont(txt);
-		tableTitles.add(rentsHistory);
+		JLabel product = new JLabel("Producto");
+		product.setHorizontalAlignment(SwingConstants.CENTER);
+		product.setForeground(lightGray);
+		product.setFont(txt);
+		tableTitles.add(product);
 		
-		JLabel purchaseHistory = new JLabel("Historial de compras");
-		purchaseHistory.setHorizontalAlignment(SwingConstants.CENTER);
-		purchaseHistory.setFont(txt);
-		tableTitles.add(purchaseHistory);
+		JLabel rentdate = new JLabel("Fecha de renta");
+		rentdate.setHorizontalAlignment(SwingConstants.CENTER);
+		rentdate.setForeground(lightGray);
+		rentdate.setFont(txt);
+		tableTitles.add(rentdate);
 		
+		JLabel returnDate = new JLabel("Fecha de devolucion");
+		returnDate.setHorizontalAlignment(SwingConstants.CENTER);
+		returnDate.setForeground(lightGray);
+		returnDate.setFont(txt);
+		tableTitles.add(returnDate);
 		
+		JLabel discount = new JLabel("Descuento");
+		discount.setHorizontalAlignment(SwingConstants.CENTER);
+		discount.setForeground(lightGray);
+		discount.setFont(txt);
+		tableTitles.add(discount);
+		
+		JLabel status = new JLabel("Estado");
+		status.setHorizontalAlignment(SwingConstants.CENTER);
+		status.setForeground(lightGray);
+		status.setFont(txt);
+		tableTitles.add(status);
+		
+		//tablas
+		
+		JPanel tablePanelContainer = new JPanel(new CardLayout());
+        tablePanelContainer.setBounds(151, 400, 810, 150);
+        centro.add(tablePanelContainer);
+		
+		JPanel panelActivas = new JPanel();
+		panelActivas.setBounds(151, 400, 810, 150);
+		panelActivas.setLayout(new BorderLayout(0, 0));
+		panelActivas.setBackground(Color.white);
+		centro.add(panelActivas);
+		
+		JPanel panelRentas = new JPanel();
+		panelRentas.setBounds(151, 400, 810, 150);
+		panelRentas.setLayout(new BorderLayout(0, 0));
+		panelRentas.setBackground(Color.blue);
+		centro.add(panelRentas);
+		
+		JPanel panelCompras = new JPanel();
+		panelCompras.setBounds(151, 400, 810, 150);
+		panelCompras.setLayout(new BorderLayout(0, 0));
+		panelCompras.setBackground(Color.red);
+		centro.add(panelCompras);
+		
+		tablePanelContainer.add(panelActivas, "RENTAS_ACTIVAS");
+        tablePanelContainer.add(panelRentas, "HISTORIAL_RENTAS");
+        tablePanelContainer.add(panelCompras, "HISTORIAL_COMPRAS");
+		
+        CardLayout cl = (CardLayout) tablePanelContainer.getLayout();
+
+        activeRents.addActionListener(e -> cl.show(tablePanelContainer, "RENTAS_ACTIVAS"));
+        rentsHistory.addActionListener(e -> cl.show(tablePanelContainer, "HISTORIAL_RENTAS"));
+        purchaseHistory.addActionListener(e -> cl.show(tablePanelContainer, "HISTORIAL_COMPRAS"));
 	}
 
 	public void filterPanel(JPanel centro) {
