@@ -13,11 +13,14 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -25,8 +28,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.RowFilter;
 import javax.swing.SwingConstants;
+
 import javax.swing.border.MatteBorder;
+
+import javax.swing.SwingUtilities;
+
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -106,6 +114,7 @@ public class ClientsView {
 	RoundedJTextField searchBar;
 	CustomJRadioButton compra,renta;
     CustomJRadioButton videojuego,pelicula;
+    CustomJRadioButton tipoSale,tipoRent,productMovie,productGame,tiposAll,productsAll;
     
     RoundedButton foto,clientId,clientFidelity,guardar,cancelar, infoPDF;
     RoundedJTextField namefield,clientBirth,clientEmail,clientSurname,clientPhone;
@@ -193,7 +202,7 @@ public class ClientsView {
 		lupaIcon.setBounds(20, 20, 30, 30);
 		barra.add(lupaIcon);
 		
-		RoundedJTextField searchBar = new RoundedJTextField(20);
+		searchBar = new RoundedJTextField(20);
 		searchBar.setBounds(65, 20, 520, 30);
 		searchBar.setBackground(field);
 		searchBar.setFont(txt);
@@ -275,10 +284,6 @@ public class ClientsView {
 		tablePanel.setBackground(Color.white);
 		centro.add(tablePanel);
 		
-		//Obtener clientes de la BD
-		ClientsController controller = new ClientsController();
-		ArrayList<Client> clients = controller.get();
-		
 		String[] columnNames = {"", "", "", "", "",""};
 		DefaultTableModel model1 = new DefaultTableModel(columnNames, 0){
 		    @Override
@@ -287,48 +292,70 @@ public class ClientsView {
 		    }
 		};
 		
-		for (Client client : clients) {
-			
-			String celdaCliente = "<html>"
-                    + client.getName() + " " + client.getLast_name() + "<br>"
-                    + "<font color='gray'>ID: " + client.getClient_id() + "</font>"
-                    + "</html>";
-			
-			String celdaHistorial = "<html>"
-                    + "Rentas: " + client.getTotal_rentals() + "<br>"
-                    + "Compras: " + client.getTotal_purchases()
-                    + "</html>";
-			
-			String celdaRentaActual=null;
-	        if (renta != null) {
-	            /*celdaRentaActual = "<html>"
-	                             + /*renta.getMovieTitle() + "<br>"
-	                             + "<font color='red'>" + renta.getDueDate().toString() + "</font>"
-	                             + "</html>";*/
-	        } else {
-	            celdaRentaActual = "<html><i>Sin renta</i></html>";
-	        }
-	        
-	        String descuento = null;
-	        if(client.getFidelity().equalsIgnoreCase("aficionado")) {
-	        	descuento="15% Descuento";
-	        }
-	        else if(client.getFidelity().equalsIgnoreCase("frecuente")) {
-	        	descuento="20% Descuento";
-	        }
-	        else {
-	        	descuento = "Ninguno";
-	        }
-		    model1.addRow(new Object[] {
-		        celdaCliente,
-		        celdaHistorial,
-		        celdaRentaActual,
-		        descuento,
-		        "",
-		        client
-		    });
-		}
+		JDialog dlg = new JDialog(frame, "Cargando...", false);
+	    dlg.setUndecorated(true);
+	    JPanel p = new JPanel(new BorderLayout(5,5));
+	    p.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+	    p.add(new JLabel("Por favor, espere algunos segundos...", SwingConstants.CENTER), BorderLayout.CENTER);
+	    dlg.setContentPane(p);
+	    dlg.pack();
+	    dlg.setLocationRelativeTo(frame);
 		
+	    new Thread(() -> {
+	    	//Obtener clientes de la BD
+	    	ClientsController controller = new ClientsController();
+			OperationsController oc = new OperationsController();
+			ArrayList<Client> clients = controller.get();
+
+	        SwingUtilities.invokeLater(() ->{
+	        	for (Client client : clients) {
+	    			
+	    			String celdaCliente = "<html>"
+	                        + client.getName() + " " + client.getLast_name() + "<br>"
+	                        + "<font color='gray'>ID: " + client.getClient_id() + "</font>"
+	                        + "</html>";
+	    			
+	    			String celdaHistorial = "<html>"
+	                        + "Rentas: " + client.getTotal_rentals() + "<br>"
+	                        + "Compras: " + client.getTotal_purchases()
+	                        + "</html>";
+	    			
+	    			List<Operation> ops = oc.getOperationsByClientId(client.getClient_id());
+	    			String celdaRentaActual = ops.isEmpty()
+	    	                ? "<html><i>Sin renta</i></html>"
+	    	                : "<html>" + 
+	    	                    (ops.get(0).getMovie()!=null
+	    	                        ? ops.get(0).getMovie().getTitle()
+	    	                        : ops.get(0).getGame().getTitle()
+	    	                    ) +
+	    	                    "<br><font color='gray'>" + ops.get(0).getOperation_date() + "</font>"
+	    	                  + "</html>";
+	    	        
+	    	        String descuento = null;
+	    	        if(client.getFidelity().equalsIgnoreCase("aficionado")) {
+	    	        	descuento="15% Descuento";
+	    	        }
+	    	        else if(client.getFidelity().equalsIgnoreCase("frecuente")) {
+	    	        	descuento="20% Descuento";
+	    	        }
+	    	        else {
+	    	        	descuento = "Ninguno";
+	    	        }
+	    		    model1.addRow(new Object[] {
+	    		        celdaCliente,
+	    		        celdaHistorial,
+	    		        celdaRentaActual,
+	    		        descuento,
+	    		        "",
+	    		        client
+	    		    });
+	    		}
+	        	dlg.dispose();
+	        });
+	    },"clients-loader").start();
+	    dlg.setVisible(true);
+		
+	    
 		JTable table = new JTable(model1);
 		table.setRowHeight(80);
 		table.setShowVerticalLines(false);
@@ -1183,45 +1210,71 @@ public class ClientsView {
 		filtro.setLayout(null);
 		filtro.setVisible(false);
 		
-		JLabel tipo = new JLabel("Tipo");
+		JLabel tipo = new JLabel("Nivel de fidelidad");
 		tipo.setBounds(35, 25, 100, 15);
 		tipo.setFont(txt);
 		filtro.add(tipo);
 		
-		CustomJRadioButton tipoSale = new CustomJRadioButton();
-		tipoSale.setBounds(75, 45, 100, 30);
+		tipoSale = new CustomJRadioButton();
+		tipoSale.setBounds(75, 45, 70, 30);
 		tipoSale.setFont(txt);
-		tipoSale.setText("Compra");
+		tipoSale.setText("Aficionado");
 		filtro.add(tipoSale);
 		
-		CustomJRadioButton tipoRent = new CustomJRadioButton();
-		tipoRent.setBounds(175, 45, 100, 30);
+		tipoRent = new CustomJRadioButton();
+		tipoRent.setBounds(160, 45, 70, 30);
 		tipoRent.setFont(txt);
-		tipoRent.setText("Renta");
+		tipoRent.setText("Frecuente");
 		filtro.add(tipoRent);
+		
+		tiposAll = new CustomJRadioButton();
+		tiposAll.setBounds(240, 45, 100, 30);
+		tiposAll.setFont(txt);
+		tiposAll.setText("Todos");
+		filtro.add(tiposAll);
 		
 		JLabel producto = new JLabel("Producto");
 		producto.setBounds(35, 100, 100, 15);
 		producto.setFont(txt);
 		filtro.add(producto);
 		
-		CustomJRadioButton productGame = new CustomJRadioButton();
+		productGame = new CustomJRadioButton();
 		productGame.setBounds(75, 120, 100, 30);
 		productGame.setFont(txt);
 		productGame.setText("Videojuego");
 		filtro.add(productGame);
 		
-		CustomJRadioButton productMovie = new CustomJRadioButton();
+		productMovie = new CustomJRadioButton();
 		productMovie.setBounds(175, 120, 100, 30);
 		productMovie.setFont(txt);
 		productMovie.setText("Película");
 		filtro.add(productMovie);
+		
+		productsAll = new CustomJRadioButton();
+		productsAll.setBounds(295, 120, 100, 30);
+		productsAll.setFont(txt);
+		productsAll.setText("Todos");
+		filtro.add(productsAll);
+		
+		ButtonGroup operation = new ButtonGroup();
+		operation.add(tipoSale);
+		operation.add(tipoRent);
+		operation.add(tiposAll);
+		
+		ButtonGroup product = new ButtonGroup();
+		product.add(productGame);
+		product.add(productMovie);
+		product.add(productsAll);
 		
 		RoundedButton aplicar = new RoundedButton("Aplicar");
 		aplicar.setBounds(160, 175, 85, 30);
 		aplicar.setRadius(20);
 		aplicar.setBackground(blue);
 		filtro.add(aplicar);
+		aplicar.addActionListener(e ->{
+			filtrar();
+			filtro.setVisible(false);
+		});
 		
 		RoundedButton cerrar = new RoundedButton("Cerrar");
 		cerrar.setBounds(50, 175, 85, 30);
@@ -1243,6 +1296,58 @@ public class ClientsView {
 		centro.add(filtro);
 		centro.setComponentZOrder(filtro, 0);
 			
+	}
+	
+	public void filtrar() {
+		String textoBarra = searchBar.getText();
+		RowFilter<DefaultTableModel, Object> filtroTexto;
+		if(textoBarra.isEmpty()) {
+			filtroTexto = RowFilter.regexFilter(".*", 0);
+		} else {
+			filtroTexto = RowFilter.regexFilter("(?i)" + Pattern.quote(textoBarra), 0);
+		}
+
+		String typeSelec=null;
+		RowFilter<DefaultTableModel, Object> filtroFidelidad;
+		if (tipoRent.isSelected()) 
+			typeSelec = "20% Descuento";
+		else if (tipoSale.isSelected()) 
+			typeSelec = "15% Descuento";
+		else if (tiposAll.isSelected()) 
+			typeSelec = "Todos"; 
+
+		if (typeSelec == null || typeSelec.equals("Todos") ) {
+			filtroFidelidad = RowFilter.regexFilter(".*", 4);
+
+		}else {
+			filtroFidelidad = RowFilter.regexFilter("^" + Pattern.quote(typeSelec) + "$", 4);
+		}
+		
+		String productSelec=null;
+		RowFilter<DefaultTableModel, Object> filtroProducto;
+		if (productGame.isSelected()) {
+			productSelec = "Videojuego";
+		}
+		else if(productMovie.isSelected()) {
+			productSelec = "Pelicula";
+		}
+		else if(productsAll.isSelected()) {
+			productSelec = "Todos";
+		}
+		
+		if(productSelec == null || productSelec.equals("Todos")) {
+			filtroProducto = RowFilter.regexFilter(".*", 1);
+		}
+		else {
+			filtroProducto = RowFilter.regexFilter("^" + Pattern.quote(typeSelec) + "$", 1);
+		}
+
+		List<RowFilter<DefaultTableModel, Object>> listaFiltros = new ArrayList<>();
+		listaFiltros.add(filtroTexto);  
+		listaFiltros.add(filtroFidelidad);
+		listaFiltros.add(filtroProducto);
+		RowFilter<DefaultTableModel, Object> filtroCombinado = RowFilter.andFilter(listaFiltros); 
+		buscador.setRowFilter(filtroCombinado);
 	}
 	
 	public void edit() {

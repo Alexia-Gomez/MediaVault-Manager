@@ -224,7 +224,7 @@ public class GamesView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				//filtro.setVisible(true);
+				filtro.setVisible(true);
 			}
 
 		});
