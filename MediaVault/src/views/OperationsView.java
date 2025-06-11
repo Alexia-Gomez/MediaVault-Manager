@@ -12,14 +12,18 @@ import java.awt.event.MouseEvent;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.RowFilter;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -31,6 +35,7 @@ import controllers.OperationsController;
 import controllers.PromotionsController;
 import customClasses.CoverTitleCellRendererClient;
 import customClasses.CoverTitleCellRendererOperationClient;
+import customClasses.CustomJRadioButton;
 import customClasses.CustomScrollBar;
 import customClasses.CustomScrollPane;
 import customClasses.Fuentes;
@@ -97,6 +102,8 @@ public class OperationsView {
 	JLabel returnLabel,lblFoto2;
 	
 	String operationType;
+	
+	CustomJRadioButton rent, sale, allTypes;
 
 	public OperationsView() {
 
@@ -176,7 +183,7 @@ public class OperationsView {
 		lupaIcon.setBounds(20, 20, 30, 30);
 		barra.add(lupaIcon);
 
-		RoundedJTextField searchBar = new RoundedJTextField(20);
+		searchBar = new RoundedJTextField(20);
 		searchBar.setBounds(65, 20, 520, 30);
 		searchBar.setBackground(field);
 		searchBar.setFont(txt);
@@ -1174,18 +1181,53 @@ public class OperationsView {
 	
 	public void filterPanel(JPanel centro) {
 		filtro = new RoundedPanel(30, new Color(255, 255, 255),3);
-		filtro.setBounds(700, 115, 265, 200);
+		filtro.setBounds(625, 115, 340, 150);
 		filtro.setLayout(null);
 		filtro.setVisible(false);
+		JLabel tipo = new JLabel("Tipo"); 
+		tipo.setBounds(40, 30, 100, 15);
+		tipo.setFont(txt);
+		filtro.add(tipo);
+		 
+		rent = new CustomJRadioButton();
+		rent.setBounds(35, 55, 70, 30);
+		rent.setFont(fieldtxt);
+		rent.setText("Renta");
+		
+		filtro.add(rent);
+		sale = new CustomJRadioButton();
+		sale.setBounds(140, 55, 70, 30);
+		sale.setFont(fieldtxt);
+		sale.setText("Venta");
+		filtro.add(sale);
+	
+		allTypes = new CustomJRadioButton();
+		allTypes.setBounds(240, 55, 70, 30);
+		allTypes.setFont(fieldtxt);
+		allTypes.setText("Todos");
+		filtro.add(allTypes);
+		 
+		ButtonGroup grupoType = new ButtonGroup();
+		grupoType.add(rent);
+		grupoType.add(sale); 
+		grupoType.add(allTypes);
+
 		
 		RoundedButton aplicar = new RoundedButton("Aplicar");
-		aplicar.setBounds(150, 150, 85, 30);
+		aplicar.setBounds(200, 100, 85, 30);
 		aplicar.setRadius(20);
 		aplicar.setBackground(blue);
 		filtro.add(aplicar);
+		aplicar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				filtrar();
+				filtro.setVisible(false);
+			}
+			
+		});
 		
 		RoundedButton cerrar = new RoundedButton("Cerrar");
-		cerrar.setBounds(45, 150, 85, 30);
+		cerrar.setBounds(60, 100, 85, 30);
 		cerrar.setRadius(20);
 		cerrar.setBackground(field);
 		cerrar.setForeground(Color.black);
@@ -1205,5 +1247,49 @@ public class OperationsView {
 		centro.setComponentZOrder(filtro, 0);
 		
 	}
+	
+	public void filtrar() { 
+		String textoBarra = searchBar.getText();
+
+		RowFilter<DefaultTableModel, Object> filtroTexto;
+
+		if(textoBarra.isEmpty()) {
+
+			filtroTexto = RowFilter.regexFilter(".*", 0);
+
+		} else {
+
+			filtroTexto = RowFilter.regexFilter("(?i)" + Pattern.quote(textoBarra), 0);
+
+		}
+
+		String typeSelec=null;
+
+		RowFilter<DefaultTableModel, Object> filtroType;
+
+		if (rent.isSelected()) 
+			typeSelec = "Renta";
+		else if (sale.isSelected()) 
+			typeSelec = "Venta";
+		else if (allTypes.isSelected()) 
+			typeSelec = "Todos"; 
+
+		if (typeSelec == null || typeSelec.equals("Todos") ) {
+			filtroType = RowFilter.regexFilter(".*", 1);
+
+		}else {
+			filtroType = RowFilter.regexFilter("^" + Pattern.quote(typeSelec) + "$", 1);
+
+		}
+
+		List<RowFilter<DefaultTableModel, Object>> listaFiltros = new ArrayList<>();
+		listaFiltros.add(filtroTexto);  
+		listaFiltros.add(filtroType);
+		RowFilter<DefaultTableModel, Object> filtroCombinado = RowFilter.andFilter(listaFiltros); 
+		buscador.setRowFilter(filtroCombinado);
+
+	}
+
+	
 
 }
