@@ -295,7 +295,6 @@ public class ClientsView {
 		JDialog dlg = new JDialog(frame, "Cargando...", false);
 	    dlg.setUndecorated(true);
 	    JPanel p = new JPanel(new BorderLayout(5,5));
-	    p.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 	    p.add(new JLabel("Por favor, espere algunos segundos...", SwingConstants.CENTER), BorderLayout.CENTER);
 	    dlg.setContentPane(p);
 	    dlg.pack();
@@ -310,12 +309,12 @@ public class ClientsView {
 	        SwingUtilities.invokeLater(() ->{
 	        	for (Client client : clients) {
 	    			
-	    			String celdaCliente = "<html>"
+	    			String celdaCliente = "<html><div style='text-align:center;'>"
 	                        + client.getName() + " " + client.getLast_name() + "<br>"
 	                        + "<font color='gray'>ID: " + client.getClient_id() + "</font>"
 	                        + "</html>";
 	    			
-	    			String celdaHistorial = "<html>"
+	    			String celdaHistorial = "<html><div style='text-align:center;'>"
 	                        + "Rentas: " + client.getTotal_rentals() + "<br>"
 	                        + "Compras: " + client.getTotal_purchases()
 	                        + "</html>";
@@ -323,13 +322,14 @@ public class ClientsView {
 	    			List<Operation> ops = oc.getOperationsByClientId(client.getClient_id());
 	    			String celdaRentaActual = ops.isEmpty()
 	    	                ? "<html><i>Sin renta</i></html>"
-	    	                : "<html>" + 
+	    	                : "<html><div style='text-align:center;'>" + 
 	    	                    (ops.get(0).getMovie()!=null
 	    	                        ? ops.get(0).getMovie().getTitle()
 	    	                        : ops.get(0).getGame().getTitle()
-	    	                    ) +
+	    	                    ) + (ops.get(0).getMovie()!=null?"<!--MOVIE-->" : "<!--GAME-->")+
 	    	                    "<br><font color='gray'>" + ops.get(0).getOperation_date() + "</font>"
 	    	                  + "</html>";
+	    	                  
 	    	        
 	    	        String descuento = null;
 	    	        if(client.getFidelity().equalsIgnoreCase("aficionado")) {
@@ -1227,29 +1227,29 @@ public class ClientsView {
 	
 	public void filterPanel(JPanel centro) {
 		filtro = new RoundedPanel(30, new Color(255, 255, 255),3);
-		filtro.setBounds(680, 115, 285, 230);
+		filtro.setBounds(610, 115, 350, 230);
 		filtro.setLayout(null);
 		filtro.setVisible(false);
 		
 		JLabel tipo = new JLabel("Nivel de fidelidad");
-		tipo.setBounds(35, 25, 100, 15);
+		tipo.setBounds(35, 25, 130, 15);
 		tipo.setFont(txt);
 		filtro.add(tipo);
 		
 		tipoSale = new CustomJRadioButton();
-		tipoSale.setBounds(75, 45, 70, 30);
+		tipoSale.setBounds(35, 45, 100, 30);
 		tipoSale.setFont(txt);
 		tipoSale.setText("Aficionado");
 		filtro.add(tipoSale);
 		
 		tipoRent = new CustomJRadioButton();
-		tipoRent.setBounds(160, 45, 70, 30);
+		tipoRent.setBounds(145, 45, 100, 30);
 		tipoRent.setFont(txt);
 		tipoRent.setText("Frecuente");
 		filtro.add(tipoRent);
 		
 		tiposAll = new CustomJRadioButton();
-		tiposAll.setBounds(240, 45, 100, 30);
+		tiposAll.setBounds(255, 45, 100, 30);
 		tiposAll.setFont(txt);
 		tiposAll.setText("Todos");
 		filtro.add(tiposAll);
@@ -1260,19 +1260,19 @@ public class ClientsView {
 		filtro.add(producto);
 		
 		productGame = new CustomJRadioButton();
-		productGame.setBounds(75, 120, 100, 30);
+		productGame.setBounds(35, 120, 100, 30);
 		productGame.setFont(txt);
 		productGame.setText("Videojuego");
 		filtro.add(productGame);
 		
 		productMovie = new CustomJRadioButton();
-		productMovie.setBounds(175, 120, 100, 30);
+		productMovie.setBounds(145, 120, 100, 30);
 		productMovie.setFont(txt);
 		productMovie.setText("Película");
 		filtro.add(productMovie);
 		
 		productsAll = new CustomJRadioButton();
-		productsAll.setBounds(295, 120, 100, 30);
+		productsAll.setBounds(255, 120, 100, 30);
 		productsAll.setFont(txt);
 		productsAll.setText("Todos");
 		filtro.add(productsAll);
@@ -1338,30 +1338,22 @@ public class ClientsView {
 			typeSelec = "Todos"; 
 
 		if (typeSelec == null || typeSelec.equals("Todos") ) {
-			filtroFidelidad = RowFilter.regexFilter(".*", 4);
+			filtroFidelidad = RowFilter.regexFilter(".*", 3);
 
 		}else {
-			filtroFidelidad = RowFilter.regexFilter("^" + Pattern.quote(typeSelec) + "$", 4);
+			filtroFidelidad = RowFilter.regexFilter("^" + Pattern.quote(typeSelec) + "$", 3);
 		}
 		
-		String productSelec=null;
-		RowFilter<DefaultTableModel, Object> filtroProducto;
+		
+		RowFilter<DefaultTableModel, Object> filtroProducto=null;
 		if (productGame.isSelected()) {
-			productSelec = "Videojuego";
-		}
-		else if(productMovie.isSelected()) {
-			productSelec = "Pelicula";
-		}
-		else if(productsAll.isSelected()) {
-			productSelec = "Todos";
+		    filtroProducto = RowFilter.regexFilter("<!--GAME-->", 2);
+		} else if (productMovie.isSelected()) {
+		    filtroProducto = RowFilter.regexFilter("<!--MOVIE-->", 2);
+		} else if (productsAll.isSelected() || filtroProducto == null){
+		    filtroProducto = RowFilter.regexFilter(".*", 2);
 		}
 		
-		if(productSelec == null || productSelec.equals("Todos")) {
-			filtroProducto = RowFilter.regexFilter(".*", 1);
-		}
-		else {
-			filtroProducto = RowFilter.regexFilter("^" + Pattern.quote(typeSelec) + "$", 1);
-		}
 
 		List<RowFilter<DefaultTableModel, Object>> listaFiltros = new ArrayList<>();
 		listaFiltros.add(filtroTexto);  

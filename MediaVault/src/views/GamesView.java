@@ -567,7 +567,7 @@ public class GamesView {
 		dataPanel.add(genreLabel);
 
 		CustomJComboBox gameGenre = new CustomJComboBox();
-		gameGenre.setModel( new DefaultComboBoxModel( new String[] { "Selecciona", "Deportes", "Acciones", "Carreras", "Aventura", "Disparos", "Terror" }));
+		gameGenre.setModel( new DefaultComboBoxModel( new String[] { "Selecciona", "Deportes", "Accion", "Carreras", "Aventura", "Plataformas", "Terror" }));
 		gameGenre.setBounds(520, 170, 250, 27);
 		gameGenre.setFont(fieldtxt);
 		dataPanel.add(gameGenre);
