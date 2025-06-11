@@ -56,6 +56,24 @@ public class Movie {
 		this.rent_price = rent_price;
 		this.fk_promotion_id=fk_promotion_id;
 	}
+	
+	public Movie(int product_id, String title, String studio, String classification, String release_date, String genre, int rent_stock, int sale_stock, byte[] cover, double sale_price, double rent_price,int fk_promotion_id) {
+
+		this.product_id = product_id;
+		this.rent_stock = rent_stock ;
+		this.sale_stock = sale_stock;
+		this.title = title;
+		this.platform = platform;
+		this.genre = genre;
+		this.classification = classification;
+		this.product_type = "movie";
+		this.cover = cover;
+		this.studio = studio;
+		this.release_date = release_date;
+		this.sale_price = sale_price;
+		this.rent_price = rent_price;
+		this.fk_promotion_id=fk_promotion_id;
+	}
 	public Movie() {
 		
 	}
