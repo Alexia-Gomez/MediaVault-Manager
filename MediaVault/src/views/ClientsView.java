@@ -26,6 +26,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.border.MatteBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -108,6 +109,9 @@ public class ClientsView {
     
     RoundedButton foto,clientId,clientFidelity,guardar,cancelar, infoPDF;
     RoundedJTextField namefield,clientBirth,clientEmail,clientSurname,clientPhone;
+    
+    private JLabel title, product, date, discount, subtotal, total;
+    
     boolean editable=false;
 
 	public ClientsView() {
@@ -573,30 +577,6 @@ public class ClientsView {
 			clients();
 			
 		});
-		
-		//Tablas
-		/*
-		JPanel tableTitles = new JPanel();
-		tableTitles.setBounds(151, 321, 810, 50);
-		tableTitles.setLayout(new GridLayout(0, 5, 0, 0));
-		tableTitles.setBackground(Color.white);
-		centro.add(tableTitles);
-		
-		JLabel activeRents = new JLabel("Rentas activas");
-		activeRents.setHorizontalAlignment(SwingConstants.CENTER);
-		activeRents.setFont(txt);
-		tableTitles.add(activeRents);
-		
-		JLabel rentsHistory = new JLabel("Historial de rentas");
-		rentsHistory.setHorizontalAlignment(SwingConstants.CENTER);
-		rentsHistory.setFont(txt);
-		tableTitles.add(rentsHistory);
-		
-		JLabel purchaseHistory = new JLabel("Historial de compras");
-		purchaseHistory.setHorizontalAlignment(SwingConstants.CENTER);
-		purchaseHistory.setFont(txt);
-		tableTitles.add(purchaseHistory);
-		*/
 
 	}
 	
@@ -946,64 +926,51 @@ public class ClientsView {
 		//Titulos tabla
 		JPanel tableTitles = new JPanel();
 		tableTitles.setBounds(151, 370, 810, 30);
-		tableTitles.setLayout(new GridLayout(0, 5, 0, 0));
+		tableTitles.setLayout(new GridLayout(0, 6, 0, 0));
 		centro.add(tableTitles);
 		
-		JLabel title = new JLabel("Título");
+		title = new JLabel("Título");
 		title.setHorizontalAlignment(SwingConstants.CENTER);
 		title.setForeground(lightGray);
+		title.setVisible(false);
 		title.setFont(txt);
 		tableTitles.add(title);
 		
-		JLabel product = new JLabel("Producto");
+		product = new JLabel("Producto");
 		product.setHorizontalAlignment(SwingConstants.CENTER);
 		product.setForeground(lightGray);
+		product.setVisible(false);
 		product.setFont(txt);
 		tableTitles.add(product);
 		
-		JLabel rentdate = new JLabel("");
-		rentdate.setHorizontalAlignment(SwingConstants.CENTER);
-		rentdate.setForeground(lightGray);
-		rentdate.setFont(txt);
-		tableTitles.add(rentdate);
+		date = new JLabel("");
+		date.setHorizontalAlignment(SwingConstants.CENTER);
+		date.setForeground(lightGray);
+		date.setVisible(false);
+		date.setFont(txt);
+		tableTitles.add(date);
 		
-		purchaseHistory.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				rentdate.setText("Fecha de compra");
-			}
-			
-		});
+		discount = new JLabel("Descuento");
+		discount.setHorizontalAlignment(SwingConstants.CENTER);
+		discount.setForeground(lightGray);
+		discount.setVisible(false);
+		discount.setFont(txt);
+		tableTitles.add(discount);
 		
-		rentsHistory.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				rentdate.setText("Fecha de renta");
-			}
-			
-		});
-		
-		/*JLabel returnDate = new JLabel("Descuento");
-		returnDate.setHorizontalAlignment(SwingConstants.CENTER);
-		returnDate.setForeground(lightGray);
-		returnDate.setFont(txt);
-		tableTitles.add(returnDate);*/
-		
-		JLabel subtotal = new JLabel("Importe");
+		subtotal = new JLabel("Importe");
 		subtotal.setHorizontalAlignment(SwingConstants.CENTER);
 		subtotal.setForeground(lightGray);
+		subtotal.setVisible(false);
 		subtotal.setFont(txt);
 		tableTitles.add(subtotal);
 		
-		JLabel total = new JLabel("Importe final");
+		total = new JLabel("Importe final");
 		total.setHorizontalAlignment(SwingConstants.CENTER);
 		total.setForeground(lightGray);
+		total.setVisible(false);
 		total.setFont(txt);
 		tableTitles.add(total);
-		
-		/*JLabel status = new JLabel("Estado");
-		status.setHorizontalAlignment(SwingConstants.CENTER);
-		status.setForeground(lightGray);
-		status.setFont(txt);
-		tableTitles.add(status);*/
+
 		
 		//tablas
 		
@@ -1014,19 +981,16 @@ public class ClientsView {
 		JPanel panelActivas = new JPanel();
 		panelActivas.setBounds(151, 400, 810, 150);
 		panelActivas.setLayout(new BorderLayout(0, 0));
-		panelActivas.setBackground(Color.white);
 		//centro.add(panelActivas);
 		
 		JPanel panelRentas = new JPanel();
 		panelRentas.setBounds(151, 400, 810, 150);
 		panelRentas.setLayout(new BorderLayout(0, 0));
-		panelRentas.setBackground(Color.white);
 		//centro.add(panelRentas);
 		
 		JPanel panelCompras = new JPanel();
 		panelCompras.setBounds(151, 400, 810, 150);
 		panelCompras.setLayout(new BorderLayout(0, 0));
-		panelCompras.setBackground(Color.white);
 
 		OperationsController opController = new OperationsController(); 
 		System.out.println("Client ID: " + client.getClient_id());
@@ -1050,18 +1014,31 @@ public class ClientsView {
 		
 		
 		//tabla rentas
-		String[] rentColumnNames = {"Título", "Producto", "Fecha de renta", "Precio Unitario", "Precio Final"};
+		String[] rentColumnNames = {"Título", "Producto", "Fecha de renta", "Descuento","Precio Unitario", "Precio Final"};
 
 		DefaultTableModel rentModel = new DefaultTableModel(rentColumnNames, 0);
 
 		for (Operation rent : rentHistory) {
 		    String productType = (rent.getMovie() != null) ? "movie" : "videogame";
+		    String descuento = null;
+	        if(client.getFidelity().equalsIgnoreCase("aficionado")) {
+	        	descuento="15%";
+	        }
+	        else if(client.getFidelity().equalsIgnoreCase("frecuente")) {
+	        	descuento="20%";
+	        }
+	        else {
+	        	descuento = "Ninguno";
+	        }
+		    
 		    Object[] rowData = {
 		        rent.getProductTitle(),
 		        productType,
 		        rent.getOperation_date(),
+		        descuento,
 		        "$" + String.format("%.2f", rent.getPrecioUnitario()),
 		        "$" + String.format("%.2f", rent.getPrecioFinal())
+		        
 		    };
 		    rentModel.addRow(rowData);
 		}
@@ -1086,16 +1063,28 @@ public class ClientsView {
 		
 		
 		//tabla compras
-		String[] purchaseColumnNames = {"Título", "Producto", "Fecha de compra", "Precio Unitario", "Precio Final"};
+		String[] purchaseColumnNames = {"Título", "Producto", "Fecha de compra", "Descuento","Precio Unitario", "Precio Final"};
 
 		DefaultTableModel purchaseModel = new DefaultTableModel(purchaseColumnNames, 0);
 
 		for (Operation purchase : purchaseHistoryy) {
 		    String productType = (purchase.getMovie() != null) ? "movie" : "videogame";
+		    String descuento = null;
+	        if(client.getFidelity().equalsIgnoreCase("aficionado")) {
+	        	descuento="15%";
+	        }
+	        else if(client.getFidelity().equalsIgnoreCase("frecuente")) {
+	        	descuento="20%";
+	        }
+	        else {
+	        	descuento = "Ninguno";
+	        }
+	        
 		    Object[] rowData = {
 		        purchase.getProductTitle(),
 		        productType,
 		        purchase.getOperation_date(),
+		        descuento,
 		        "$" + String.format("%.2f", purchase.getPrecioUnitario()),
 		        "$" + String.format("%.2f", purchase.getPrecioFinal())
 		    };
@@ -1118,21 +1107,76 @@ public class ClientsView {
 		scrollPane2.getVerticalScrollBar().setUI(new CustomScrollBar());
 		panelCompras.add(scrollPane2);
 		
-		
-		
-		
 		tablePanelContainer.add(panelActivas, "RENTAS_ACTIVAS");
         tablePanelContainer.add(panelRentas, "HISTORIAL_RENTAS");
         tablePanelContainer.add(panelCompras, "HISTORIAL_COMPRAS");
 		
         CardLayout cl = (CardLayout) tablePanelContainer.getLayout();
-        cl.show(tablePanelContainer, "HISTORIAL_RENTAS"); 
+        
+        
+        activeRents.addActionListener(e -> {
+        	setSelectedTab(activeRents, rentsHistory, purchaseHistory);
+		    cl.show(tablePanelContainer, "RENTAS_ACTIVAS");
+		    titulosTablas("activas");
+		});
+		
+        rentsHistory.addActionListener(e -> {
+        	 setSelectedTab(rentsHistory, activeRents, purchaseHistory);
+            cl.show(tablePanelContainer, "HISTORIAL_RENTAS");
+            titulosTablas("rentas");
+        });
 
-        activeRents.addActionListener(e -> cl.show(tablePanelContainer, "RENTAS_ACTIVAS"));
-        rentsHistory.addActionListener(e -> cl.show(tablePanelContainer, "HISTORIAL_RENTAS")); 
-        purchaseHistory.addActionListener(e -> cl.show(tablePanelContainer, "HISTORIAL_COMPRAS")); 
+        purchaseHistory.addActionListener(e -> {
+            setSelectedTab(purchaseHistory, activeRents, rentsHistory);
+            cl.show(tablePanelContainer, "HISTORIAL_COMPRAS");
+            titulosTablas("compras");
+        });
+		
 	}
 
+	private void titulosTablas(String tipo) {
+	    switch (tipo) {
+	        case "activas":
+	            title.setVisible(true);
+	            product.setVisible(false);
+	            date.setText("Fecha de renta");
+	            date.setVisible(true);
+	            discount.setVisible(false);
+	            subtotal.setVisible(false);
+	            total.setVisible(false);
+	            break;
+	        case "rentas":
+	        	title.setVisible(true);
+	        	product.setVisible(true);
+	        	date.setText("Fecha de renta");
+	        	date.setVisible(true);
+	            discount.setVisible(true);
+	            subtotal.setVisible(true);
+	            total.setVisible(true);
+	            break;
+	        case "compras":
+	        	title.setVisible(true);
+	        	product.setVisible(true);
+	        	date.setText("Fecha de compra");
+	        	date.setVisible(true);
+	            discount.setVisible(true);
+	            subtotal.setVisible(true);
+	            total.setVisible(true);
+	            break;
+	        default:
+	            break;
+	    }
+	}
+	
+	private void setSelectedTab(JButton selected, JButton... others) {
+	    MatteBorder underline = BorderFactory.createMatteBorder(0, 0, 2, 0, blue); 
+
+	    selected.setBorder(underline);
+	    for (JButton btn : others) {
+	        btn.setBorder(null); 
+	    }
+	}
+	
 	public void filterPanel(JPanel centro) {
 		filtro = new RoundedPanel(30, new Color(255, 255, 255),3);
 		filtro.setBounds(680, 115, 285, 230);
