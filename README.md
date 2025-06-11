@@ -21,8 +21,8 @@ El proyecto consiste en la creación de una aplicación o sistema de aspecto adm
 * Figma: Empleado para la creación del prototipo del proyecto  https://www.figma.com/design/yKz43RCoLVIXCSjQbbja7t/MediaVault-Manager?node-id=0-1&p=f&t=NCWvw0rHrBNJLGrV-0
 * Dropbox: Se creó y subió una carpeta con la tipografía, logo y elementos gráficos usados en el prototipo https://www.dropbox.com/scl/fo/rfkhwqpot4vh3vhsyq2g7/ADksgjgCFOwGdt90_YCHbU0?rlkey=yi6yiupaszp2piyoc9f2j85fb&e=1&st=gupnz7y0&dl=0 
 * Loom: Usado para la grabación de un breve video explicativo sobre el proyecto
-    *Diseño https://www.loom.com/share/168458988b9c4f4a820ee60952f92851?sid=653b08a7-af7c-49ac-9829-54240c3e8f98
-    *Sistema https://www.loom.com/share/4a8067a068764d7cab2a5b4afef4b2a4
+   *    Diseño https://www.loom.com/share/168458988b9c4f4a820ee60952f92851?sid=653b08a7-af7c-49ac-9829-54240c3e8f98
+   *    Sistema https://www.loom.com/share/4a8067a068764d7cab2a5b4afef4b2a4
 * IDE Eclipse: Entorno de desarrollo usado para la creacion del programa a traves de codigo en JAVA.
 * GitHub Desktop: Empleado en la organizacion y control de los cambios hechos al proyecto para que estos se reflejen en el repositorio del mismo.
 * MySQL Workbench: Se usó para crear las tablas e insertar algunos datos en la DB del proyecto. Se hizo una conexion con el servidor Aiven
