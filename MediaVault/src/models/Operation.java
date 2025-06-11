@@ -30,6 +30,24 @@ public class Operation {
 		this.precioUnitario=precioUnitario;
 		this.precioFinal=precioFinal;
 	}
+	
+	public Operation( Client cliente, Movie movie, String operation_type, String operation_date, double precioUnitario, double precioFinal) {
+		this.cliente=cliente;
+		this.movie=movie;
+		this.operation_type=operation_type;
+		this.operation_date=operation_date;
+		this.precioUnitario=precioUnitario;
+		this.precioFinal=precioFinal;
+	}
+	
+	public Operation( Client cliente, Game game, String operation_type, String operation_date, double precioUnitario, double precioFinal) {
+		this.cliente=cliente;
+		this.game=game;
+		this.operation_type=operation_type;
+		this.operation_date=operation_date;
+		this.precioUnitario=precioUnitario;
+		this.precioFinal=precioFinal;
+	}
 
 	public String getProductTitle() {
 	        if (movie != null) {
