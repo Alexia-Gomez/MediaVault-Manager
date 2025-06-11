@@ -1026,7 +1026,7 @@ public class GamesView {
 
 
 		
-		RoundedButton eliminar = new RoundedButton("Eliminar película");
+		RoundedButton eliminar = new RoundedButton("Eliminar videojuego");
 		eliminar.setIcon(new ImageIcon(((ImageIcon) delete).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
 		eliminar.setHorizontalTextPosition(SwingConstants.RIGHT);
 		eliminar.setIconTextGap(10);
@@ -1037,7 +1037,7 @@ public class GamesView {
 		dataPanel.add(eliminar);
 		eliminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int confirm = JOptionPane.showConfirmDialog(null, "¿Estás seguro de eliminar esta película?", 
+				int confirm = JOptionPane.showConfirmDialog(null, "¿Estás seguro de eliminar este videojuego?", 
 						"Confirmar eliminación", JOptionPane.YES_NO_OPTION);
 
 				if (confirm == JOptionPane.YES_OPTION) {
@@ -1045,11 +1045,11 @@ public class GamesView {
 					MoviesController mc = new MoviesController();
 
 					if (mc.deleteMovie(productId)) {
-						JOptionPane.showMessageDialog(null, "Película eliminada con éxito.");
+						JOptionPane.showMessageDialog(null, "Videojuego eliminado con éxito.");
 						frame.dispose(); 
 						games(); 
 					} else {
-						JOptionPane.showMessageDialog(null, "Error al eliminar la película.", 
+						JOptionPane.showMessageDialog(null, "Error al eliminar el videojuego.", 
 								"Error", JOptionPane.ERROR_MESSAGE);
 					}
 				}
