@@ -712,9 +712,33 @@ public class OperationsView {
 		    	
 		    Operation op;
 		    if (movieSelec) {
+		    	if(tipoOperacion == "rent") {
+		    		if(currentMovie.getRent_stock()==0) {
+		    			JOptionPane.showMessageDialog(frame,"No hay stock para renta de este producto.","Stock insuficiente",JOptionPane.WARNING_MESSAGE);
+		    			return;
+		    		}
+		    	}
+		    	else if(tipoOperacion == "sale") {
+		    		if(currentMovie.getSale_stock()==0) {
+		    			JOptionPane.showMessageDialog(frame,"No hay stock para venta de este producto.","Stock insuficiente",JOptionPane.WARNING_MESSAGE);
+		    			return;
+		    		}
+		    	}
 		    	op = new Operation(currentClient,currentMovie,tipoOperacion,saleDate.getText(),unitPrice,totalAmount);
 		    }
 		    else {
+		    	if(tipoOperacion == "rent") {
+		    		if(currentGame.getRent_stock()==0) {
+		    			JOptionPane.showMessageDialog(frame,"No hay stock para renta de este producto.","Stock insuficiente",JOptionPane.WARNING_MESSAGE);
+		    			return;
+		    		}
+		    	}
+		    	else if(tipoOperacion == "sale") {
+		    		if(currentGame.getSale_stock()==0) {
+		    			JOptionPane.showMessageDialog(frame,"No hay stock para venta de este producto.","Stock insuficiente",JOptionPane.WARNING_MESSAGE);
+		    			return;
+		    		}
+		    	}
 		    	op = new Operation(currentClient,currentGame,tipoOperacion,saleDate.getText(),unitPrice,totalAmount);
 		    }
 		    
