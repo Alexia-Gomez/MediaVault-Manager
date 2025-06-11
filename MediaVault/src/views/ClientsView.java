@@ -373,6 +373,27 @@ public class ClientsView {
 				viewClient(client);
 				edit();
 			}
+			public void onDelete(int row) {
+				Client client = (Client) table.getModel().getValueAt(row, 5);
+				int confirm = JOptionPane.showConfirmDialog(frame, "¿Estás seguro de eliminar este cliente?", 
+						"Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+				
+				if(confirm == JOptionPane.YES_OPTION) {
+					int client_id = client.getClient_id();
+					ClientsController cc = new ClientsController();
+					
+					if(cc.delete(client_id)) {
+						JOptionPane.showMessageDialog(frame, "Cliente eliminado con éxito."); 
+						frame.dispose();
+						clients();
+					} else {
+						JOptionPane.showMessageDialog(frame, "Error al eliminar el cliente.", 
+								"Error", JOptionPane.ERROR_MESSAGE);
+					}
+					
+				}
+				
+			}
 		}));
 		
 		TableColumnModel cm = table.getColumnModel();
