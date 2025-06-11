@@ -63,7 +63,6 @@ import customClasses.CustomJComboBox;
 import customClasses.CustomJRadioButton;
 import customClasses.CustomScrollBar;
 import customClasses.CustomScrollPane;
-import customClasses.FilterDialog;
 import customClasses.Fuentes;
 import customClasses.IconCellRenderer;
 import customClasses.RoundedButton;
@@ -557,7 +556,7 @@ public class GamesView {
 		dataPanel.add(classLabel);
 
 		CustomJComboBox gameClass = new CustomJComboBox();
-		gameClass.setModel( new DefaultComboBoxModel( new String[] { "E", "T", "M", "A" }));
+		gameClass.setModel( new DefaultComboBoxModel( new String[] { "Selecciona", "E", "T", "M", "A" }));
 		gameClass.setBounds(520, 105, 250, 27);
 		gameClass.setFont(fieldtxt);
 		dataPanel.add(gameClass);
@@ -568,7 +567,7 @@ public class GamesView {
 		dataPanel.add(genreLabel);
 
 		CustomJComboBox gameGenre = new CustomJComboBox();
-		gameGenre.setModel( new DefaultComboBoxModel( new String[] { "Deportes", "Acciones", "Carreras", "Aventura", "Disparos", "Terror" }));
+		gameGenre.setModel( new DefaultComboBoxModel( new String[] { "Selecciona", "Deportes", "Acciones", "Carreras", "Aventura", "Disparos", "Terror" }));
 		gameGenre.setBounds(520, 170, 250, 27);
 		gameGenre.setFont(fieldtxt);
 		dataPanel.add(gameGenre);
@@ -941,7 +940,7 @@ public class GamesView {
 		dataPanel.add(classLabel);
 		
 		CustomJComboBox gameClass = new CustomJComboBox();
-		gameClass.setModel( new DefaultComboBoxModel( new String[] { "E", "T", "M", "A" }));
+		gameClass.setModel( new DefaultComboBoxModel( new String[] { "Selecciona", "E", "T", "M", "A" }));
 		gameClass.setBounds(520, 105, 250, 27);
 		gameClass.setEnabled(false);
 		if(game.getClassification()!=null)  gameClass.setSelectedItem(game.classification);
@@ -954,7 +953,7 @@ public class GamesView {
 		dataPanel.add(genreLabel);
 		
 		CustomJComboBox gameGenre = new CustomJComboBox();
-		gameGenre.setModel( new DefaultComboBoxModel( new String[] { "Deportes", "Acción", "Carreras", "Aventura", "Disparos", "Terror" }));
+		gameGenre.setModel( new DefaultComboBoxModel( new String[] { "Selecciona", "Deportes", "Acción", "Carreras", "Aventura", "Disparos", "Terror" }));
 		gameGenre.setBounds(520, 170, 250, 27);
 		gameGenre.setFont(fieldtxt);
 		gameGenre.setEnabled(false);
