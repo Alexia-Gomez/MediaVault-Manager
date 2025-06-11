@@ -1321,7 +1321,7 @@ public class GamesView {
 		if(textoBarra.isEmpty()) {
 			filtroTexto = RowFilter.regexFilter(".*", 0);
 		} else {
-			filtroTexto = RowFilter.regexFilter("(?i)" + Pattern.quote(textoBarra), 0);
+			filtroTexto = RowFilter.regexFilter("(?i)^" + Pattern.quote(textoBarra), 0);
 		}
 		
 		String PlatfoSelec=null;
