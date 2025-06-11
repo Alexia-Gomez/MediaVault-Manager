@@ -942,10 +942,11 @@ public class ClientsView {
 		pestañas.add(purchaseHistory);
 		
 		
+		
 		//Titulos tabla
 		JPanel tableTitles = new JPanel();
 		tableTitles.setBounds(151, 370, 810, 30);
-		tableTitles.setLayout(new GridLayout(0, 6, 0, 0));
+		tableTitles.setLayout(new GridLayout(0, 5, 0, 0));
 		centro.add(tableTitles);
 		
 		JLabel title = new JLabel("Título");
@@ -960,29 +961,49 @@ public class ClientsView {
 		product.setFont(txt);
 		tableTitles.add(product);
 		
-		JLabel rentdate = new JLabel("Fecha de renta");
+		JLabel rentdate = new JLabel("");
 		rentdate.setHorizontalAlignment(SwingConstants.CENTER);
 		rentdate.setForeground(lightGray);
 		rentdate.setFont(txt);
 		tableTitles.add(rentdate);
 		
-		JLabel returnDate = new JLabel("Fecha de devolucion");
+		purchaseHistory.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				rentdate.setText("Fecha de compra");
+			}
+			
+		});
+		
+		rentsHistory.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				rentdate.setText("Fecha de renta");
+			}
+			
+		});
+		
+		/*JLabel returnDate = new JLabel("Descuento");
 		returnDate.setHorizontalAlignment(SwingConstants.CENTER);
 		returnDate.setForeground(lightGray);
 		returnDate.setFont(txt);
-		tableTitles.add(returnDate);
+		tableTitles.add(returnDate);*/
 		
-		JLabel discount = new JLabel("Descuento");
-		discount.setHorizontalAlignment(SwingConstants.CENTER);
-		discount.setForeground(lightGray);
-		discount.setFont(txt);
-		tableTitles.add(discount);
+		JLabel subtotal = new JLabel("Importe");
+		subtotal.setHorizontalAlignment(SwingConstants.CENTER);
+		subtotal.setForeground(lightGray);
+		subtotal.setFont(txt);
+		tableTitles.add(subtotal);
 		
-		JLabel status = new JLabel("Estado");
+		JLabel total = new JLabel("Importe final");
+		total.setHorizontalAlignment(SwingConstants.CENTER);
+		total.setForeground(lightGray);
+		total.setFont(txt);
+		tableTitles.add(total);
+		
+		/*JLabel status = new JLabel("Estado");
 		status.setHorizontalAlignment(SwingConstants.CENTER);
 		status.setForeground(lightGray);
 		status.setFont(txt);
-		tableTitles.add(status);
+		tableTitles.add(status);*/
 		
 		//tablas
 		
@@ -1026,6 +1047,9 @@ public class ClientsView {
 		}
 		System.out.println("Total operations fetched: " + allOperations.size()); 
 
+		
+		
+		//tabla rentas
 		String[] rentColumnNames = {"Título", "Producto", "Fecha de renta", "Precio Unitario", "Precio Final"};
 
 		DefaultTableModel rentModel = new DefaultTableModel(rentColumnNames, 0);
@@ -1043,14 +1067,25 @@ public class ClientsView {
 		}
 
 		JTable rentHistoryTable = new JTable(rentModel);
-		rentHistoryTable.setFont(new Font("Arial", Font.PLAIN, 12));
-		rentHistoryTable.setRowHeight(25);
-		rentHistoryTable.getTableHeader().setFont(new Font("Arial", Font.BOLD, 12));
-		JScrollPane rentScrollPane = new JScrollPane(rentHistoryTable);
+		rentHistoryTable.setFont(fieldtxt);
+		rentHistoryTable.setRowHeight(50);
+		rentHistoryTable.setShowVerticalLines(false);
+		rentHistoryTable.setTableHeader(null);
+		
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+		rentHistoryTable.setDefaultRenderer(Object.class, centerRenderer);
+		
+		CustomScrollPane scrollPane = new CustomScrollPane();
+		scrollPane.setBorder(BorderFactory.createEmptyBorder());
+		scrollPane.setViewportView(rentHistoryTable);		
 
-		panelRentas.setLayout(new BorderLayout()); 
-		panelRentas.add(rentScrollPane, BorderLayout.CENTER);
+		scrollPane.getVerticalScrollBar().setUI(new CustomScrollBar());
+		panelRentas.add(scrollPane);
 
+		
+		
+		//tabla compras
 		String[] purchaseColumnNames = {"Título", "Producto", "Fecha de compra", "Precio Unitario", "Precio Final"};
 
 		DefaultTableModel purchaseModel = new DefaultTableModel(purchaseColumnNames, 0);
@@ -1066,15 +1101,25 @@ public class ClientsView {
 		    };
 		    purchaseModel.addRow(rowData);
 		}
-
+		
+		
 		JTable purchaseHistoryTable = new JTable(purchaseModel);
-		purchaseHistoryTable.setFont(new Font("Arial", Font.PLAIN, 12));
-		purchaseHistoryTable.setRowHeight(25);
-		purchaseHistoryTable.getTableHeader().setFont(new Font("Arial", Font.BOLD, 12));
-		JScrollPane purchaseScrollPane = new JScrollPane(purchaseHistoryTable);
+		purchaseHistoryTable.setFont(fieldtxt);
+		purchaseHistoryTable.setRowHeight(50);
+		purchaseHistoryTable.setTableHeader(null);
+		purchaseHistoryTable.setShowVerticalLines(false);
+		
+		purchaseHistoryTable.setDefaultRenderer(Object.class, centerRenderer);
+		
+		CustomScrollPane scrollPane2 = new CustomScrollPane();
+		scrollPane2.setBorder(BorderFactory.createEmptyBorder());
+		scrollPane2.setViewportView(purchaseHistoryTable);		
 
-		panelCompras.setLayout(new BorderLayout()); 
-		panelCompras.add(purchaseScrollPane, BorderLayout.CENTER);
+		scrollPane2.getVerticalScrollBar().setUI(new CustomScrollBar());
+		panelCompras.add(scrollPane2);
+		
+		
+		
 		
 		tablePanelContainer.add(panelActivas, "RENTAS_ACTIVAS");
         tablePanelContainer.add(panelRentas, "HISTORIAL_RENTAS");
