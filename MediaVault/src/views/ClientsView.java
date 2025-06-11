@@ -513,6 +513,8 @@ public class ClientsView {
 		
 		RoundedJTextField namefield = new RoundedJTextField(20);
 		namefield.setBounds(237, 40, 250, 27);
+		namefield.addKeyListener(Validaciones.letras());
+		namefield.addKeyListener(Validaciones.limite(10));
 		namefield.setFont(fieldtxt);
 		dataPanel.add(namefield);
 		
@@ -523,6 +525,8 @@ public class ClientsView {
 		
 		RoundedJTextField clientBirth = new RoundedJTextField(20);
 		clientBirth.setBounds(230, 100, 250, 27);
+		clientBirth.addKeyListener(Validaciones.fechas());
+		clientBirth.addKeyListener(Validaciones.limite(10));
 		clientBirth.setFont(fieldtxt);
 		dataPanel.add(clientBirth);
 		
@@ -533,6 +537,7 @@ public class ClientsView {
 
 		RoundedJTextField clientEmail = new RoundedJTextField(20);
 		clientEmail.setBounds(230, 160, 250, 27);
+		clientEmail.addKeyListener(Validaciones.limite(20));
 		clientEmail.setFont(fieldtxt);
 		dataPanel.add(clientEmail);
 		
@@ -552,6 +557,8 @@ public class ClientsView {
 
 		RoundedJTextField clientSurname = new RoundedJTextField(20);
 		clientSurname.setBounds(520, 40, 250, 27);
+		clientSurname.addKeyListener(Validaciones.letras());
+		clientSurname.addKeyListener(Validaciones.limite(15));
 		clientSurname.setFont(fieldtxt);
 		dataPanel.add(clientSurname);
 		
@@ -562,6 +569,8 @@ public class ClientsView {
 
 		RoundedJTextField clientPhone = new RoundedJTextField(20);
 		clientPhone.setBounds(520, 100, 250, 27);
+		clientPhone.addKeyListener(Validaciones.enteros());
+		clientPhone.addKeyListener(Validaciones.limite(10));
 		clientPhone.setFont(fieldtxt);
 		dataPanel.add(clientPhone);
 		
@@ -718,6 +727,8 @@ public class ClientsView {
 		namefield.setBounds(237, 40, 250, 27);
 		namefield.setFont(fieldtxt);
 		if(client.getName()!=null) {namefield.setText(client.getName());}
+		namefield.addKeyListener(Validaciones.letras());
+		namefield.addKeyListener(Validaciones.limite(10));
 		namefield.setFocusable(false);
 		dataPanel.add(namefield);
 		
@@ -744,6 +755,7 @@ public class ClientsView {
 		clientEmail.setBounds(230, 160, 250, 27);
 		clientEmail.setFont(fieldtxt);
 		if(clientEmail != null) {clientEmail.setText(client.getEmail());}
+		clientEmail.addKeyListener(Validaciones.limite(20));
 		clientEmail.setFocusable(false);
 		dataPanel.add(clientEmail);
 		
@@ -766,6 +778,8 @@ public class ClientsView {
 		clientSurname.setBounds(520, 40, 250, 27);
 		clientSurname.setFont(fieldtxt);
 		if(clientSurname != null) {clientSurname.setText(client.getLast_name());}
+		clientSurname.addKeyListener(Validaciones.letras());
+		clientSurname.addKeyListener(Validaciones.limite(15));
 		clientSurname.setFocusable(false);
 		dataPanel.add(clientSurname);
 		
@@ -779,6 +793,8 @@ public class ClientsView {
 		clientPhone.setFont(fieldtxt);
 		clientPhone.setFocusable(false);
 		if(clientPhone != null) {clientPhone.setText(client.getPhone());}
+		clientPhone.addKeyListener(Validaciones.enteros());
+		clientPhone.addKeyListener(Validaciones.limite(10));
 		dataPanel.add(clientPhone);
 		
 		JLabel fidelityLabel = new JLabel("Nivel de fidelidad:");
