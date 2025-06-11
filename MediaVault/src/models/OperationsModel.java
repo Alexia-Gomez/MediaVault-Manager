@@ -1,7 +1,9 @@
 package models;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -92,13 +94,14 @@ public class OperationsModel {
                 double salePrice    = rs.getDouble("sale_price");
                 double rentPrice    = rs.getDouble("rent_price");
                 int    promotionId  = rs.getInt("promotion_id");
+                
 
                 Operation op;
                 if ("movie".equalsIgnoreCase(prodType)) {
-                    Movie movie = new Movie(prodId,prodTitle,studio,classification,releaseDate,genre,rentStock,saleStock,cover,salePrice,rentPrice);
+                    Movie movie = new Movie(prodId,prodTitle,studio,classification,releaseDate,genre,rentStock,saleStock,cover,salePrice,rentPrice,promotionId);
                     op = new Operation(operation_id, cli, movie,operation_type, operation_date,unitPrice, totalAmount);
                 } else {
-                    Game game = new Game(prodId,prodTitle,studio,classification,releaseDate,genre,rentStock,saleStock,cover,salePrice,rentPrice);
+                    Game game = new Game(prodId,prodTitle,studio,classification,releaseDate,genre,rentStock,saleStock,cover,salePrice,rentPrice,promotionId);
                     op = new Operation(operation_id, cli, game,operation_type, operation_date,unitPrice, totalAmount);
                 }
 
@@ -109,5 +112,71 @@ public class OperationsModel {
         }
         return operaciones;
     }
+	
+	public boolean add(Operation operation) {
+		String query = "INSERT INTO `Operations`(fk_client_id_operation,fk_product_id_operation,operation_type,operation_date,total_amount,unit_price) "
+                + "VALUES (?, ?, ?, ?, ?, ?)";
+   
+	    Connection connection = ConexionBD.getConexion();
+	    PreparedStatement stmt = null;
+	    
+	    try {
+	        stmt = connection.prepareStatement(query);
+	        
+	        stmt.setInt(1, operation.getCliente().getClient_id());
+	        if(operation.getMovie()!=null) {
+	        	stmt.setInt(2, operation.getMovie().getProduct_id());
+	        }
+	        else {
+	        	stmt.setInt(2, operation.getGame().getProduct_id());
+	        }
+	        stmt.setString(3, operation.getOperation_type());
+	        stmt.setString(4, operation.getOperation_date());
+    		stmt.setDouble(5, operation.getPrecioFinal());        	
+	        stmt.setDouble(6, operation.getPrecioUnitario());
+	        
+	        int rowsAffected = stmt.executeUpdate();
+	        if (rowsAffected > 0) {
+	            return true;
+	        }
+	        else {
+	        	throw new SQLException("No se agregó ningún cliente");
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        try {
+	            if (stmt != null) stmt.close();
+	            if (connection != null) connection.close();
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	    }
+    return false;
+	}
+	
+	public boolean delete(int operation_id) {
+		String query = "DELETE FROM Operations WHERE operation_id = ? ";
+		Connection connection = ConexionBD.getConexion();
+		PreparedStatement stmt = null;
+		try {
+			stmt = connection.prepareStatement(query);
+			stmt.setInt(1, operation_id);
+
+			int affectedRows = stmt.executeUpdate();
+			return affectedRows > 0;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (stmt != null) stmt.close();
+				if (connection != null) connection.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return false;
+	}
 	
 }
