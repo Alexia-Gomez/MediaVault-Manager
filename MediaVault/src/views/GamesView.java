@@ -63,6 +63,7 @@ import customClasses.CustomJComboBox;
 import customClasses.CustomJRadioButton;
 import customClasses.CustomScrollBar;
 import customClasses.CustomScrollPane;
+import customClasses.FilterDialog;
 import customClasses.Fuentes;
 import customClasses.IconCellRenderer;
 import customClasses.RoundedButton;
@@ -224,7 +225,7 @@ public class GamesView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				filtro.setVisible(true);
+				//filtro.setVisible(true);
 			}
 
 		});
@@ -1200,21 +1201,21 @@ public class GamesView {
 		filtro.add(platform);
 		
 		xbox = new CustomJRadioButton();
-		xbox.setBounds(35, 55, 70, 30);
+		xbox.setBounds(35, 55, 100, 30);
 		xbox.setFont(fieldtxt);
-		xbox.setText("Xbox");
+		xbox.setText("Xbox Series");
 		filtro.add(xbox);
 		
 		Switch = new CustomJRadioButton();
-		Switch.setBounds(140, 55, 70, 30);
+		Switch.setBounds(140, 55, 90, 30);
 		Switch.setFont(fieldtxt);
-		Switch.setText("Switch");
+		Switch.setText("N Switch");
 		filtro.add(Switch);
 		
 		ps4 = new CustomJRadioButton();
 		ps4.setBounds(240, 55, 70, 30);
 		ps4.setFont(fieldtxt);
-		ps4.setText("PS4");
+		ps4.setText("PS5");
 		filtro.add(ps4);
 		
 		allPlatforms = new CustomJRadioButton();
@@ -1249,13 +1250,13 @@ public class GamesView {
 		racing = new CustomJRadioButton();
 		racing.setBounds(240, 150, 100, 30);
 		racing.setFont(fieldtxt);
-		racing.setText("Carreras");
+		racing.setText("Terror");
 		filtro.add(racing);
 		
 		shooter = new CustomJRadioButton();
 		shooter.setBounds(35, 195, 100, 30);
 		shooter.setFont(fieldtxt);
-		shooter.setText("Disparos");
+		shooter.setText("Plataformas");
 		filtro.add(shooter);
 		
 		action = new CustomJRadioButton();
@@ -1310,6 +1311,8 @@ public class GamesView {
 		
 		centro.add(filtro);
 		centro.setComponentZOrder(filtro, 0);
+		centro.repaint();
+		centro.revalidate();
 			
 	}
 
@@ -1325,19 +1328,19 @@ public class GamesView {
 		String PlatfoSelec=null;
 		RowFilter<DefaultTableModel, Object> filtroPlatform;
 	    if (xbox.isSelected())        
-	    	PlatfoSelec = "Xbox";
+	    	PlatfoSelec = "Xbox Series";
 	    else if (Switch.isSelected())   
-	    	PlatfoSelec = "Switch";
+	    	PlatfoSelec = "Nintendo Switch";
 	    else if (ps4.isSelected()) 
-	    	PlatfoSelec = "PS4";
+	    	PlatfoSelec = "PS5";
 	    else if (allPlatforms.isSelected())                            
 	    	PlatfoSelec = "Todos"; 
 	    
 	    if (PlatfoSelec == null || PlatfoSelec.equals("Todos")  ) {
-	    	filtroPlatform = RowFilter.regexFilter(".*", 2);
+	    	filtroPlatform = RowFilter.regexFilter(".*", 1);
 	    }
 	    else {
-	    	filtroPlatform = RowFilter.regexFilter("^" + Pattern.quote(PlatfoSelec) + "$", 2);
+	    	filtroPlatform = RowFilter.regexFilter("^" + Pattern.quote(PlatfoSelec) + "$", 1);
 	    }
 		
 		
@@ -1348,9 +1351,9 @@ public class GamesView {
 	    else if (adventure.isSelected()) 
 	    	generoSelec = "Aventura";
 	    else if (racing.isSelected())    
-	    	generoSelec = "Carreras";
+	    	generoSelec = "Terror";
 	    else if (shooter.isSelected())    
-	    	generoSelec = "Disparos";
+	    	generoSelec = "Plataformas";
 	    else if (action.isSelected())    
 	    	generoSelec = "Acción";
 	    else if (allGen.isSelected())                             
@@ -1370,6 +1373,8 @@ public class GamesView {
 		buscador.setRowFilter(filtroCombinado);
 		
 	}
+	
+	
 	
 	public void generarPDF(Game game) {
 	    JFileChooser fileChooser = new JFileChooser();
