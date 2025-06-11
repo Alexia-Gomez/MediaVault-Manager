@@ -22,4 +22,12 @@ public class OperationsController {
 	public ArrayList<Operation> get() {
 		return model.getOperations();
 	}
+	
+	public boolean add(Operation operation) {
+		return model.add(operation);
+	}
+	
+	public boolean delete(int operation_id) {
+		return model.delete(operation_id);
+	}
 }
