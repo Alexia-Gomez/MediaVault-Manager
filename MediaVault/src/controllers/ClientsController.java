@@ -34,4 +34,9 @@ public class ClientsController {
 	public boolean delete(int client_id) {
 		return model.delete(client_id);
 	}
+	
+	public int getCantClients() {
+		return model.getCantClients();
+		
+	}
 }

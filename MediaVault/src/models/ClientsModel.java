@@ -167,4 +167,25 @@ public class ClientsModel {
 		    }
 		    return false;
 	}
+
+	public int getCantClients() {
+	    
+	    Connection connection = ConexionBD.getConexion();
+	    if (connection == null) return 0;
+	    
+
+	    String query = "SELECT COUNT(*) FROM Clients"; 
+
+	    try {
+	        PreparedStatement stmt = connection.prepareStatement(query);
+	        ResultSet rs = stmt.executeQuery();
+
+	        if (rs.next()) {
+	            return rs.getInt(1);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return 0;
+	}
 }

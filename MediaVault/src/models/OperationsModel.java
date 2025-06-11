@@ -282,4 +282,179 @@ public class OperationsModel {
 	    return clientOperations;
 	}
 	
+	public int getTotalSales() {
+	    String query = "SELECT COUNT(*) FROM Operations WHERE operation_type = 'sale'";
+	    Connection connection = ConexionBD.getConexion();
+	    try (Statement stmt = connection.createStatement();
+	         ResultSet rs = stmt.executeQuery(query)) {
+	        if (rs.next()) {
+	            return rs.getInt(1);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return 0;
+	}
+	
+	public int getTotalRents() {
+	    String query = "SELECT COUNT(*) FROM Operations WHERE operation_type = 'rent'";
+	    Connection connection = ConexionBD.getConexion();
+	    try (Statement stmt = connection.createStatement();
+	         ResultSet rs = stmt.executeQuery(query)) {
+	        if (rs.next()) {
+	            return rs.getInt(1);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return 0;
+	}
+	
+	public Game getMostRentedGame() {
+	    Game game = null;
+	    String query = "SELECT p.product_id, p.title, p.platform, p.classification, p.release_date, p.genre, "
+	                 + "p.rent_stock, p.sale_stock, p.cover, p.sale_price, p.rent_price, "
+	                 + "COUNT(o.operation_id) AS total_rent_count "
+	                 + "FROM Products p "
+	                 + "JOIN Operations o ON p.product_id = o.fk_product_id_operation "
+	                 + "WHERE p.product_type = 'videogame' AND o.operation_type = 'rent' "
+	                 + "GROUP BY p.product_id "
+	                 + "ORDER BY total_rent_count DESC "
+	                 + "LIMIT 1";
+
+	    try (Connection connection = ConexionBD.getConexion();
+	         PreparedStatement stmt = connection.prepareStatement(query);
+	         ResultSet rs = stmt.executeQuery()) {
+
+	        if (rs.next()) {
+	            game = new Game(
+	                rs.getInt("product_id"),
+	                rs.getString("title"),
+	                rs.getString("platform"),
+	                rs.getString("classification"),
+	                rs.getString("release_date"),
+	                rs.getString("genre"),
+	                rs.getInt("rent_stock"),
+	                rs.getInt("sale_stock"),
+	                rs.getBytes("cover"),
+	                rs.getDouble("sale_price"),
+	                rs.getDouble("rent_price")
+	            );
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return game;
+	}
+
+	public Game getMostPurchasedGame() {
+	    Game game = null;
+	    String query = "SELECT p.product_id, p.title, p.platform, p.classification, p.release_date, p.genre, "
+	                 + "p.rent_stock, p.sale_stock, p.cover, p.sale_price, p.rent_price, "
+	                 + "COUNT(o.operation_id) AS total_purchase_count "
+	                 + "FROM Products p "
+	                 + "JOIN Operations o ON p.product_id = o.fk_product_id_operation "
+	                 + "WHERE p.product_type = 'videogame' AND o.operation_type = 'sale' "
+	                 + "GROUP BY p.product_id "
+	                 + "ORDER BY total_purchase_count DESC "
+	                 + "LIMIT 1";
+
+	    try (Connection connection = ConexionBD.getConexion();
+	         PreparedStatement stmt = connection.prepareStatement(query);
+	         ResultSet rs = stmt.executeQuery()) {
+
+	        if (rs.next()) {
+	            game = new Game(
+	                rs.getInt("product_id"),
+	                rs.getString("title"),
+	                rs.getString("platform"),
+	                rs.getString("classification"),
+	                rs.getString("release_date"),
+	                rs.getString("genre"),
+	                rs.getInt("rent_stock"),
+	                rs.getInt("sale_stock"),
+	                rs.getBytes("cover"),
+	                rs.getDouble("sale_price"),
+	                rs.getDouble("rent_price")
+	            );
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return game;
+	}
+
+	public Movie getMostRentedMovie() {
+	    Movie movie = null;
+	    String query = "SELECT p.product_id, p.title, p.platform, p.classification, p.release_date, p.genre, "
+	                 + "p.rent_stock, p.sale_stock, p.cover, p.sale_price, p.rent_price, "
+	                 + "COUNT(o.operation_id) AS total_rent_count "
+	                 + "FROM Products p "
+	                 + "JOIN Operations o ON p.product_id = o.fk_product_id_operation "
+	                 + "WHERE p.product_type = 'movie' AND o.operation_type = 'rent' "
+	                 + "GROUP BY p.product_id "
+	                 + "ORDER BY total_rent_count DESC "
+	                 + "LIMIT 1";
+
+	    try (Connection connection = ConexionBD.getConexion();
+	         PreparedStatement stmt = connection.prepareStatement(query);
+	         ResultSet rs = stmt.executeQuery()) {
+
+	        if (rs.next()) {
+	            movie = new Movie(
+	                rs.getInt("product_id"),
+	                rs.getString("title"),
+	                rs.getString("platform"),
+	                rs.getString("classification"),
+	                rs.getString("release_date"),
+	                rs.getString("genre"),
+	                rs.getInt("rent_stock"),
+	                rs.getInt("sale_stock"),
+	                rs.getBytes("cover"),
+	                rs.getDouble("sale_price"),
+	                rs.getDouble("rent_price")
+	            );
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return movie;
+	}
+
+	public Movie getMostPurchasedMovie() {
+	    Movie movie = null;
+	    String query = "SELECT p.product_id, p.title, p.platform, p.classification, p.release_date, p.genre, "
+	                 + "p.rent_stock, p.sale_stock, p.cover, p.sale_price, p.rent_price, "
+	                 + "COUNT(o.operation_id) AS total_purchase_count "
+	                 + "FROM Products p "
+	                 + "JOIN Operations o ON p.product_id = o.fk_product_id_operation "
+	                 + "WHERE p.product_type = 'movie' AND o.operation_type = 'sale' "
+	                 + "GROUP BY p.product_id "
+	                 + "ORDER BY total_purchase_count DESC "
+	                 + "LIMIT 1";
+
+	    try (Connection connection = ConexionBD.getConexion();
+	         PreparedStatement stmt = connection.prepareStatement(query);
+	         ResultSet rs = stmt.executeQuery()) {
+
+	        if (rs.next()) {
+	            movie = new Movie(
+	                rs.getInt("product_id"),
+	                rs.getString("title"),
+	                rs.getString("platform"),
+	                rs.getString("classification"),
+	                rs.getString("release_date"),
+	                rs.getString("genre"),
+	                rs.getInt("rent_stock"),
+	                rs.getInt("sale_stock"),
+	                rs.getBytes("cover"),
+	                rs.getDouble("sale_price"),
+	                rs.getDouble("rent_price")
+	            );
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return movie;
+	}
 }

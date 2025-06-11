@@ -25,6 +25,10 @@ public class GamesController {
 		view.viewGame(null);
 	}
 	
+	public void viewGame(Game game) {
+	    view.viewGame(game);
+	}
+	
 	public boolean addGame(Game game) {
 		return model.add(game); 
 	}
@@ -43,4 +47,5 @@ public class GamesController {
 	public ArrayList<Game> get(){
 		return model.get();
 	}
+	
 }

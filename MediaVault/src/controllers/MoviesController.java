@@ -23,6 +23,10 @@ public class MoviesController {
 		view.viewMovie(null);
 	}
 	
+	public void viewMovies(Movie movie) {
+		view.viewMovie(movie);
+	}
+	
 	public boolean addMovie(Movie movie) {
 		return model.add(movie); 
 	}
@@ -42,5 +46,6 @@ public class MoviesController {
 		return model.get();
 		
 	}
+
 	
 }

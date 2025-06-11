@@ -2,6 +2,8 @@ package controllers;
 
 import java.util.ArrayList;
 
+import models.Game;
+import models.Movie;
 import models.Operation;
 import models.OperationsModel;
 import views.OperationsView;
@@ -33,5 +35,29 @@ public class OperationsController {
 	
 	public ArrayList<Operation> getOperationsByClientId(int clientId) {
 		return model.getOperationsByClientId(clientId);
+	}
+	
+	public int getTotalSales() {
+        return model.getTotalSales();
+    }
+	
+	public int getTotalRents() {
+        return model.getTotalRents();
+    }
+	
+	public Game getMostRentedGame() {
+		return model.getMostPurchasedGame();
+	}
+	
+	public Game getMostPurchasedGame() {
+		return model.getMostPurchasedGame();
+	}
+	
+	public Movie getMostRentedMovie() {
+		return model.getMostPurchasedMovie();
+	}
+	
+	public Movie getMostPurchasedMovie() {
+		return model.getMostPurchasedMovie();
 	}
 }

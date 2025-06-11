@@ -1,5 +1,6 @@
 package views;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -10,19 +11,25 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 
 import controllers.ClientsController;
 import controllers.GamesController;
 import controllers.LoginController;
 import controllers.MoviesController;
+import controllers.OperationsController;
 import customClasses.Fuentes;
 import customClasses.RoundedButton;
 import customClasses.RoundedPanel;
 import customClasses.SideBar;
+import models.Game;
+import models.Movie;
 
 public class HomeView {
 	
@@ -34,7 +41,7 @@ public class HomeView {
 	Font titles = tipoFuentes.fuente("/fonts/GolosText-SemiBold.ttf", 17f);
 	Font subtitles = tipoFuentes.fuente("/fonts/GolosText-SemiBold.ttf", 13f);
 	Font btntxt = tipoFuentes.fuente("/fonts/GolosText-Regular.ttf", 15f);
-	Font btnNum = tipoFuentes.fuente("/fonts/GolosText-SemiBold.ttf", 18f);
+	Font btnNum = tipoFuentes.fuente("/fonts/GolosText-SemiBold.ttf", 25f);
 	Font small = tipoFuentes.fuente("/fonts/GolosText-Regular.ttf", 10f);
 	Font extra = tipoFuentes.fuente("/fonts/GolosText-SemiBold.ttf", 10f);
 	
@@ -46,6 +53,12 @@ public class HomeView {
 	GamesController gc = new GamesController();
 	MoviesController mc = new MoviesController();
 	ClientsController cc = new ClientsController();
+	OperationsController oc = new OperationsController();
+	
+	JLabel movieTitle2, movieTitle, gameTitle2, gameTitle;
+	RoundedButton gameBtn1,gameBtn2, movieBtn1, movieBtn2; 
+	
+	private JLabel w1num, w3num, w2num;
 
 	public HomeView() {
 
@@ -57,7 +70,7 @@ public class HomeView {
 		JFrame frame = new JFrame();
 		frame.setBounds(100, 20, 1000, 643);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
+		//frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
 		frame.setResizable(false);
 		frame.setTitle("Dashboard");
@@ -153,25 +166,25 @@ public class HomeView {
 		w1btn.setFont(btntxt);
 		w1btn.setRadius(20);
 		widget1.add(w1btn);
+		w1btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				oc.operations();
+			}
+			
+		});
 		
 		
-		JLabel w1num = new JLabel("127");
+		w1num = new JLabel("");
 		w1num.setVerticalAlignment(SwingConstants.TOP);
 		w1num.setHorizontalAlignment(SwingConstants.CENTER);
 		w1num.setForeground(new Color(91, 161, 70));
-		w1num.setBounds(15, 60, 170, 35);
+		w1num.setBounds(15,70, 170, 35);
 		w1num.setFont(btnNum);
 		widget1.add(w1num);
 		
-		JLabel w1date = new JLabel("06/06/2025");
-		w1date.setHorizontalAlignment(SwingConstants.CENTER);
-		w1date.setBounds(15, 100, 170, 14);
-		w1date.setForeground(lightGray);
-		w1date.setFont(small);
-		widget1.add(w1date);
 		
-		
-		//w2
+		//w2	
 		RoundedPanel widget2 = new RoundedPanel(15, Color.WHITE, 3);
 		widget2.setBounds(465, 105, 200, 190);
 		widget2.setLayout(null);
@@ -190,21 +203,21 @@ public class HomeView {
 		w2btn.setFont(btntxt);
 		w2btn.setRadius(20);
 		widget2.add(w2btn);
+		w2btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				oc.operations();
+			}
+			
+		});
 		
-		JLabel w2num = new JLabel("249");
+		w2num = new JLabel("");
 		w2num.setVerticalAlignment(SwingConstants.TOP);
 		w2num.setHorizontalAlignment(SwingConstants.CENTER);
 		w2num.setForeground(new Color(49, 113, 223));
-		w2num.setBounds(15, 60, 170, 35);
+		w2num.setBounds(15, 70, 170, 35);
 		w2num.setFont(btnNum);
 		widget2.add(w2num);
-		
-		JLabel w2date = new JLabel("06/06/2025");
-		w2date.setHorizontalAlignment(SwingConstants.CENTER);
-		w2date.setBounds(15, 100, 170, 14);
-		w2date.setForeground(lightGray);
-		w2date.setFont(small);
-		widget2.add(w2date);
 		
 		
 		//w3
@@ -237,20 +250,13 @@ public class HomeView {
 		});
 		widget3.add(w3btn);
 		
-		JLabel w3num = new JLabel("5,308");
+		w3num = new JLabel("");
 		w3num.setHorizontalAlignment(SwingConstants.CENTER);
 		w3num.setVerticalAlignment(SwingConstants.TOP);
 		w3num.setForeground(new Color(66, 194, 168));
-		w3num.setBounds(15, 60, 170, 35);
+		w3num.setBounds(15, 70, 170, 35);
 		w3num.setFont(btnNum);
 		widget3.add(w3num);
-		
-		JLabel w3date = new JLabel("06/06/2025");
-		w3date.setHorizontalAlignment(SwingConstants.CENTER);
-		w3date.setBounds(15, 100, 170, 14);
-		w3date.setForeground(lightGray);
-		w3date.setFont(small);
-		widget3.add(w3date);
 		
 			//WIDGETS INF
 		//games
@@ -273,6 +279,14 @@ public class HomeView {
 		gameSubtitle1.setFont(subtitles);
 		gamePanel.add(gameSubtitle1);
 		
+		gameTitle = new JLabel("");
+		gameTitle.setHorizontalAlignment(SwingConstants.CENTER);
+		gameTitle.setBounds(50, 110, 90, 50);
+		gameTitle.setForeground(gray);
+		gameTitle.setFont(subtitles);
+		gamePanel.add(gameTitle);
+
+
 		JLabel gameSubtitle2 = new JLabel("Más comprado");
 		gameSubtitle2.setHorizontalAlignment(SwingConstants.CENTER);
 		gameSubtitle2.setBounds(220, 65, 93, 15);
@@ -280,40 +294,28 @@ public class HomeView {
 		gameSubtitle2.setFont(subtitles);
 		gamePanel.add(gameSubtitle2);
 		
-		RoundedButton gameBtn1 = new RoundedButton("Ver");
+		gameBtn1 = new RoundedButton("Ver");
 		gameBtn1.setBounds(45, 205, 90, 30);
 		gameBtn1.setForeground(Color.WHITE);
 		gameBtn1.setBackground(blue);
 		gameBtn1.setFont(btntxt);
 		gameBtn1.setRadius(20);
-		gameBtn1.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				/*frame.dispose();
-				gc.viewGame();*/
-			}
-			
-		});
 		gamePanel.add(gameBtn1);
+
 		
-		RoundedButton gameBtn2 = new RoundedButton("Ver");
+		gameTitle2 = new JLabel("");
+		gameTitle2.setHorizontalAlignment(SwingConstants.CENTER);
+		gameTitle2.setBounds(230, 110, 90, 50);
+		gameTitle2.setForeground(gray);
+		gameTitle2.setFont(subtitles);
+		gamePanel.add(gameTitle2);
+		
+		gameBtn2 = new RoundedButton("Ver");
 		gameBtn2.setBounds(220, 205, 90, 30);
 		gameBtn2.setForeground(Color.WHITE);
 		gameBtn2.setBackground(blue);
 		gameBtn2.setFont(btntxt);
 		gameBtn2.setRadius(20);
-		gameBtn2.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				/*frame.dispose();
-				gc.viewGame();*/
-			}
-			
-		});
 		gamePanel.add(gameBtn2);
 		
 		
@@ -328,6 +330,7 @@ public class HomeView {
 		mPanelTitle.setBounds(35, 25, 290, 25);
 		mPanelTitle.setFont(titles);
 		moviePanel.add(mPanelTitle);
+
 		
 		JLabel movieSubtitle1 = new JLabel("Más rentado");
 		movieSubtitle1.setHorizontalAlignment(SwingConstants.CENTER);
@@ -336,6 +339,14 @@ public class HomeView {
 		movieSubtitle1.setForeground(gray);
 		moviePanel.add(movieSubtitle1);
 		
+		movieTitle = new JLabel("");
+		movieTitle.setHorizontalAlignment(SwingConstants.CENTER);
+		movieTitle.setBounds(45, 110, 90, 50);
+		movieTitle.setForeground(gray);
+		movieTitle.setFont(subtitles);
+		moviePanel.add(movieTitle);
+		
+		
 		JLabel movieSubtitle2 = new JLabel("Más comprado");
 		movieSubtitle2.setHorizontalAlignment(SwingConstants.CENTER);
 		movieSubtitle2.setBounds(220, 65, 95, 15);
@@ -343,41 +354,147 @@ public class HomeView {
 		movieSubtitle2.setForeground(gray);
 		moviePanel.add(movieSubtitle2);
 		
-		RoundedButton movieBtn1 = new RoundedButton("Ver");
+		movieTitle2 = new JLabel("");
+		movieTitle2.setHorizontalAlignment(SwingConstants.CENTER);
+		movieTitle2.setBounds(220, 110, 90, 50);
+		movieTitle2.setForeground(gray);
+		movieTitle2.setFont(subtitles);
+		moviePanel.add(movieTitle2);
+		
+		movieBtn1 = new RoundedButton("Ver");
 		movieBtn1.setBounds(43, 205, 90, 30);
 		movieBtn1.setForeground(Color.WHITE);
 		movieBtn1.setBackground(blue);
 		movieBtn1.setFont(btntxt);
 		movieBtn1.setRadius(20);
-		movieBtn1.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				/*frame.dispose();
-				mc.viewMovies();*/
-			}
-			
-		});
 		moviePanel.add(movieBtn1);
 		
-		RoundedButton movieBtn2 = new RoundedButton("Ver");
+		movieBtn2 = new RoundedButton("Ver");
 		movieBtn2.setForeground(Color.WHITE);
 		movieBtn2.setBounds(220, 205, 90, 30);
 		movieBtn2.setBackground(blue);
 		movieBtn2.setFont(btntxt);
 		movieBtn2.setRadius(20);
+		moviePanel.add(movieBtn2);
+		
+		frame.setVisible(true);
+	    
+	    SwingUtilities.invokeLater(() -> {
+	        JDialog dlg = new JDialog(frame, "Cargando...", true); // modal
+	        dlg.setUndecorated(true);
+	        JPanel p = new JPanel(new BorderLayout(5,5));
+	        JLabel label = new JLabel("Cargando, espere unos segundos...", SwingConstants.CENTER);
+	        label.setFont(titles);
+	        p.add(label);
+	        dlg.setContentPane(p);
+	        dlg.pack();
+	        dlg.setLocationRelativeTo(frame);
+
+	        // Crear SwingWorker
+	        SwingWorker<Void, Void> worker = new SwingWorker<>() {
+	            Game juegoRentado, juegoComprado;
+	            Movie peliculaRentada, peliculaComprada;
+	            int totalRents, totalSales, cantClientes;
+
+	            @Override
+	            protected Void doInBackground() throws Exception {
+	                // Operaciones pesadas acá, NO en EDT
+	                juegoRentado = oc.getMostRentedGame();
+	                juegoComprado = oc.getMostPurchasedGame();
+	                peliculaRentada = oc.getMostRentedMovie();
+	                peliculaComprada = oc.getMostPurchasedMovie();
+	                totalRents = oc.getTotalRents();
+	                totalSales = oc.getTotalSales();
+	                cantClientes = cc.getCantClients();
+	                return null;
+	            }
+
+	            @Override
+	            protected void done() {
+	                dlg.dispose();  // Cierra diálogo
+	                datos(frame, juegoRentado, juegoComprado, peliculaRentada, peliculaComprada, totalRents, totalSales, cantClientes);
+	            }
+	        };
+
+	        worker.execute();
+	        dlg.setVisible(true);  // Esto bloqueará aquí hasta que worker termine y cierre el diálogo
+	    });
+	}
+	
+	public void actualizarCantClientes() {
+		int cantidad = cc.getCantClients();
+	    w3num.setText(String.format("%,d", cantidad));
+	}
+	
+	public void actualizarCantCompras() {
+		int totalSales = oc.getTotalSales();
+	    w2num.setText(String.valueOf(totalSales));
+	}
+	
+	public void actualizarCantRentas() {
+		int totalRents = oc.getTotalRents();
+	    w2num.setText(String.valueOf(totalRents));
+	}
+
+	public void datos(JFrame frame, Game juegoRentado, Game juegoComprado, Movie peliculaRentada, Movie peliculaComprada, int totalRents, int totalSales, int cantClientes) {
+		
+		w1num.setText(String.valueOf(totalRents));
+		w2num.setText((String.valueOf(totalSales)));
+		w3num.setText(String.format("%,d", cc.getCantClients()));
+		gameTitle.setText("<html>" + juegoComprado.getTitle() + "</html>");
+		gameTitle2.setText("<html>" + juegoRentado.getTitle() + "</html>");
+		movieTitle.setText("<html>" + peliculaRentada.getTitle() + "</html>");
+		movieTitle2.setText("<html>" + peliculaComprada.getTitle() + "</html>");
+		
+		/*JLabel lblCover = new JLabel();
+		lblCover.setBounds(45, 85, 90, 95); 
+		try {
+			ImageIcon icon = juegoRentado.getCoverAsIcon(lblCover.getWidth(), lblCover.getHeight());
+			lblCover.setIcon(icon);
+		} catch (NullPointerException ex) {
+			System.out.println("No hay imagen disponible: " + ex.getMessage());
+		}
+		gamePanel.add(lblCover);*/
+		
+		gameBtn1.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				gc.viewGame(juegoRentado);
+			}
+			
+		});
+		gameBtn2.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				gc.viewGame(juegoComprado);
+			}
+			
+		});
+		movieBtn1.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				mc.viewMovies(peliculaRentada);
+			}
+			
+		});
 		movieBtn2.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				/*frame.dispose();
-				mc.viewMovies();*/
+				frame.dispose();
+				mc.viewMovies(peliculaComprada);
 			}
 			
 		});
-		moviePanel.add(movieBtn2);
+		
+		frame.repaint();
+		frame.revalidate();
+		
 	}
-
 }
