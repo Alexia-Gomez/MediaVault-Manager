@@ -12,6 +12,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -22,6 +23,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -46,6 +48,7 @@ import com.itextpdf.layout.properties.VerticalAlignment;
 
 import controllers.ClientsController;
 import controllers.MoviesController;
+import controllers.OperationsController;
 import customClasses.CoverTitleCellRenderer;
 import customClasses.CoverTitleCellRendererClient;
 import customClasses.CustomJComboBox;
@@ -67,6 +70,7 @@ import models.Client;
 import models.ClientsModel;
 import models.Movie;
 import models.MoviesModel;
+import models.Operation;
 
 public class ClientsView {
 	
@@ -990,29 +994,98 @@ public class ClientsView {
 		panelActivas.setBounds(151, 400, 810, 150);
 		panelActivas.setLayout(new BorderLayout(0, 0));
 		panelActivas.setBackground(Color.white);
-		centro.add(panelActivas);
+		//centro.add(panelActivas);
 		
 		JPanel panelRentas = new JPanel();
 		panelRentas.setBounds(151, 400, 810, 150);
 		panelRentas.setLayout(new BorderLayout(0, 0));
 		panelRentas.setBackground(Color.white);
-		centro.add(panelRentas);
+		//centro.add(panelRentas);
 		
 		JPanel panelCompras = new JPanel();
 		panelCompras.setBounds(151, 400, 810, 150);
 		panelCompras.setLayout(new BorderLayout(0, 0));
 		panelCompras.setBackground(Color.white);
-		centro.add(panelCompras);
+
+		OperationsController opController = new OperationsController(); 
+		System.out.println("Client ID: " + client.getClient_id());
+		List<Operation> allOperations = opController.getOperationsByClientId(client.getClient_id());
+		for (Operation op : allOperations) {
+		    System.out.println("Op -> tipo: " + op.getOperation_type() + ", título: " + op.getProductTitle());
+		}
+		
+		List<Operation> rentHistory = new ArrayList<>();
+		List<Operation> purchaseHistoryy = new ArrayList<>();
+
+		for (Operation op : allOperations) {
+		    if ("rent".equalsIgnoreCase(op.getOperation_type())) { 
+		        rentHistory.add(op);
+		    } else if ("sale".equalsIgnoreCase(op.getOperation_type())) { 
+		        purchaseHistoryy.add(op);
+		    }
+		}
+		System.out.println("Total operations fetched: " + allOperations.size()); 
+
+		String[] rentColumnNames = {"Título", "Producto", "Fecha de renta", "Precio Unitario", "Precio Final"};
+
+		DefaultTableModel rentModel = new DefaultTableModel(rentColumnNames, 0);
+
+		for (Operation rent : rentHistory) {
+		    String productType = (rent.getMovie() != null) ? "movie" : "videogame";
+		    Object[] rowData = {
+		        rent.getProductTitle(),
+		        productType,
+		        rent.getOperation_date(),
+		        "$" + String.format("%.2f", rent.getPrecioUnitario()),
+		        "$" + String.format("%.2f", rent.getPrecioFinal())
+		    };
+		    rentModel.addRow(rowData);
+		}
+
+		JTable rentHistoryTable = new JTable(rentModel);
+		rentHistoryTable.setFont(new Font("Arial", Font.PLAIN, 12));
+		rentHistoryTable.setRowHeight(25);
+		rentHistoryTable.getTableHeader().setFont(new Font("Arial", Font.BOLD, 12));
+		JScrollPane rentScrollPane = new JScrollPane(rentHistoryTable);
+
+		panelRentas.setLayout(new BorderLayout()); 
+		panelRentas.add(rentScrollPane, BorderLayout.CENTER);
+
+		String[] purchaseColumnNames = {"Título", "Producto", "Fecha de compra", "Precio Unitario", "Precio Final"};
+
+		DefaultTableModel purchaseModel = new DefaultTableModel(purchaseColumnNames, 0);
+
+		for (Operation purchase : purchaseHistoryy) {
+		    String productType = (purchase.getMovie() != null) ? "movie" : "videogame";
+		    Object[] rowData = {
+		        purchase.getProductTitle(),
+		        productType,
+		        purchase.getOperation_date(),
+		        "$" + String.format("%.2f", purchase.getPrecioUnitario()),
+		        "$" + String.format("%.2f", purchase.getPrecioFinal())
+		    };
+		    purchaseModel.addRow(rowData);
+		}
+
+		JTable purchaseHistoryTable = new JTable(purchaseModel);
+		purchaseHistoryTable.setFont(new Font("Arial", Font.PLAIN, 12));
+		purchaseHistoryTable.setRowHeight(25);
+		purchaseHistoryTable.getTableHeader().setFont(new Font("Arial", Font.BOLD, 12));
+		JScrollPane purchaseScrollPane = new JScrollPane(purchaseHistoryTable);
+
+		panelCompras.setLayout(new BorderLayout()); 
+		panelCompras.add(purchaseScrollPane, BorderLayout.CENTER);
 		
 		tablePanelContainer.add(panelActivas, "RENTAS_ACTIVAS");
         tablePanelContainer.add(panelRentas, "HISTORIAL_RENTAS");
         tablePanelContainer.add(panelCompras, "HISTORIAL_COMPRAS");
 		
         CardLayout cl = (CardLayout) tablePanelContainer.getLayout();
+        cl.show(tablePanelContainer, "HISTORIAL_RENTAS"); 
 
         activeRents.addActionListener(e -> cl.show(tablePanelContainer, "RENTAS_ACTIVAS"));
-        rentsHistory.addActionListener(e -> cl.show(tablePanelContainer, "HISTORIAL_RENTAS"));
-        purchaseHistory.addActionListener(e -> cl.show(tablePanelContainer, "HISTORIAL_COMPRAS"));
+        rentsHistory.addActionListener(e -> cl.show(tablePanelContainer, "HISTORIAL_RENTAS")); 
+        purchaseHistory.addActionListener(e -> cl.show(tablePanelContainer, "HISTORIAL_COMPRAS")); 
 	}
 
 	public void filterPanel(JPanel centro) {

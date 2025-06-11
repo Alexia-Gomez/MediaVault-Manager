@@ -1,6 +1,6 @@
 package models;
 
-public class Operation {
+public class Operation { 
 	
 	public int id_operation;
 	public String operation_type, operation_date;

@@ -30,4 +30,8 @@ public class OperationsController {
 	public boolean delete(int operation_id) {
 		return model.delete(operation_id);
 	}
+	
+	public ArrayList<Operation> getOperationsByClientId(int clientId) {
+		return model.getOperationsByClientId(clientId);
+	}
 }

@@ -401,7 +401,7 @@ public class OperationsView {
 		titleButton.setBounds(151, 11, 230, 43);
 		titleButton.setBackground(Color.white);
 		titleButton.setForeground(Color.black);
-		titleButton.setFont(titles);
+		titleButton.setFont(titles); 
 		titleButton.setIconTextGap(20);
 		titleButton.setRadius(20);
 		titleButton.addActionListener(new ActionListener() {
@@ -754,7 +754,7 @@ public class OperationsView {
 		sidepanel.add(SideBar.inicio(frame));
 		sidepanel.add(SideBar.clientes(frame));
 		sidepanel.add(SideBar.nuevaOperacion(frame));
-		sidepanel.add(SideBar.rentaCompra(frame));
+		//sidepanel.add(SideBar.rentaCompra(frame));
 		sidepanel.add(SideBar.juegos(frame));
 		sidepanel.add(SideBar.peliculas(frame));
 
